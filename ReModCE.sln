@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReModCE", "ReModCE\ReModCE.csproj", "{4EA50331-5D4E-47D3-BDA5-260600CFF84C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReModCE.Loader", "ReModCE.Loader\ReModCE.Loader.csproj", "{6E5E0E59-73D9-4D74-B734-D040D26710C4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EA50331-5D4E-47D3-BDA5-260600CFF84C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EA50331-5D4E-47D3-BDA5-260600CFF84C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EA50331-5D4E-47D3-BDA5-260600CFF84C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EA50331-5D4E-47D3-BDA5-260600CFF84C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E5E0E59-73D9-4D74-B734-D040D26710C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E5E0E59-73D9-4D74-B734-D040D26710C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E5E0E59-73D9-4D74-B734-D040D26710C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E5E0E59-73D9-4D74-B734-D040D26710C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A11D4D69-B136-4696-9D96-F323B5330C6C}
+	EndGlobalSection
+EndGlobal
