@@ -65,7 +65,7 @@ namespace ReModCE.VRChat
 
             switch (pageName)
             {
-                case "ShortMenu":
+                case "ShortcutMenu":
                     quickMenu.SetMenuIndex(QuickMenuPage.ShortcutMenu);
                     break;
                 case "UserInteractMenu":

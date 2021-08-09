@@ -11,6 +11,7 @@ using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.UI;
 using UnityEngine;
+using QuickMenuContext = QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique;
 
 namespace ReModCE
 {
@@ -40,11 +41,11 @@ namespace ReModCE
                 () => menu.Open(),
                 QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
 
-            var targetMenu = new ReQuickMenu("ReModCETarget");
+            var targetMenu = new ReQuickMenu("ReModCETarget", "UserInteractMenu", QuickMenuContext.UserSelected);
             targetMenu.OnOpen += () => ReLogger.Msg($"Target menu opened.");
             var targetButton = new ReQuickButton(new Vector2(reportWorldButton.x, reportWorldButton.y - (420f * 2f)),
                 "Target Options", "More options for this target",
-                () => targetMenu.Open(),
+                () => targetMenu.Open(QuickMenuContext.UserSelected),
                 QuickMenu.prop_QuickMenu_0.transform.Find("UserInteractMenu"));
 
             foreach (var t in Components)
