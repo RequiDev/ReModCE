@@ -32,17 +32,17 @@ namespace ReModCE
 
             var reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton").GetComponent<RectTransform>().localPosition;
 
-            var menu = new ReMenu("ReModCE");
+            var menu = new ReQuickMenu("ReModCE");
             menu.OnOpen += () => ReLogger.Msg($"Menu opened.");
 
-            var button = new ReButton(new Vector2(reportWorldButton.x, reportWorldButton.y + (420f * 2f)),
+            var button = new ReQuickButton(new Vector2(reportWorldButton.x, reportWorldButton.y + (420f * 2f)),
                 "ReMod <color=#00ff00>CE</color>", "Access the ReMod Community Edition",
                 () => menu.Open(),
                 QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
 
-            var targetMenu = new ReMenu("ReModCETarget");
+            var targetMenu = new ReQuickMenu("ReModCETarget");
             targetMenu.OnOpen += () => ReLogger.Msg($"Target menu opened.");
-            var targetButton = new ReButton(new Vector2(reportWorldButton.x, reportWorldButton.y - (420f * 2f)),
+            var targetButton = new ReQuickButton(new Vector2(reportWorldButton.x, reportWorldButton.y - (420f * 2f)),
                 "Target Options", "More options for this target",
                 () => targetMenu.Open(),
                 QuickMenu.prop_QuickMenu_0.transform.Find("UserInteractMenu"));

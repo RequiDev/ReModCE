@@ -10,12 +10,12 @@ using Object = UnityEngine.Object;
 
 namespace ReModCE.UI
 {
-    internal class ReToggle : UIElement
+    internal class ReQuickToggle : UIElement
     {
         private readonly GameObject _toggleStateOn;
         private readonly GameObject _toggleStateOff;
 
-        public ReToggle(Vector2 pos, string text, string tooltip, bool defaultValue = false, Transform parent = null) : base(GameObject.Find("UserInterface/QuickMenu/UserInteractMenu/BlockButton"), parent, pos, $"Toggle_{text}")
+        public ReQuickToggle(Vector2 pos, string text, string tooltip, bool defaultValue = false, Transform parent = null) : base(GameObject.Find("UserInterface/QuickMenu/UserInteractMenu/BlockButton"), parent, pos, $"Toggle_{text}")
         {
             var textComponent = gameObject.GetComponentInChildren<Text>();
             textComponent.text = text;

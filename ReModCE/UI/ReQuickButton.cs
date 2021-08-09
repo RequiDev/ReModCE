@@ -10,9 +10,9 @@ using Object = UnityEngine.Object;
 
 namespace ReModCE.UI
 {
-    internal class ReButton : UIElement
+    internal class ReQuickButton : UIElement
     {
-        public ReButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton"), parent, pos, $"Button_{text}")
+        public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton"), parent, pos, $"Button_{text}")
         {
             Object.DestroyImmediate(gameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != gameObject.transform));
 

@@ -19,20 +19,19 @@ namespace ReModCE.VRChat
 
         private static void EnsureCurrentPageFieldInfo(QuickMenu quickMenu)
         {
-            if (_fiCurrentPage == null)
+            if (_fiCurrentPage != null) return;
+            
+            var shortcutMenu = quickMenu.transform.Find("ShortcutMenu").gameObject;
+
+            var menuToFind = shortcutMenu;
+            if (menuToFind == null || !menuToFind.activeInHierarchy)
             {
-                var shortcutMenu = quickMenu.transform.Find("ShortcutMenu").gameObject;
-
-                var menuToFind = shortcutMenu;
-                if (menuToFind == null || !menuToFind.activeInHierarchy)
-                {
-                    menuToFind = quickMenu.transform.Find("UserInteractMenu").gameObject;
-                }
-
-                _fiCurrentPage = Il2CppType.Of<QuickMenu>().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Where(a => a.FieldType == Il2CppType.Of<GameObject>())
-                    .LastOrDefault(a => a.GetValue(quickMenu)?.Cast<GameObject>() == menuToFind);
+                menuToFind = quickMenu.transform.Find("UserInteractMenu").gameObject;
             }
+
+            _fiCurrentPage = Il2CppType.Of<QuickMenu>().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(a => a.FieldType == Il2CppType.Of<GameObject>())
+                .LastOrDefault(a => a.GetValue(quickMenu)?.Cast<GameObject>() == menuToFind);
         }
 
         private static GameObject GetCurrentPage(this QuickMenu quickMenu)

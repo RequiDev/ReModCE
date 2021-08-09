@@ -11,11 +11,11 @@ using QuickMenuContext = QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7
 
 namespace ReModCE.UI
 {
-    internal class ReMenu : UIElement
+    internal class ReQuickMenu : UIElement
     {
         public event Action OnOpen;
 
-        public ReMenu(string name) : base(GameObject.Find("UserInterface/QuickMenu/CameraMenu"), QuickMenu.prop_QuickMenu_0.transform, name, false)
+        public ReQuickMenu(string name) : base(GameObject.Find("UserInterface/QuickMenu/CameraMenu"), QuickMenu.prop_QuickMenu_0.transform, name, false)
         {
             foreach (var obj in transform)
             {

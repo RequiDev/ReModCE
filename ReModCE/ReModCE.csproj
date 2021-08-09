@@ -75,9 +75,9 @@
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\UIElement.cs" />
-    <Compile Include="UI\ReButton.cs" />
-    <Compile Include="UI\ReMenu.cs" />
-    <Compile Include="UI\ReToggle.cs" />
+    <Compile Include="UI\ReQuickButton.cs" />
+    <Compile Include="UI\ReQuickMenu.cs" />
+    <Compile Include="UI\ReQuickToggle.cs" />
     <Compile Include="VRChat\PlayerExtensions.cs" />
     <Compile Include="VRChat\QuickMenuExtensions.cs" />
     <Compile Include="VRChat\UnityExtensions.cs" />
