@@ -1,5 +1,11 @@
-﻿namespace ReModCE.Core
+﻿using System;
+
+namespace ReModCE.Core
 {
+    public class ComponentDisabled : Attribute
+    {
+    }
+
     internal class ModComponent
     {
         public virtual void OnUiManagerInit() { }

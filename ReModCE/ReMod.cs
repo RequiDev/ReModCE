@@ -28,6 +28,8 @@ namespace ReModCE
 
         public static void OnUiManagerInit()
         {
+            ReLogger.Msg("Initializing UI...");
+
             GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton").transform.localPosition +=
                 new Vector3(420f, -420f, 0f);
 
@@ -161,6 +163,8 @@ namespace ReModCE
                 if (t.BaseType == null)
                     continue;
                 if (t.BaseType.Name != nameof(ModComponent))
+                    continue;
+                if (t.IsDefined(typeof(ComponentDisabled), false))
                     continue;
 
                 AddModComponent(t);
