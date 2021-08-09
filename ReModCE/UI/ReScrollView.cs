@@ -11,7 +11,7 @@ namespace ReModCE.UI
 {
     internal class ReScrollView : UIElement
     {
-        public Text _logText;
+        private readonly Text _logText;
 
         public ReScrollView(string name, Vector2 pos, Transform parent) : base(GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton"), parent, pos, $"ScrollView_{name}")
         {
@@ -43,8 +43,10 @@ namespace ReModCE.UI
             _logText.transform.localPosition += new Vector3(10f, -100f);
             _logText.alignment = TextAnchor.LowerLeft;
             _logText.verticalOverflow = VerticalWrapMode.Overflow;
-            _logText.SetClipRect(new Rect(new Vector2(0, -220), new Vector2(3000, 1500)), true);
+            //_logText.SetClipRect(new Rect(new Vector2(0, -220), new Vector2(3000, 1500)), true);
             _logText.text = "";
+
+            gameObject.AddComponent<RectMask2D>();  
         }
 
         public void AddText(string message)
