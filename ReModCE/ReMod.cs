@@ -11,6 +11,7 @@ using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.UI;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using QuickMenuContext = QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique;
 
 namespace ReModCE
@@ -26,12 +27,35 @@ namespace ReModCE
             ReLogger.Msg("Done!");
         }
 
+        public static string ToHexCode(ConsoleColor c)
+        {
+            string[] cColors = { 
+                "#000000", //Black = 0
+                "#000080", //DarkBlue = 1
+                "#008000", //DarkGreen = 2
+                "#008080", //DarkCyan = 3
+                "#800000", //DarkRed = 4
+                "#800080", //DarkMagenta = 5
+                "#808000", //DarkYellow = 6
+                "#C0C0C0", //Gray = 7
+                "#808080", //DarkGray = 8
+                "#0000FF", //Blue = 9
+                "#00FF00", //Green = 10
+                "#00FFFF", //Cyan = 11
+                "#FF0000", //Red = 12
+                "#FF00FF", //Magenta = 13
+                "#FFFF00", //Yellow = 14
+                "#FFFFFF"  //White = 15
+            };
+            return cColors[(int)c];
+        }
         public static void OnUiManagerInit()
         {
             ReLogger.Msg("Initializing UI...");
 
-            GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton").transform.localPosition +=
-                new Vector3(420f, -420f, 0f);
+            var cameraButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton");
+            var cameraButtonPos = cameraButton.transform.localPosition;
+            Object.DestroyImmediate(cameraButton);
 
             var reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton").GetComponent<RectTransform>().localPosition;
 
@@ -49,6 +73,13 @@ namespace ReModCE
                 "Target Options", "More options for this target",
                 () => targetMenu.Open(QuickMenuContext.UserSelected),
                 QuickMenu.prop_QuickMenu_0.transform.Find("UserInteractMenu"));
+
+            var scrollLog = new ReScrollView("LogTest", cameraButtonPos + new Vector3(1050F, -630f), QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
+
+            MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
+            {
+                scrollLog.AddText($"<color={ToHexCode(color)}>[{nameSection}]</color> <color={ToHexCode(consoleColor)}>{msg}</color>\n");
+            };
 
             foreach (var t in Components)
             {
