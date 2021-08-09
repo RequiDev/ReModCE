@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\FlyComponent.cs" />
+    <Compile Include="Components\ThirdPersonComponent.cs" />
     <Compile Include="Core\ModComponent.cs" />
     <Compile Include="Core\ConfigValue.cs" />
     <Compile Include="ReMod.cs" />
