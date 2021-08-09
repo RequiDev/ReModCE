@@ -17,64 +17,35 @@ namespace ReModCE.VRChat
     {
         private static FieldInfo _fiCurrentPage;
 
-        private static GameObject GetCurrentPage(this QuickMenu quickMenu)
+        private static void EnsureCurrentPageFieldInfo(QuickMenu quickMenu)
         {
             if (_fiCurrentPage == null)
             {
                 var shortcutMenu = quickMenu.transform.Find("ShortcutMenu").gameObject;
 
-                var objectToFind = shortcutMenu;
-                if (objectToFind == null || !objectToFind.activeInHierarchy)
+                var menuToFind = shortcutMenu;
+                if (menuToFind == null || !menuToFind.activeInHierarchy)
                 {
-                    objectToFind = quickMenu.transform.Find("UserInteractMenu").gameObject;
+                    menuToFind = quickMenu.transform.Find("UserInteractMenu").gameObject;
                 }
 
                 _fiCurrentPage = Il2CppType.Of<QuickMenu>().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Where(a => a.FieldType == Il2CppType.Of<GameObject>()).LastOrDefault(a =>
-                    {
-                        var obj = a.GetValue(quickMenu);
-                        if (obj == null)
-                            return false;
-                        var gameObject = obj.Cast<GameObject>();
-
-                        return gameObject == objectToFind;
-                    });
-
-                if (_fiCurrentPage == null)
-                    return null;
+                    .Where(a => a.FieldType == Il2CppType.Of<GameObject>())
+                    .LastOrDefault(a => a.GetValue(quickMenu)?.Cast<GameObject>() == menuToFind);
             }
+        }
 
-            return _fiCurrentPage.GetValue(quickMenu) as GameObject;
+        private static GameObject GetCurrentPage(this QuickMenu quickMenu)
+        {
+            EnsureCurrentPageFieldInfo(quickMenu);
+            return _fiCurrentPage?.GetValue(quickMenu)?.Cast<GameObject>();
         }
 
         private static void SetCurrentPage(this QuickMenu quickMenu, GameObject value)
         {
-            if (_fiCurrentPage == null)
-            {
-                var shortcutMenu = quickMenu.transform.Find("ShortcutMenu").gameObject;
+            EnsureCurrentPageFieldInfo(quickMenu);
 
-                var objectToFind = shortcutMenu;
-                if (objectToFind == null || !objectToFind.activeInHierarchy)
-                {
-                    objectToFind = quickMenu.transform.Find("UserInteractMenu").gameObject;
-                }
-
-                _fiCurrentPage = Il2CppType.Of<QuickMenu>().GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Where(a => a.FieldType == Il2CppType.Of<GameObject>()).LastOrDefault(a =>
-                    {
-                        var obj = a.GetValue(quickMenu);
-                        if (obj == null)
-                            return false;
-                        var gameObject = obj.Cast<GameObject>();
-
-                        return gameObject == objectToFind;
-                    });
-
-                if (_fiCurrentPage == null)
-                    return;
-            }
-
-            _fiCurrentPage.SetValue(quickMenu, value);
+            _fiCurrentPage?.SetValue(quickMenu, value);
         }
 
         public static void SetCurrentPage(this QuickMenu quickMenu, string pageName,
@@ -85,7 +56,7 @@ namespace ReModCE.VRChat
                 return;
 
             var currentPage = quickMenu.GetCurrentPage();
-            currentPage?.Cast<GameObject>().SetActive(false);
+            currentPage?.SetActive(false);
 
             quickMenu.transform.Find("QuickMenu_NewElements/_InfoBar").gameObject.SetActive(pageName == "ShortcutMenu");
             quickMenu.field_Private_QuickMenuContextualDisplay_0.Method_Public_Void_EnumNPublicSealedvaUnNoToUs7vUsNoUnique_0(context);

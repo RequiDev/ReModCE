@@ -40,6 +40,13 @@ namespace ReModCE
                 () => menu.Open(),
                 QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
 
+            var targetMenu = new ReMenu("ReModCETarget");
+            targetMenu.OnOpen += () => ReLogger.Msg($"Target menu opened.");
+            var targetButton = new ReButton(new Vector2(reportWorldButton.x, reportWorldButton.y - (420f * 2f)),
+                "Target Options", "More options for this target",
+                () => targetMenu.Open(),
+                QuickMenu.prop_QuickMenu_0.transform.Find("UserInteractMenu"));
+
             foreach (var t in Components)
             {
                 t.OnUiManagerInit();
