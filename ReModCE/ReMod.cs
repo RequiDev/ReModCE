@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -8,6 +9,8 @@ using MelonLoader;
 using ReModCE.Components;
 using ReModCE.Core;
 using ReModCE.Loader;
+using ReModCE.UI;
+using UnityEngine;
 
 namespace ReModCE
 {
@@ -24,6 +27,18 @@ namespace ReModCE
 
         public static void OnUiManagerInit()
         {
+            GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton").transform.localPosition +=
+                new Vector3(420f, -420f, 0f);
+
+            var reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton").GetComponent<RectTransform>().localPosition;
+
+            var menu = new ReMenu("ReModCE");
+            menu.OnOpen += () => ReLogger.Msg($"Menu opened.");
+
+            var button = new ReButton(new Vector2(reportWorldButton.x, reportWorldButton.y + (420f * 2f)),
+                "ReMod <color=#00ff00>CE</color>", "Access the ReMod Community Edition",
+                () => menu.Open(),
+                QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
 
             foreach (var t in Components)
             {
@@ -85,6 +100,8 @@ namespace ReModCE
             {
                 t.OnApplicationQuit();
             }
+
+            Process.GetCurrentProcess().Kill();
         }
 
         public static void OnPreferencesLoaded()

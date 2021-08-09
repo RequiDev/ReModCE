@@ -72,7 +72,13 @@
     <Compile Include="Core\ConfigValue.cs" />
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\UIElement.cs" />
+    <Compile Include="UI\ReButton.cs" />
+    <Compile Include="UI\ReMenu.cs" />
+    <Compile Include="UI\ReToggle.cs" />
     <Compile Include="VRChat\PlayerExtensions.cs" />
+    <Compile Include="VRChat\QuickMenuExtensions.cs" />
+    <Compile Include="VRChat\UnityExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReModCE.Loader\ReModCE.Loader.csproj">
@@ -80,9 +86,7 @@
       <Name>ReModCE.Loader</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y $(TargetFileName) S:\Games\steamapps\common\VRChat\$(TargetFileName)</PostBuildEvent>
