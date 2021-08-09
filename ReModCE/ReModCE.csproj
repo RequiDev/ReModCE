@@ -45,5 +45,14 @@
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReModCE.Loader\ReModCE.Loader.csproj">
+      <Project>{6e5e0e59-73d9-4d74-b734-d040d26710c4}</Project>
+      <Name>ReModCE.Loader</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y $(TargetFileName) S:\Games\steamapps\common\VRChat\$(TargetFileName)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
