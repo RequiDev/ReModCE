@@ -31,7 +31,7 @@ namespace ReModCE.UI
 
         public void Open(QuickMenuContext context = QuickMenuContext.NoSelection)
         {
-            QuickMenu.prop_QuickMenu_0.ShowPage(gameObject.name);
+            QuickMenu.prop_QuickMenu_0.SetCurrentPage(gameObject.name);
             OnOpen?.Invoke();
         }
     }
