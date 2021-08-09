@@ -17,7 +17,9 @@ namespace ReModCE
 
         public static void OnApplicationStart()
         {
+            ReLogger.Msg("Initializing...");
             InitializeModComponents();
+            ReLogger.Msg("Done!");
         }
 
         public static void OnUiManagerInit()
@@ -105,7 +107,7 @@ namespace ReModCE
         {
             try
             {
-                var newModComponent = (ModComponent)Activator.CreateInstance(type);
+                var newModComponent = Activator.CreateInstance(type) as ModComponent;
                 Components.Add(newModComponent);
             }
             catch (Exception e)
@@ -139,7 +141,7 @@ namespace ReModCE
                 AddModComponent(t);
             }
 
-            ReLogger.Msg(ConsoleColor.DarkCyan, $"Created {Components.Count} internal mod components.");
+            ReLogger.Msg(ConsoleColor.Cyan, $"Created {Components.Count} internal mod components.");
         }
     }
 }
