@@ -66,6 +66,7 @@
     <Reference Include="VRCSDKBase, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\ModComponent.cs" />
     <Compile Include="Core\ConfigValue.cs" />
     <Compile Include="ReMod.cs" />
@@ -78,6 +79,7 @@
       <Name>ReModCE.Loader</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y $(TargetFileName) S:\Games\steamapps\common\VRChat\$(TargetFileName)</PostBuildEvent>
