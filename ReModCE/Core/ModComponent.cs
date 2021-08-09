@@ -1,4 +1,4 @@
-﻿namespace ReModCE.Components
+﻿namespace ReModCE.Core
 {
     internal class ModComponent
     {
