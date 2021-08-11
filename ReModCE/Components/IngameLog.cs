@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MelonLoader;
-using ReModCE.Loader;
+using ReModCE.Core;
+using ReModCE.Managers;
 using ReModCE.UI;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
-namespace ReModCE.Core
+namespace ReModCE.Components
 {
-    internal static class ReLogger
+    internal class IngameLog : ModComponent
     {
-        private static ReScrollView _log;
-        private static string _preUiLog;
+        private ReScrollView _log;
+        private string _preUiLog;
 
-        public static void AppStart()
+        public IngameLog()
         {
             MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
             {
@@ -33,12 +29,12 @@ namespace ReModCE.Core
             };
         }
 
-        public static void UiInit()
+        public override void OnUiManagerInit(UiManager uiManager)
         {
             var cameraButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton");
             var cameraButtonPos = cameraButton.transform.localPosition;
 
-            _log = new ReScrollView("ReModCELog", cameraButtonPos + new Vector3(-2745f, -420f), QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
+            _log = new ReScrollView("ReModCELog", cameraButtonPos + new Vector3(-3165f, 0f), QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
             _log.AddText(_preUiLog);
 
         }

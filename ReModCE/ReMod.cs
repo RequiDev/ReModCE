@@ -24,15 +24,14 @@ namespace ReModCE
 
         public static void OnApplicationStart()
         {
-            ForwardedLogger.Msg("Initializing...");
-
-            ReLogger.AppStart();
+            ReLogger.Msg("Initializing...");
+            
             RiskyFunctionsManager.AppStart();
 
             InitializePatches();
 
             InitializeModComponents();
-            ForwardedLogger.Msg("Done!");
+            ReLogger.Msg("Done!");
         }
 
         private static HarmonyMethod GetLocalPatch(string name)
@@ -48,8 +47,7 @@ namespace ReModCE
 
         public static void OnUiManagerInit()
         {
-            ForwardedLogger.Msg("Initializing UI...");
-            ReLogger.UiInit();
+            ReLogger.Msg("Initializing UI...");
 
             _uiManager = new UiManager("ReModCE");
 
@@ -142,7 +140,7 @@ namespace ReModCE
             }
             catch (Exception e)
             {
-                ForwardedLogger.Error($"Failed adding ModComponent.\n{e}");
+                ReLogger.Error($"Failed adding ModComponent.\n{e}");
             }
         }
 
@@ -173,7 +171,7 @@ namespace ReModCE
                 AddModComponent(t);
             }
 
-            ForwardedLogger.Msg(ConsoleColor.Cyan, $"Created {Components.Count} internal mod components.");
+            ReLogger.Msg(ConsoleColor.Cyan, $"Created {Components.Count} mod components.");
         }
 
 

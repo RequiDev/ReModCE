@@ -76,7 +76,7 @@
     <Compile Include="Components\ThirdPersonComponent.cs" />
     <Compile Include="Core\ModComponent.cs" />
     <Compile Include="Core\ConfigValue.cs" />
-    <Compile Include="Core\ReLogger.cs" />
+    <Compile Include="Components\IngameLog.cs" />
     <Compile Include="Managers\RiskyFunctionsManager.cs" />
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
