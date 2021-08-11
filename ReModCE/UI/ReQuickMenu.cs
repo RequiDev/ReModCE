@@ -22,6 +22,7 @@ namespace ReModCE.UI
         private int _buttonsAdded;
 
         public event Action OnOpen;
+        public List<ReQuickMenu> _subMenus = new List<ReQuickMenu>();
 
         public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(GameObject.Find("UserInterface/QuickMenu/CameraMenu"), QuickMenu.prop_QuickMenu_0.transform, name, false)
         {
@@ -96,7 +97,13 @@ namespace ReModCE.UI
         {
             var menu = new ReQuickMenu(menuName, _name);
             AddButton(menuName, tooltip, () => menu.Open());
+            _subMenus.Add(menu);
             return menu;
+        }
+
+        public ReQuickMenu GetSubMenu(string menuName)
+        {
+            return _subMenus.FirstOrDefault(m => m._name == menuName);
         }
 
         private Vector2 NextButtonPos => new Vector2(-625 + (_buttonsAdded % 4) * ButtonSize, (ButtonSize * 2.5f) - (_buttonsAdded / 4) * ButtonSize); // meth

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ReModCE.Core;
+using ReModCE.Loader;
+using ReModCE.UI;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.XR;
@@ -26,10 +28,26 @@ namespace ReModCE.Components
         private ConfigValue<float> FlySpeed;
         private Vector3 _originalGravity;
 
+        private ReQuickToggle _suppressFlyAnimationToggle;
+        private ReQuickButton _flySpeedButton;
+
         public FlyComponent()
         {
             SuppressFlyAnimation = new ConfigValue<bool>(nameof(SuppressFlyAnimation), true);
+            SuppressFlyAnimation.OnValueChanged += (a, b) => _suppressFlyAnimationToggle?.Toggle(b);
             FlySpeed = new ConfigValue<float>(nameof(FlySpeed), 4);
+            FlySpeed.OnValueChanged += (a, b) => _flySpeedButton.Text = $"Fly Speed: {FlySpeed}";
+        }
+
+        public override void OnUiManagerInit(UiManager uiManager)
+        {
+            var movementMenu = uiManager.MainMenu.GetSubMenu("Movement");
+
+            movementMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
+            movementMenu.AddToggle("Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
+            _suppressFlyAnimationToggle = movementMenu.AddToggle("Suppress Fly Animations",
+                "Stay still in the air when flying instead of having dangling legs.",
+                SuppressFlyAnimation.SetValue, SuppressFlyAnimation);
         }
 
         private readonly List<Il2CppSystem.Type> _blacklistedComponents = new List<Il2CppSystem.Type>

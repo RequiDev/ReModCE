@@ -26,10 +26,7 @@ namespace ReModCE.UI
                 () => _mainMenu.Open(),
                 shortcutMenu);
 
-            for (var i = 0; i < 24; ++i)
-            {
-                _mainMenu.AddButton($"Button {i}", $"Button Tooltip {i}", () => { });
-            }
+            _mainMenu.AddSubMenu("Movement", "Access movement related options");
 
             _targetMenu = new ReQuickMenu("TargetReModCE", "UserInteractMenu", QuickMenuContext.UserSelected);
             ReQuickButton.Create(new Vector2(intialButtonPos.x, intialButtonPos.y - (ButtonSize * 2f)),
