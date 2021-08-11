@@ -41,38 +41,23 @@ namespace ReModCE.Components
                 return;
             }
 
-            _cameraBack = CreateCamera(Vector3.zero, 75f);
-            _cameraFront = CreateCamera(new Vector3(0f, 180f, 0f), 75f);
-
-            _cameraBack.GetComponent<Camera>().enabled = false;
-            _cameraFront.GetComponent<Camera>().enabled = false;
-            _referenceCamera.GetComponent<Camera>().enabled = true;
+            _cameraBack = CreateCamera(ThirdPersonMode.Back, Vector3.zero, 75f);
+            _cameraFront = CreateCamera(ThirdPersonMode.Front, new Vector3(0f, 180f, 0f), 75f);
         }
 
-        private GameObject CreateCamera(Vector3 rotation, float fieldOfView)
+        private GameObject CreateCamera(ThirdPersonMode cameraType, Vector3 rotation, float fieldOfView)
         {
-            var cameraObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            Object.Destroy(cameraObject.GetComponent<MeshRenderer>());
+            var cameraObject = new GameObject($"{cameraType}Camera");
             cameraObject.transform.localScale = _referenceCamera.transform.localScale;
-            var frontRigidbody = cameraObject.AddComponent<Rigidbody>();
-            frontRigidbody.isKinematic = true;
-            frontRigidbody.useGravity = false;
-
-            if (cameraObject.GetComponent<Collider>())
-            {
-                cameraObject.GetComponent<Collider>().enabled = false;
-            }
-
-            cameraObject.GetComponent<Renderer>().enabled = false;
-            cameraObject.AddComponent<Camera>();
+            
+            var camera = cameraObject.AddComponent<Camera>();
+            camera.enabled = false;
             cameraObject.transform.parent = _referenceCamera.transform;
             cameraObject.transform.rotation = _referenceCamera.transform.rotation;
             cameraObject.transform.Rotate(rotation);
-            cameraObject.transform.position = _referenceCamera.transform.position;
-            cameraObject.transform.position += -cameraObject.transform.forward * 2f;
-            _referenceCamera.GetComponent<Camera>().enabled = false;
-            cameraObject.GetComponent<Camera>().fieldOfView = fieldOfView;
-            cameraObject.GetComponent<Camera>().nearClipPlane /= 4f;
+            cameraObject.transform.position = _referenceCamera.transform.position + (-cameraObject.transform.forward * 2f);
+            camera.fieldOfView = fieldOfView;
+            camera.nearClipPlane /= 4f;
 
             return cameraObject;
         }

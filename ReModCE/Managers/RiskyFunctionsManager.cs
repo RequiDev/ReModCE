@@ -21,6 +21,7 @@ namespace ReModCE.Managers
 
         public static void AppStart()
         {
+            // possibly move this to main mod class?
             var harmony = new HarmonyLib.Harmony("ReModCE");
             harmony.Patch(
                 typeof(RoomManager).GetMethod(nameof(RoomManager.Method_Public_Static_Boolean_ApiWorld_ApiWorldInstance_String_Int32_0)),
