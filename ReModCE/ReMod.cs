@@ -12,51 +12,32 @@ using ReModCE.Loader;
 using ReModCE.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using QuickMenuContext = QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique;
 
 namespace ReModCE
 {
     public static class ReModCE
     {
         private static readonly List<ModComponent> Components = new List<ModComponent>();
+        private static UiManager _uiManager;
 
         public static void OnApplicationStart()
         {
             ReLogger.AppStart();
             ForwardedLogger.Msg("Initializing...");
-            //InitializeModComponents();
+            InitializeModComponents();
             ForwardedLogger.Msg("Done!");
         }
 
         public static void OnUiManagerInit()
         {
             ForwardedLogger.Msg("Initializing UI...");
-
             ReLogger.UiInit();
 
-            var cameraButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton");
-            Object.DestroyImmediate(cameraButton);
-
-            var reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton").GetComponent<RectTransform>().localPosition;
-
-            var menu = new ReQuickMenu("ReModCE");
-            menu.OnOpen += () => ForwardedLogger.Msg($"Menu opened.");
-
-            var button = new ReQuickButton(new Vector2(reportWorldButton.x, reportWorldButton.y + (420f * 2f)),
-                "ReMod <color=#00ff00>CE</color>", "Access the ReMod Community Edition",
-                () => menu.Open(),
-                QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
-
-            var targetMenu = new ReQuickMenu("ReModCETarget", "UserInteractMenu", QuickMenuContext.UserSelected);
-            targetMenu.OnOpen += () => ForwardedLogger.Msg($"Target menu opened.");
-            var targetButton = new ReQuickButton(new Vector2(reportWorldButton.x, reportWorldButton.y - (420f * 2f)),
-                "Target Options", "More options for this target",
-                () => targetMenu.Open(QuickMenuContext.UserSelected),
-                QuickMenu.prop_QuickMenu_0.transform.Find("UserInteractMenu"));
+            _uiManager = new UiManager("ReModCE");
 
             foreach (var t in Components)
             {
-                t.OnUiManagerInit();
+                t.OnUiManagerInit(_uiManager);
             }
         }
 

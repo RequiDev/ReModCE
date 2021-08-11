@@ -1,4 +1,5 @@
 ﻿using System;
+using ReModCE.UI;
 
 namespace ReModCE.Core
 {
@@ -8,7 +9,7 @@ namespace ReModCE.Core
 
     internal class ModComponent
     {
-        public virtual void OnUiManagerInit() { }
+        public virtual void OnUiManagerInit(UiManager uiManager) { }
         public virtual void OnFixedUpdate() { }
         public virtual void OnUpdate() { }
         public virtual void OnLateUpdate() { }

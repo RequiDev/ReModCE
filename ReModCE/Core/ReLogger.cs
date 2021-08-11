@@ -38,7 +38,7 @@ namespace ReModCE.Core
             var cameraButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton");
             var cameraButtonPos = cameraButton.transform.localPosition;
 
-            _log = new ReScrollView("ReModCELog", cameraButtonPos + new Vector3(-3165F, 0f), QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
+            _log = new ReScrollView("ReModCELog", cameraButtonPos + new Vector3(-2745f, -420f), QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
             _log.AddText(_preUiLog);
 
         }

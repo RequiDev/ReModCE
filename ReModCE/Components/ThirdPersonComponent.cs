@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ReModCE.Core;
+using ReModCE.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -24,7 +25,7 @@ namespace ReModCE.Components
 
         private ThirdPersonMode _cameraSetup;
 
-        public override void OnUiManagerInit()
+        public override void OnUiManagerInit(UiManager uiManager)
         {
             var backCameraObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Object.Destroy(backCameraObject.GetComponent<MeshRenderer>());
