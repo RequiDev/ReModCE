@@ -12,6 +12,20 @@ namespace ReModCE.UI
 {
     internal class ReQuickButton : UIElement
     {
+        private static GameObject _reportWorldButton;
+        private static GameObject ReportWorldButton
+        {
+            get
+            {
+                if (_reportWorldButton == null)
+                {
+                    _reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton");
+                }
+
+                return _reportWorldButton;
+            }
+        }
+
         private readonly Text _textComponent;
         public string Text
         {
@@ -26,7 +40,7 @@ namespace ReModCE.UI
             }
         }
 
-        public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton"), parent, pos, $"{text}Button")
+        public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(ReportWorldButton, parent, pos, $"{text}Button")
         {
             Object.DestroyImmediate(gameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != gameObject.transform));
 

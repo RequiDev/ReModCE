@@ -12,7 +12,19 @@ namespace ReModCE.UI
 {
     internal class ReQuickToggle : UIElement
     {
-        private string _name;
+        private static GameObject _blockButton;
+        private static GameObject BlockButton
+        {
+            get
+            {
+                if (_blockButton == null)
+                {
+                    _blockButton = GameObject.Find("UserInterface/QuickMenu/UserInteractMenu/BlockButton");
+                }
+
+                return _blockButton;
+            }
+        }
 
         private readonly GameObject _toggleStateOn;
         private readonly GameObject _toggleStateOff;
@@ -25,9 +37,8 @@ namespace ReModCE.UI
             set => _buttonComponent.interactable = value;
         }
 
-        public ReQuickToggle(Vector2 pos, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false, Transform parent = null) : base(GameObject.Find("UserInterface/QuickMenu/UserInteractMenu/BlockButton"), parent, pos, $"{text}Toggle")
+        public ReQuickToggle(Vector2 pos, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false, Transform parent = null) : base(BlockButton, parent, pos, $"{text}Toggle")
         {
-            _name = $"{text}Toggle";
             var textComponent = gameObject.GetComponentInChildren<Text>();
             textComponent.text = text;
 

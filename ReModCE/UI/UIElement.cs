@@ -10,6 +10,7 @@ namespace ReModCE.UI
 {
     internal class UIElement
     {
+        protected string name { get; }
         protected GameObject gameObject { get; }
         protected RectTransform rectTransform { get; }
 
@@ -22,6 +23,7 @@ namespace ReModCE.UI
         {
             gameObject = Object.Instantiate(original, parent);
             gameObject.name = name;
+            this.name = name;
 
             gameObject.SetActive(defaultState);
             rectTransform = gameObject.GetComponent<RectTransform>();

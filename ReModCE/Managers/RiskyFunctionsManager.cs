@@ -13,6 +13,7 @@ using VRC.Core;
 
 namespace ReModCE.Managers
 {
+    // modcomponent + singleton?
     internal static class RiskyFunctionsManager
     {
         public static event Action<bool> OnRiskyFunctionsChanged;

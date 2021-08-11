@@ -15,6 +15,18 @@ namespace ReModCE.UI
     internal class ReAvatarList : UIElement
     {
         private static GameObject _legacyAvatarList;
+        private static GameObject LegacyAvatarList
+        {
+            get
+            {
+                if (_legacyAvatarList == null)
+                {
+                    _legacyAvatarList = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Vertical Scroll View/Viewport/Content/Legacy Avatar List");
+                }
+
+                return _legacyAvatarList;
+            }
+        }
 
         private UiAvatarList _avatarList;
 
@@ -45,19 +57,6 @@ namespace ReModCE.UI
         public void Refresh()
         {
             _avatarList.StartRenderElementsCoroutine(_savedAvatars);
-        }
-
-        private static GameObject LegacyAvatarList
-        {
-            get
-            {
-                if (_legacyAvatarList == null)
-                {
-                    _legacyAvatarList = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Vertical Scroll View/Viewport/Content/Legacy Avatar List");
-                }
-
-                return _legacyAvatarList;
-            }
         }
     }
 }

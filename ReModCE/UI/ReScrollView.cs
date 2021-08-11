@@ -12,9 +12,23 @@ namespace ReModCE.UI
 {
     internal class ReScrollView : UIElement
     {
+        private static GameObject _reportWorldButton;
+        private static GameObject ReportWorldButton
+        {
+            get
+            {
+                if (_reportWorldButton == null)
+                {
+                    _reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton");
+                }
+
+                return _reportWorldButton;
+            }
+        }
+
         private readonly Text _logText;
 
-        public ReScrollView(string name, Vector2 pos, Transform parent) : base(GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton"), parent, pos, $"ScrollView_{name}")
+        public ReScrollView(string name, Vector2 pos, Transform parent) : base(ReportWorldButton, parent, pos, $"ScrollView_{name}")
         {
             Object.DestroyImmediate(gameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != gameObject.transform));
             Object.DestroyImmediate(gameObject.GetComponent<UiTooltip>());

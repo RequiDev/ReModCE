@@ -14,6 +14,20 @@ namespace ReModCE.UI
 {
     internal class ReQuickMenu : UIElement
     {
+        private static GameObject _cameraMenu;
+        private static GameObject CameraMenu
+        {
+            get
+            {
+                if (_cameraMenu == null)
+                {
+                    _cameraMenu = GameObject.Find("UserInterface/QuickMenu/CameraMenu");
+                }
+
+                return _cameraMenu;
+            }
+        }
+
         private const int ButtonSize = 420;
         private const int MaxFullButtons = 12;
 
@@ -24,7 +38,7 @@ namespace ReModCE.UI
         public event Action OnOpen;
         public List<ReQuickMenu> _subMenus = new List<ReQuickMenu>();
 
-        public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(GameObject.Find("UserInterface/QuickMenu/CameraMenu"), QuickMenu.prop_QuickMenu_0.transform, name, false)
+        public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(CameraMenu, QuickMenu.prop_QuickMenu_0.transform, name, false)
         {
             _name = name;
             foreach (var obj in rectTransform)
