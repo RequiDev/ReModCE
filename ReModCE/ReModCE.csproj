@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\AvatarFavoritesComponent.cs" />
+    <Compile Include="Components\DynamicBonesComponent.cs" />
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\ThirdPersonComponent.cs" />
     <Compile Include="Core\ModComponent.cs" />

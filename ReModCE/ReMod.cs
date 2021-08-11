@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using HarmonyLib;
 using MelonLoader;
 using ReModCE.Components;
 using ReModCE.Core;
@@ -28,8 +29,38 @@ namespace ReModCE
             ReLogger.AppStart();
             RiskyFunctionsManager.AppStart();
 
+            InitializePatches();
+
             InitializeModComponents();
             ForwardedLogger.Msg("Done!");
+        }
+
+        private static HarmonyMethod GetLocalPatch(string name)
+        {
+            return new HarmonyMethod(typeof(ReModCE).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static));
+        }
+
+        private static void InitializePatches()
+        {
+            var harmony = new HarmonyLib.Harmony("ReModCE");
+            harmony.Patch(typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake)), GetLocalPatch(nameof(VRCPlayerAwakePatch)));
+        }
+        private static void VRCPlayerAwakePatch(VRCPlayer __instance)
+        {
+            if (__instance == null) return;
+
+            __instance.Method_Public_add_Void_MulticastDelegateNPublicSealedVoUnique_0(new Action(() =>
+            {
+                OnAvatarIsReady(__instance);
+            }));
+        }
+
+        private static void OnAvatarIsReady(VRCPlayer vrcPlayer)
+        {
+            foreach (var m in Components)
+            {
+                m.OnAvatarIsReady(vrcPlayer);
+            }
         }
 
         public static void OnUiManagerInit()
@@ -39,65 +70,65 @@ namespace ReModCE
 
             _uiManager = new UiManager("ReModCE");
 
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnUiManagerInit(_uiManager);
+                m.OnUiManagerInit(_uiManager);
             }
         }
 
         public static void OnFixedUpdate()
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnFixedUpdate();
+                m.OnFixedUpdate();
             }
         }
 
         public static void OnUpdate()
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnUpdate();
+                m.OnUpdate();
             }
         }
 
         public static void OnLateUpdate()
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnLateUpdate();
+                m.OnLateUpdate();
             }
         }
 
         public static void OnGUI()
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnGUI();
+                m.OnGUI();
             }
         }
 
         public static void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnSceneWasLoaded(buildIndex, sceneName);
+                m.OnSceneWasLoaded(buildIndex, sceneName);
             }
         }
 
         public static void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnSceneWasInitialized(buildIndex, sceneName);
+                m.OnSceneWasInitialized(buildIndex, sceneName);
             }
         }
 
         public static void OnApplicationQuit()
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnApplicationQuit();
+                m.OnApplicationQuit();
             }
 
             Process.GetCurrentProcess().Kill();
@@ -105,17 +136,17 @@ namespace ReModCE
 
         public static void OnPreferencesLoaded()
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnPreferencesLoaded();
+                m.OnPreferencesLoaded();
             }
         }
 
         public static void OnPreferencesSaved()
         {
-            foreach (var t in Components)
+            foreach (var m in Components)
             {
-                t.OnPreferencesSaved();
+                m.OnPreferencesSaved();
             }
         }
 

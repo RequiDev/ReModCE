@@ -20,5 +20,6 @@ namespace ReModCE.Core
         public virtual void OnApplicationQuit() { }
         public virtual void OnPreferencesLoaded() { }
         public virtual void OnPreferencesSaved() { }
+        public virtual void OnAvatarIsReady(VRCPlayer vrcPlayer) { }
     }
 }
