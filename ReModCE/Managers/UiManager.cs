@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using ReModCE.UI;
+using UnityEngine;
 using QuickMenuContext = QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique;
 
-namespace ReModCE.UI
+namespace ReModCE.Managers
 {
     internal class UiManager
     {

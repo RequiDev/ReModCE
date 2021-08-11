@@ -1,4 +1,5 @@
 ﻿using System;
+using ReModCE.Managers;
 using ReModCE.UI;
 
 namespace ReModCE.Core

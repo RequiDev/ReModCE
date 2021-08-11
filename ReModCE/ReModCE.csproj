@@ -83,7 +83,7 @@
     <Compile Include="UI\ReQuickButton.cs" />
     <Compile Include="UI\ReQuickMenu.cs" />
     <Compile Include="UI\ReQuickToggle.cs" />
-    <Compile Include="UI\UiManager.cs" />
+    <Compile Include="Managers\UiManager.cs" />
     <Compile Include="VRChat\PlayerExtensions.cs" />
     <Compile Include="VRChat\PopupManagerExtensions.cs" />
     <Compile Include="VRChat\QuickMenuExtensions.cs" />
