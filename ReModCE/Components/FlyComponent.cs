@@ -127,6 +127,7 @@ namespace ReModCE.Components
         private void ToggleFly(bool value)
         {
             _flyEnabled = value;
+            _flyToggle.Toggle(value);
 
             if (_flyEnabled)
             {
@@ -149,6 +150,7 @@ namespace ReModCE.Components
         private void ToggleNoclip(bool value)
         {
             _noclipEnabled = value;
+            _noclipToggle.Toggle(value);
             if (_noclipEnabled && !_flyEnabled)
             {
                 ToggleFly(true);
