@@ -14,7 +14,7 @@ namespace ReModCE.UI
 {
     internal class ReAvatarList : UIElement
     {
-        private static Transform _legacyAvatarList;
+        private static GameObject _legacyAvatarList;
 
         private UiAvatarList _avatarList;
 
@@ -22,8 +22,8 @@ namespace ReModCE.UI
             new Il2CppSystem.Collections.Generic.List<ApiAvatar>();
 
         public ReAvatarList(string title) : base(
-            LegacyAvatarList.gameObject,
-            LegacyAvatarList.parent,
+            LegacyAvatarList,
+            LegacyAvatarList.transform.parent,
             $"{title}AvatarList")
         {
             _avatarList = gameObject.GetComponent<UiAvatarList>();
@@ -38,6 +38,8 @@ namespace ReModCE.UI
 
             var refreshButton = new ReUiButton("↻", new Vector3(980f, 0f),
                 new Vector2(0.25f, 1), Refresh, expandButton.transform);
+
+            Refresh();
         }
 
         public void Refresh()
@@ -45,14 +47,13 @@ namespace ReModCE.UI
             _avatarList.StartRenderElementsCoroutine(_savedAvatars);
         }
 
-        private static Transform LegacyAvatarList
+        private static GameObject LegacyAvatarList
         {
             get
             {
                 if (_legacyAvatarList == null)
                 {
-                    _legacyAvatarList = VRCUiManager.prop_VRCUiManager_0.field_Public_GameObject_0.transform
-                        .Find("Screens/Avatar/Vertical Scroll View/Viewport/Content/Legacy Avatar List");
+                    _legacyAvatarList = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Vertical Scroll View/Viewport/Content/Legacy Avatar List");
                 }
 
                 return _legacyAvatarList;
