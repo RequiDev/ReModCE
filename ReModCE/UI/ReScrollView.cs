@@ -35,16 +35,15 @@ namespace ReModCE.UI
             };
             button.interactable = false;
 
-            var rect = gameObject.GetComponent<RectTransform>();
-            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
-            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F);
-            rect.ForceUpdateRectTransforms();
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F);
+            rectTransform.ForceUpdateRectTransforms();
 
             _logText = gameObject.GetComponentInChildren<Text>();
 
-            var viewport = new GameObject("Viewport", new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Type>(new Il2CppSystem.Type[1] { Il2CppType.Of<RectTransform>() }));
-            var viewportRect = viewport.GetComponent<RectTransform>();
-            viewportRect.SetParent(rect);
+            var content = new GameObject("Content", new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Type>(new Il2CppSystem.Type[1] { Il2CppType.Of<RectTransform>() }));
+            var contentRect = content.GetComponent<RectTransform>();
+            contentRect.SetParent(rectTransform);
 
             var scrollRect = gameObject.AddComponent<ScrollRect>();
             scrollRect.content = _logText.GetComponent<RectTransform>();
@@ -53,7 +52,7 @@ namespace ReModCE.UI
             scrollRect.decelerationRate = 0.03f;
             scrollRect.scrollSensitivity = 3;
 
-            //_logText.GetComponent<RectTransform>().SetParent(viewportRect);
+            //_logText.GetComponent<RectTransform>().SetParent(contentRect);
 
             _logText.fontSize = (int)(_logText.fontSize * 0.75f);
             _logText.transform.localPosition += new Vector3(0f, -140f);

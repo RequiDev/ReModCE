@@ -70,6 +70,7 @@
     <Reference Include="VRCSDKBase, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\AvatarFavoritesComponent.cs" />
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\ThirdPersonComponent.cs" />
     <Compile Include="Core\ModComponent.cs" />
@@ -78,7 +79,9 @@
     <Compile Include="Managers\RiskyFunctionsManager.cs" />
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\ReAvatarList.cs" />
     <Compile Include="UI\ReScrollView.cs" />
+    <Compile Include="UI\ReUiButton.cs" />
     <Compile Include="UI\UIElement.cs" />
     <Compile Include="UI\ReQuickButton.cs" />
     <Compile Include="UI\ReQuickMenu.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="VRChat\PopupManagerExtensions.cs" />
     <Compile Include="VRChat\QuickMenuExtensions.cs" />
     <Compile Include="VRChat\UnityExtensions.cs" />
+    <Compile Include="VRChat\VrcUiExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReModCE.Loader\ReModCE.Loader.csproj">

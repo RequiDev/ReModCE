@@ -27,7 +27,7 @@ namespace ReModCE.UI
         public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(GameObject.Find("UserInterface/QuickMenu/CameraMenu"), QuickMenu.prop_QuickMenu_0.transform, name, false)
         {
             _name = name;
-            foreach (var obj in transform)
+            foreach (var obj in rectTransform)
             {
                 var control = obj.Cast<Transform>();
                 if (control == null)
@@ -70,7 +70,7 @@ namespace ReModCE.UI
                 return _nextPageMenu.AddButton(text, tooltip, onClick);
             }
 
-            var button = new ReQuickButton(NextButtonPos, text, tooltip, onClick, transform);
+            var button = new ReQuickButton(NextButtonPos, text, tooltip, onClick, rectTransform);
             ++_buttonsAdded;
             return button;
         }
@@ -88,7 +88,7 @@ namespace ReModCE.UI
                 return _nextPageMenu.AddToggle(text, tooltip, onToggle, defaultValue);
             }
 
-            var toggle = new ReQuickToggle(NextButtonPos, text, tooltip, onToggle, defaultValue, transform);
+            var toggle = new ReQuickToggle(NextButtonPos, text, tooltip, onToggle, defaultValue, rectTransform);
             ++_buttonsAdded;
             return toggle;
         }

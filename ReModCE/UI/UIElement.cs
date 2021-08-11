@@ -11,7 +11,7 @@ namespace ReModCE.UI
     internal class UIElement
     {
         protected GameObject gameObject { get; }
-        protected Transform transform { get; }
+        protected RectTransform rectTransform { get; }
 
         public UIElement(GameObject original, Transform parent, Vector3 pos, string name, bool defaultState = true) : this(original, parent, name, defaultState)
         {
@@ -24,7 +24,7 @@ namespace ReModCE.UI
             gameObject.name = name;
 
             gameObject.SetActive(defaultState);
-            transform = gameObject.transform;
+            rectTransform = gameObject.GetComponent<RectTransform>();
         }
 
         public void Destroy()
