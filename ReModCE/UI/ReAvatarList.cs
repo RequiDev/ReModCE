@@ -38,13 +38,13 @@ namespace ReModCE.UI
             LegacyAvatarList.transform.parent,
             $"{title}AvatarList")
         {
-            _avatarList = gameObject.GetComponent<UiAvatarList>();
+            _avatarList = GameObject.GetComponent<UiAvatarList>();
             _avatarList.clearUnseenListOnCollapse = false;
             _avatarList.field_Public_EnumNPublicSealedvaInPuMiFaSpClPuLiCrUnique_0 =
                 Category.SpecificList;
-            gameObject.transform.SetSiblingIndex(0);
+            GameObject.transform.SetSiblingIndex(0);
 
-            var expandButton = gameObject.GetComponentInChildren<Button>(true);
+            var expandButton = GameObject.GetComponentInChildren<Button>(true);
             var textComponent = expandButton.GetComponentInChildren<Text>();
             textComponent.text = title;
 

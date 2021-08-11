@@ -30,18 +30,16 @@ namespace ReModCE.UI
 
         private const int ButtonSize = 420;
         private const int MaxFullButtons = 12;
-
-        private readonly string _name;
+        
         private ReQuickMenu _nextPageMenu;
         private int _buttonsAdded;
+        private readonly List<ReQuickMenu> _subMenus = new List<ReQuickMenu>();
 
         public event Action OnOpen;
-        public List<ReQuickMenu> _subMenus = new List<ReQuickMenu>();
 
-        public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(CameraMenu, QuickMenu.prop_QuickMenu_0.transform, name, false)
+        public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(CameraMenu, QuickMenu.prop_QuickMenu_0.transform, $"{name}Menu", false)
         {
-            _name = name;
-            foreach (var obj in rectTransform)
+            foreach (var obj in RectTransform)
             {
                 var control = obj.Cast<Transform>();
                 if (control == null)
@@ -67,7 +65,7 @@ namespace ReModCE.UI
 
         public void Open(QuickMenuContext context = QuickMenuContext.NoSelection)
         {
-            QuickMenu.prop_QuickMenu_0.SetCurrentPage(gameObject.name, context);
+            QuickMenu.prop_QuickMenu_0.SetCurrentPage(GameObject.name, context);
             OnOpen?.Invoke();
         }
 
@@ -84,7 +82,7 @@ namespace ReModCE.UI
                 return _nextPageMenu.AddButton(text, tooltip, onClick);
             }
 
-            var button = new ReQuickButton(NextButtonPos, text, tooltip, onClick, rectTransform);
+            var button = new ReQuickButton(NextButtonPos, text, tooltip, onClick, RectTransform);
             ++_buttonsAdded;
             return button;
         }
@@ -102,14 +100,14 @@ namespace ReModCE.UI
                 return _nextPageMenu.AddToggle(text, tooltip, onToggle, defaultValue);
             }
 
-            var toggle = new ReQuickToggle(NextButtonPos, text, tooltip, onToggle, defaultValue, rectTransform);
+            var toggle = new ReQuickToggle(NextButtonPos, text, tooltip, onToggle, defaultValue, RectTransform);
             ++_buttonsAdded;
             return toggle;
         }
 
         public ReQuickMenu AddSubMenu(string menuName, string tooltip)
         {
-            var menu = new ReQuickMenu(menuName, _name);
+            var menu = new ReQuickMenu(menuName, Name);
             AddButton(menuName, tooltip, () => menu.Open());
             _subMenus.Add(menu);
             return menu;
@@ -117,7 +115,7 @@ namespace ReModCE.UI
 
         public ReQuickMenu GetSubMenu(string menuName)
         {
-            return _subMenus.FirstOrDefault(m => m._name == menuName);
+            return _subMenus.FirstOrDefault(m => m.Name == menuName || m.Name == $"{menuName}Menu");
         }
 
         private Vector2 NextButtonPos => new Vector2(-625 + (_buttonsAdded % 4) * ButtonSize, (ButtonSize * 2.5f) - (_buttonsAdded / 4) * ButtonSize); // meth

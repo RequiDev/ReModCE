@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,28 +11,28 @@ namespace ReModCE.UI
 {
     internal class UIElement
     {
-        protected string name { get; }
-        protected GameObject gameObject { get; }
-        protected RectTransform rectTransform { get; }
+        protected string Name { get; }
+        protected GameObject GameObject { get; }
+        protected RectTransform RectTransform { get; }
 
         public UIElement(GameObject original, Transform parent, Vector3 pos, string name, bool defaultState = true) : this(original, parent, name, defaultState)
         {
-            gameObject.transform.localPosition = pos;
+            GameObject.transform.localPosition = pos;
         }
 
         public UIElement(GameObject original, Transform parent, string name, bool defaultState = true)
         {
-            gameObject = Object.Instantiate(original, parent);
-            gameObject.name = name;
-            this.name = name;
+            GameObject = Object.Instantiate(original, parent);
+            GameObject.name = string.Concat(name.Where(char.IsLetter));
+            Name = GameObject.name;
 
-            gameObject.SetActive(defaultState);
-            rectTransform = gameObject.GetComponent<RectTransform>();
+            GameObject.SetActive(defaultState);
+            RectTransform = GameObject.GetComponent<RectTransform>();
         }
 
         public void Destroy()
         {
-            Object.Destroy(gameObject);
+            Object.Destroy(GameObject);
         }
     }
 }

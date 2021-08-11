@@ -42,17 +42,17 @@ namespace ReModCE.UI
 
         public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(ReportWorldButton, parent, pos, $"{text}Button")
         {
-            Object.DestroyImmediate(gameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != gameObject.transform));
+            Object.DestroyImmediate(GameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != GameObject.transform));
 
-            _textComponent = gameObject.GetComponentInChildren<Text>();
+            _textComponent = GameObject.GetComponentInChildren<Text>();
             _textComponent.text = text;
             _textComponent.resizeTextForBestFit = true;
 
-            var tooltipComponent = gameObject.GetComponent<UiTooltip>();
+            var tooltipComponent = GameObject.GetComponent<UiTooltip>();
             tooltipComponent.field_Public_String_0 = tooltip;
             tooltipComponent.field_Public_String_1 = tooltip;
 
-            var buttonComponent = gameObject.GetComponent<Button>();
+            var buttonComponent = GameObject.GetComponent<Button>();
             buttonComponent.onClick = new Button.ButtonClickedEvent();
             buttonComponent.onClick.AddListener(new Action(onClick));
         }

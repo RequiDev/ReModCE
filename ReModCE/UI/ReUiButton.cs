@@ -16,14 +16,14 @@ namespace ReModCE.UI
             $"{text}UiButton")
         {
 
-            var buttonComponent = gameObject.GetComponentInChildren<Button>();
+            var buttonComponent = GameObject.GetComponentInChildren<Button>();
             buttonComponent.onClick = new Button.ButtonClickedEvent();
             buttonComponent.onClick.AddListener(new Action(onClick));
 
-            var textComponent = gameObject.GetComponentInChildren<Text>();
+            var textComponent = GameObject.GetComponentInChildren<Text>();
             textComponent.text = text;
 
-            var allTextComponents = gameObject.GetComponentsInChildren<Text>(true);
+            var allTextComponents = GameObject.GetComponentsInChildren<Text>(true);
             foreach (var t in allTextComponents)
             {
                 if (t.transform == textComponent.transform)
@@ -32,7 +32,7 @@ namespace ReModCE.UI
                 Object.DestroyImmediate(t);
             }
 
-            rectTransform.sizeDelta *= scale;
+            RectTransform.sizeDelta *= scale;
         }
     }
 }

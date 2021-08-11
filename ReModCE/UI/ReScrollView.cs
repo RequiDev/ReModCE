@@ -30,13 +30,13 @@ namespace ReModCE.UI
 
         public ReScrollView(string name, Vector2 pos, Transform parent) : base(ReportWorldButton, parent, pos, $"ScrollView_{name}")
         {
-            Object.DestroyImmediate(gameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != gameObject.transform));
-            Object.DestroyImmediate(gameObject.GetComponent<UiTooltip>());
-            Object.DestroyImmediate(gameObject.GetComponent<ButtonReaction>());
+            Object.DestroyImmediate(GameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != GameObject.transform));
+            Object.DestroyImmediate(GameObject.GetComponent<UiTooltip>());
+            Object.DestroyImmediate(GameObject.GetComponent<ButtonReaction>());
 
-            gameObject.AddComponent<RectMask2D>();
+            GameObject.AddComponent<RectMask2D>();
 
-            var button = gameObject.GetComponent<Button>();
+            var button = GameObject.GetComponent<Button>();
             var originalColors = button.colors;
             button.colors = new ColorBlock
             {
@@ -49,17 +49,17 @@ namespace ReModCE.UI
             };
             button.interactable = false;
 
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F);
-            rectTransform.ForceUpdateRectTransforms();
+            RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
+            RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F);
+            RectTransform.ForceUpdateRectTransforms();
 
-            _logText = gameObject.GetComponentInChildren<Text>();
+            _logText = GameObject.GetComponentInChildren<Text>();
 
             var content = new GameObject("Content", new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Type>(new Il2CppSystem.Type[1] { Il2CppType.Of<RectTransform>() }));
             var contentRect = content.GetComponent<RectTransform>();
-            contentRect.SetParent(rectTransform);
+            contentRect.SetParent(RectTransform);
 
-            var scrollRect = gameObject.AddComponent<ScrollRect>();
+            var scrollRect = GameObject.AddComponent<ScrollRect>();
             scrollRect.content = _logText.GetComponent<RectTransform>();
             scrollRect.movementType = ScrollRect.MovementType.Unrestricted;
             scrollRect.horizontal = false;
