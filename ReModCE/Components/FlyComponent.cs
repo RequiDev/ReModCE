@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ReModCE.Core;
 using ReModCE.Loader;
+using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
 using UnhollowerRuntimeLib;
@@ -34,20 +35,33 @@ namespace ReModCE.Components
         private ReQuickToggle _suppressFlyAnimationToggle;
         private ReQuickButton _flySpeedButton;
 
+        private ReQuickToggle _flyToggle;
+        private ReQuickToggle _noclipToggle;
+
         public FlyComponent()
         {
             SuppressFlyAnimation = new ConfigValue<bool>(nameof(SuppressFlyAnimation), true);
             SuppressFlyAnimation.OnValueChanged += (a, b) => _suppressFlyAnimationToggle?.Toggle(b);
             FlySpeed = new ConfigValue<float>(nameof(FlySpeed), 4);
             FlySpeed.OnValueChanged += (a, b) => _flySpeedButton.Text = $"Fly Speed: {FlySpeed}";
+
+            RiskyFunctionsManager.OnRiskyFunctionsChanged += allowed =>
+            {
+                _flyToggle.Interactable = allowed;
+                _noclipToggle.Interactable = allowed;
+                if (!allowed)
+                {
+                    ToggleNoclip(false);
+                }
+            };
         }
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
             var movementMenu = uiManager.MainMenu.GetSubMenu("Movement");
 
-            movementMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
-            movementMenu.AddToggle("Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
+            _flyToggle = movementMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
+            _noclipToggle = movementMenu.AddToggle("Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
             _suppressFlyAnimationToggle = movementMenu.AddToggle("Suppress Fly Animations",
                 "Stay still in the air when flying instead of having dangling legs.",
                 SuppressFlyAnimation.SetValue, SuppressFlyAnimation);
@@ -167,6 +181,9 @@ namespace ReModCE.Components
         private VRCMotionState _motionState;
         private void HandleFly()
         {
+            if (!RiskyFunctionsManager.RiskyFunctionAllowed)
+                return;
+
             var player = VRCPlayer.field_Internal_Static_VRCPlayer_0;
             if (player == null)
                 return;

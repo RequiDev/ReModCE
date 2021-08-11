@@ -9,6 +9,7 @@ using MelonLoader;
 using ReModCE.Components;
 using ReModCE.Core;
 using ReModCE.Loader;
+using ReModCE.Managers;
 using ReModCE.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -22,8 +23,11 @@ namespace ReModCE
 
         public static void OnApplicationStart()
         {
-            ReLogger.AppStart();
             ForwardedLogger.Msg("Initializing...");
+
+            ReLogger.AppStart();
+            RiskyFunctionsManager.AppStart();
+
             InitializeModComponents();
             ForwardedLogger.Msg("Done!");
         }

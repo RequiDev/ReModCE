@@ -17,6 +17,14 @@ namespace ReModCE.UI
         private readonly GameObject _toggleStateOn;
         private readonly GameObject _toggleStateOff;
 
+        private readonly Button _buttonComponent;
+
+        public bool Interactable
+        {
+            get => _buttonComponent.interactable;
+            set => _buttonComponent.interactable = value;
+        }
+
         public ReQuickToggle(Vector2 pos, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false, Transform parent = null) : base(GameObject.Find("UserInterface/QuickMenu/UserInteractMenu/BlockButton"), parent, pos, $"{text}Toggle")
         {
             _name = $"{text}Toggle";
@@ -41,9 +49,9 @@ namespace ReModCE.UI
             _toggleStateOff.GetComponentsInChildren<Text>()[1].resizeTextForBestFit = true;
             Object.DestroyImmediate(gameObject.GetComponent<RectTransform>());
 
-            var buttonComponent = gameObject.GetComponent<Button>();
-            buttonComponent.onClick = new Button.ButtonClickedEvent();
-            buttonComponent.onClick.AddListener(new Action(() =>
+            _buttonComponent = gameObject.GetComponent<Button>();
+            _buttonComponent.onClick = new Button.ButtonClickedEvent();
+            _buttonComponent.onClick.AddListener(new Action(() =>
             {
                 var toggled = !_toggleStateOn.activeSelf;
                 Toggle(toggled);
