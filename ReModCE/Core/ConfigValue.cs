@@ -9,6 +9,8 @@ namespace ReModCE.Core
 {
     internal class ConfigValue<T>
     {
+        public event Action<T, T> OnValueChanged;
+
         private readonly MelonPreferences_Entry<T> _entry;
         private static MelonPreferences_Category _category;
 
@@ -16,6 +18,7 @@ namespace ReModCE.Core
         {
             _category ??= MelonPreferences.CreateCategory("ReModCE");
             _entry = _category.GetEntry<T>(name) ?? _category.CreateEntry(name, defaultValue, displayName, description, isHidden);
+            _entry.OnValueChanged += (a, b) => OnValueChanged?.Invoke(a, b);
         }
 
         public static implicit operator T(ConfigValue<T> conf)

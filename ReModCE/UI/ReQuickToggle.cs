@@ -42,7 +42,7 @@ namespace ReModCE.UI
             buttonComponent.onClick = new Button.ButtonClickedEvent();
             buttonComponent.onClick.AddListener(new Action(() =>
             {
-                ReLogger.Msg($"Toggle clicked {!_toggleStateOn.activeSelf}!");
+                ForwardedLogger.Msg($"Toggle clicked {!_toggleStateOn.activeSelf}!");
                 Toggle(!_toggleStateOn.activeSelf);
             }));
 

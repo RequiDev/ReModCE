@@ -10,7 +10,7 @@ namespace ReModCE.Loader
     /// <summary>
     /// Logger class that forwards all logging to MelonLoader through the ReModCE Loader so the colors are set up properly.
     /// </summary>
-    public static class ReLogger
+    public static class ForwardedLogger
     {
         public static void Msg(string txt) => MelonLogger.Msg(txt);
         public static void Msg(string txt, params object[] args) => MelonLogger.Msg(txt, args);

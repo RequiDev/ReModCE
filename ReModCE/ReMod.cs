@@ -22,45 +22,25 @@ namespace ReModCE
 
         public static void OnApplicationStart()
         {
-            ReLogger.Msg("Initializing...");
-            InitializeModComponents();
-            ReLogger.Msg("Done!");
+            ReLogger.AppStart();
+            ForwardedLogger.Msg("Initializing...");
+            //InitializeModComponents();
+            ForwardedLogger.Msg("Done!");
         }
 
-        public static string ToHexCode(ConsoleColor c)
-        {
-            string[] cColors = { 
-                "#000000", //Black = 0
-                "#000080", //DarkBlue = 1
-                "#008000", //DarkGreen = 2
-                "#008080", //DarkCyan = 3
-                "#800000", //DarkRed = 4
-                "#800080", //DarkMagenta = 5
-                "#808000", //DarkYellow = 6
-                "#C0C0C0", //Gray = 7
-                "#808080", //DarkGray = 8
-                "#0000FF", //Blue = 9
-                "#00FF00", //Green = 10
-                "#00FFFF", //Cyan = 11
-                "#FF0000", //Red = 12
-                "#FF00FF", //Magenta = 13
-                "#FFFF00", //Yellow = 14
-                "#FFFFFF"  //White = 15
-            };
-            return cColors[(int)c];
-        }
         public static void OnUiManagerInit()
         {
-            ReLogger.Msg("Initializing UI...");
+            ForwardedLogger.Msg("Initializing UI...");
+
+            ReLogger.UiInit();
 
             var cameraButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton");
-            var cameraButtonPos = cameraButton.transform.localPosition;
             Object.DestroyImmediate(cameraButton);
 
             var reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton").GetComponent<RectTransform>().localPosition;
 
             var menu = new ReQuickMenu("ReModCE");
-            menu.OnOpen += () => ReLogger.Msg($"Menu opened.");
+            menu.OnOpen += () => ForwardedLogger.Msg($"Menu opened.");
 
             var button = new ReQuickButton(new Vector2(reportWorldButton.x, reportWorldButton.y + (420f * 2f)),
                 "ReMod <color=#00ff00>CE</color>", "Access the ReMod Community Edition",
@@ -68,18 +48,11 @@ namespace ReModCE
                 QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
 
             var targetMenu = new ReQuickMenu("ReModCETarget", "UserInteractMenu", QuickMenuContext.UserSelected);
-            targetMenu.OnOpen += () => ReLogger.Msg($"Target menu opened.");
+            targetMenu.OnOpen += () => ForwardedLogger.Msg($"Target menu opened.");
             var targetButton = new ReQuickButton(new Vector2(reportWorldButton.x, reportWorldButton.y - (420f * 2f)),
                 "Target Options", "More options for this target",
                 () => targetMenu.Open(QuickMenuContext.UserSelected),
                 QuickMenu.prop_QuickMenu_0.transform.Find("UserInteractMenu"));
-
-            var scrollLog = new ReScrollView("LogTest", cameraButtonPos + new Vector3(1050F, -630f), QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
-
-            MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
-            {
-                scrollLog.AddText($"<color={ToHexCode(color)}>[{nameSection}]</color> <color={ToHexCode(consoleColor)}>{msg}</color>\n");
-            };
 
             foreach (var t in Components)
             {
@@ -170,7 +143,7 @@ namespace ReModCE
             }
             catch (Exception e)
             {
-                ReLogger.Error($"Failed adding ModComponent.\n{e}");
+                ForwardedLogger.Error($"Failed adding ModComponent.\n{e}");
             }
         }
 
@@ -201,7 +174,7 @@ namespace ReModCE
                 AddModComponent(t);
             }
 
-            ReLogger.Msg(ConsoleColor.Cyan, $"Created {Components.Count} internal mod components.");
+            ForwardedLogger.Msg(ConsoleColor.Cyan, $"Created {Components.Count} internal mod components.");
         }
     }
 }
