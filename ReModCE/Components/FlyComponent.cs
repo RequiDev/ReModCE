@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.UI;
+using ReModCE.VRChat;
 using UnhollowerRuntimeLib;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR;
 using VRC.Animation;
 using VRC.SDK3.Components;
@@ -17,6 +19,7 @@ using VRC_Pickup = VRC.SDKBase.VRC_Pickup;
 using VRC_UiShape = VRC.SDKBase.VRC_UiShape;
 using Object = UnityEngine.Object;
 
+// ReSharper disable InconsistentNaming
 namespace ReModCE.Components
 {
     internal class FlyComponent : ModComponent
@@ -48,6 +51,21 @@ namespace ReModCE.Components
             _suppressFlyAnimationToggle = movementMenu.AddToggle("Suppress Fly Animations",
                 "Stay still in the air when flying instead of having dangling legs.",
                 SuppressFlyAnimation.SetValue, SuppressFlyAnimation);
+
+            _flySpeedButton = movementMenu.AddButton($"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
+            {
+                VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Set fly speed", FlySpeed.ToString(), InputField.InputType.Standard, false, "Submit",
+                    new Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text>((s, k, t) =>
+                    {
+                        if (string.IsNullOrEmpty(s))
+                            return;
+
+                        if (!float.TryParse(s, out var flySpeed))
+                            return;
+
+                        FlySpeed.SetValue(flySpeed);
+                    }), null);
+            });
         }
 
         private readonly List<Il2CppSystem.Type> _blacklistedComponents = new List<Il2CppSystem.Type>
