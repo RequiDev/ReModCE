@@ -161,9 +161,7 @@ namespace ReModCE
             {
                 if (t.IsAbstract)
                     continue;
-                if (t.BaseType == null)
-                    continue;
-                if (t.BaseType.Name != nameof(ModComponent))
+                if (t.BaseType != typeof(ModComponent))
                     continue;
                 if (t.IsDefined(typeof(ComponentDisabled), false))
                     continue;
