@@ -45,23 +45,6 @@ namespace ReModCE
             var harmony = new HarmonyLib.Harmony("ReModCE");
             harmony.Patch(typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake)), GetLocalPatch(nameof(VRCPlayerAwakePatch)));
         }
-        private static void VRCPlayerAwakePatch(VRCPlayer __instance)
-        {
-            if (__instance == null) return;
-
-            __instance.Method_Public_add_Void_MulticastDelegateNPublicSealedVoUnique_0(new Action(() =>
-            {
-                OnAvatarIsReady(__instance);
-            }));
-        }
-
-        private static void OnAvatarIsReady(VRCPlayer vrcPlayer)
-        {
-            foreach (var m in Components)
-            {
-                m.OnAvatarIsReady(vrcPlayer);
-            }
-        }
 
         public static void OnUiManagerInit()
         {
@@ -191,6 +174,20 @@ namespace ReModCE
             }
 
             ForwardedLogger.Msg(ConsoleColor.Cyan, $"Created {Components.Count} internal mod components.");
+        }
+
+
+        private static void VRCPlayerAwakePatch(VRCPlayer __instance)
+        {
+            if (__instance == null) return;
+
+            __instance.Method_Public_add_Void_MulticastDelegateNPublicSealedVoUnique_0(new Action(() =>
+            {
+                foreach (var m in Components)
+                {
+                    m.OnAvatarIsReady(__instance);
+                }
+            }));
         }
     }
 }
