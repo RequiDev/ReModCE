@@ -12,7 +12,7 @@ using VRC.Core;
 
 namespace ReModCE.Components
 {
-    internal class AvatarFavoritesComponent : ModComponent, FavoriteListener
+    internal class AvatarFavoritesComponent : ModComponent, IFavoriteListener
     {
         private ReAvatarList _avatarList;
 

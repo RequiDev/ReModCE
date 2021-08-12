@@ -15,7 +15,7 @@ using Category = UiAvatarList.EnumNPublicSealedvaInPuMiFaSpClPuLiCrUnique;
 
 namespace ReModCE.UI
 {
-    internal interface FavoriteListener
+    internal interface IFavoriteListener
     {
         void OnFavoriteAvatar(ApiAvatar avatar);
         void OnUnfavoriteAvatar(ApiAvatar avatar);
@@ -53,7 +53,7 @@ namespace ReModCE.UI
 
         private SimpleAvatarPedestal AvatarPedestal => _avatarList.field_Public_SimpleAvatarPedestal_0;
 
-        private readonly FavoriteListener _favoriteListener;
+        private readonly IFavoriteListener _favoriteListener;
 
         private readonly Text _textComponent;
 
@@ -65,7 +65,7 @@ namespace ReModCE.UI
 
         private string _title;
 
-        public ReAvatarList(string title, FavoriteListener favoriteListener) : base(
+        public ReAvatarList(string title, IFavoriteListener favoriteListener) : base(
             LegacyAvatarList,
             LegacyAvatarList.transform.parent,
             $"{title}AvatarList")
