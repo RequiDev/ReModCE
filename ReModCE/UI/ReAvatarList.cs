@@ -42,7 +42,7 @@ namespace ReModCE.UI
 
         private int _currentPage;
 
-        private const int MaxAvatarsPerPage = 2;
+        private const int MaxAvatarsPerPage = 100;
 
         private SimpleAvatarPedestal AvatarPedestal => _avatarList.field_Public_SimpleAvatarPedestal_0;
 
