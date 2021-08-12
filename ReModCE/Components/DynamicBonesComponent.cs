@@ -293,6 +293,8 @@ namespace ReModCE.Components
                 var o = _settings.OwnColliderOption;
                 CycleColliderOption(_ownColliderOptionButton, ref o);
                 _settings.OwnColliderOption = o;
+
+                _ownDynamicBoneColliders.Clear(); // clear this because we might have colliders we don't want in here
             });
             ownMenu.AddToggle("To Self", "Add colliders to self", toggled =>
             {
@@ -346,6 +348,8 @@ namespace ReModCE.Components
                 var o = _settings.WhitelistColliderOption;
                 CycleColliderOption(_whitelistedColliderOptionButton, ref o);
                 _settings.WhitelistColliderOption = o;
+
+                _whitelistedBoneColliders.Clear(); // clear this because we might have colliders we don't want in here
             });
             whitelistedMenu.AddToggle("To Self", "Add colliders to self", toggled =>
             {
@@ -398,6 +402,8 @@ namespace ReModCE.Components
                 var o = _settings.FriendsColliderOption;
                 CycleColliderOption(_friendsColliderOptionButton, ref o);
                 _settings.FriendsColliderOption = o;
+
+                _friendsDynamicBoneColliders.Clear(); // clear this because we might have colliders we don't want in here
             });
             friendsMenu.AddToggle("To Self", "Add colliders to self", toggled =>
             {
@@ -451,6 +457,8 @@ namespace ReModCE.Components
                 var o = _settings.OthersColliderOption;
                 CycleColliderOption(_othersColliderOptionButton, ref o);
                 _settings.OthersColliderOption = o;
+
+                _ownDynamicBoneColliders.Clear(); // clear this because we might have colliders we don't want in here
             });
             othersMenu.AddToggle("To Self", "Add colliders to self", toggled =>
             {
