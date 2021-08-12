@@ -11,6 +11,7 @@ using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
 using UnityEngine;
+using VRC;
 using VRC.Core;
 
 using DynamicBoneColliderBound = DynamicBoneCollider.EnumNPublicSealedvaOuIn3vUnique;
@@ -258,6 +259,17 @@ namespace ReModCE.Components
                     WhitelistUser(activeUser.id);
                 });
 
+            uiManager.TargetMenu.AddButton("Reload Avatars", "Reload this users avatar", () =>
+            {
+                var interactMenu = ExtendedQuickMenu.UserInteractMenu;
+                var activeUser = interactMenu.field_Public_MenuController_0.activeUser;
+                if (activeUser == null)
+                    return;
+
+                var player = PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(activeUser.id);
+                player?.GetVRCPlayer()?.ReloadAvatar();
+            });
+
             uiManager.TargetMenu.OnOpen += () =>
             {
                 var interactMenu = ExtendedQuickMenu.UserInteractMenu;
@@ -271,6 +283,9 @@ namespace ReModCE.Components
             var menu = uiManager.MainMenu.AddSubMenu("Dynamic Bones", "Access your global dynamic bone settings");
             menu.AddToggle("Enabled", "Enable/Disable global dynamic bones", ToggleDynamicBones,
                 _settings.Enabled);
+            menu.AddButton("Reload All Avatars",
+                "Reload every users avatar. Necessary to apply changed dynamic bones settings.",
+                () => VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars());
 
             var ownMenu = menu.AddSubMenu("Self Options", "Adjust how your colliders affect others");
             _ownColliderOptionButton = ownMenu.AddButton($"Colliders: {_settings.OwnColliderOption}", "Choose which colliders are applied", () =>
@@ -514,12 +529,8 @@ namespace ReModCE.Components
         {
             foreach (var bone in bones)
             {
-                var boneTransform = animator.GetBoneTransform(bone);
-                foreach (var collider in boneTransform.GetComponentsInChildren<DynamicBoneCollider>(true))
+                foreach (var collider in animator.GetBoneTransform(bone).GetComponentsInChildren<DynamicBoneCollider>(true))
                 {
-                    if (collider == null)
-                        continue;
-
                     if (collider.m_Bound == DynamicBoneColliderBound.Inside)
                         continue;
 
@@ -542,9 +553,6 @@ namespace ReModCE.Components
                     {
                         foreach (var collider in avatarObject.GetComponentsInChildren<DynamicBoneCollider>(true))
                         {
-                            if (collider == null)
-                                continue;
-
                             if (collider.m_Bound == DynamicBoneColliderBound.Inside)
                                 continue;
 
@@ -583,6 +591,32 @@ namespace ReModCE.Components
             }
         }
 
+        private void AddCollidersToDynamicBones(List<DynamicBoneCollider> colliders, List<DynamicBone> bones)
+        {
+            foreach (var bone in bones.ToList())
+            {
+                if (bone == null)
+                {
+                    bones.Remove(bone);
+                    continue;
+                }
+
+                foreach (var collider in colliders.ToList())
+                {
+                    if (collider == null)
+                    {
+                        colliders.Remove(collider);
+                        continue;
+                    }
+
+                    if (bone.m_Colliders.IndexOf(collider) == -1)
+                    {
+                        bone.m_Colliders.Add(collider);
+                    }
+                }
+            }
+        }
+
         public override void OnAvatarIsReady(VRCPlayer vrcPlayer)
         {
             var apiUser = vrcPlayer.GetPlayer().GetAPIUser();
@@ -597,44 +631,118 @@ namespace ReModCE.Components
             var isOther = !isSelf && !isFriend && !isWhitelisted;
 
             ColliderOption colliderOption;
+            CollisionFlag collisionFlag;
             List<DynamicBone> bonesList;
             List<DynamicBoneCollider> collidersList;
             if (isSelf)
             {
                 colliderOption = _settings.OwnColliderOption;
+                collisionFlag = _settings.OwnCollisionFlag;
                 bonesList = _ownDynamicBones;
                 collidersList = _ownDynamicBoneColliders;
             }
             else if (isWhitelisted)
             {
                 colliderOption = _settings.WhitelistColliderOption;
+                collisionFlag = _settings.WhitelistCollisionFlag;
                 bonesList = _whitelistedDynamicBones;
                 collidersList = _whitelistedBoneColliders;
             }
             else if (isFriend)
             {
                 colliderOption = _settings.FriendsColliderOption;
+                collisionFlag = _settings.FriendsCollisionFlag;
                 bonesList = _friendsDynamicBones;
                 collidersList = _friendsDynamicBoneColliders;
             }
             else
             {
                 colliderOption = _settings.OthersColliderOption;
+                collisionFlag = _settings.OthersCollisionFlag;
                 bonesList = _othersDynamicBones;
                 collidersList = _othersDynamicBoneColliders;
             }
 
             HandleColliderOption(collidersList, animator, avatarObject, colliderOption);
 
-            // Remove unloaded colliders and bones
-            foreach (var collider in collidersList.ToList().Where(collider => collider == null))
+            bonesList.AddRange(avatarObject.GetComponentsInChildren<DynamicBone>(true));
+
+            if ((collisionFlag & CollisionFlag.Self) == CollisionFlag.Self)
             {
-                collidersList.Remove(collider);
+                AddCollidersToDynamicBones(collidersList, _ownDynamicBones);
+            }
+            if ((collisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist)
+            {
+                AddCollidersToDynamicBones(collidersList, _whitelistedDynamicBones);
+            }
+            if ((collisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends)
+            {
+                AddCollidersToDynamicBones(collidersList, _friendsDynamicBones);
+            }
+            if ((collisionFlag & CollisionFlag.Others) == CollisionFlag.Others)
+            {
+                AddCollidersToDynamicBones(collidersList, _othersDynamicBones);
             }
 
-            foreach (var bone in bonesList.ToList().Where(bone => bone == null))
+            if (isSelf)
             {
-                bonesList.Remove(bone);
+                if ((_settings.WhitelistCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self)
+                {
+                    AddCollidersToDynamicBones(_whitelistedBoneColliders, bonesList);
+                }
+                if ((_settings.FriendsCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self)
+                {
+                    AddCollidersToDynamicBones(_friendsDynamicBoneColliders, bonesList);
+                }
+                if ((_settings.OthersCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self)
+                {
+                    AddCollidersToDynamicBones(_othersDynamicBoneColliders, bonesList);
+                }
+            }
+            else if (isWhitelisted)
+            {
+                if ((_settings.OwnCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist)
+                {
+                    AddCollidersToDynamicBones(_ownDynamicBoneColliders, bonesList);
+                }
+                if ((_settings.FriendsCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist)
+                {
+                    AddCollidersToDynamicBones(_friendsDynamicBoneColliders, bonesList);
+                }
+                if ((_settings.OthersCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist)
+                {
+                    AddCollidersToDynamicBones(_othersDynamicBoneColliders, bonesList);
+                }
+            }
+            else if (isFriend)
+            {
+                if ((_settings.OwnCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends)
+                {
+                    AddCollidersToDynamicBones(_ownDynamicBoneColliders, bonesList);
+                }
+                if ((_settings.WhitelistCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends)
+                {
+                    AddCollidersToDynamicBones(_whitelistedBoneColliders, bonesList);
+                }
+                if ((_settings.OthersCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends)
+                {
+                    AddCollidersToDynamicBones(_othersDynamicBoneColliders, bonesList);
+                }
+            }
+            else
+            {
+                if ((_settings.OwnCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others)
+                {
+                    AddCollidersToDynamicBones(_ownDynamicBoneColliders, bonesList);
+                }
+                if ((_settings.WhitelistCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others)
+                {
+                    AddCollidersToDynamicBones(_whitelistedBoneColliders, bonesList);
+                }
+                if ((_settings.FriendsCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others)
+                {
+                    AddCollidersToDynamicBones(_friendsDynamicBoneColliders, bonesList);
+                }
             }
         }
     }

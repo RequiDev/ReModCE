@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using VRC;
 using VRC.Core;
@@ -63,6 +64,44 @@ namespace ReModCE.VRChat
         public static VRCPlayerApi GetPlayerApi(this VRCPlayer vrcPlayer)
         {
             return vrcPlayer.field_Private_VRCPlayerApi_0;
+        }
+
+        private static MethodInfo _reloadAvatarMethod;
+        private static MethodInfo LoadAvatarMethod
+        {
+            get
+            {
+                if (_reloadAvatarMethod == null)
+                {
+                    _reloadAvatarMethod = typeof(VRCPlayer).GetMethods().First(mi =>
+                        mi.Name.StartsWith("Method_Private_Void_Boolean_") && mi.Name.Length < 31 &&
+                        mi.GetParameters().Any(pi => pi.IsOptional));
+                }
+
+                return _reloadAvatarMethod;
+            }
+        }
+        
+        private static MethodInfo _reloadAllAvatarsMethod;
+        private static MethodInfo ReloadAllAvatarsMethod
+        {
+            get
+            {
+                if (_reloadAllAvatarsMethod == null)
+                {
+                    _reloadAllAvatarsMethod = typeof(VRCPlayer).GetMethods().First(mi => mi.Name.StartsWith("Method_Public_Void_Boolean_") && mi.Name.Length < 30 && mi.GetParameters().Any(pi => pi.IsOptional));
+                }
+
+                return _reloadAllAvatarsMethod;
+            }
+        }
+        public static void ReloadAvatar(this VRCPlayer instance)
+        {
+            LoadAvatarMethod.Invoke(instance, new object[] { true }); // parameter is forceLoad and has to be true
+        }
+        public static void ReloadAllAvatars(this VRCPlayer instance, bool ignoreSelf = false)
+        {
+            ReloadAllAvatarsMethod.Invoke(instance, new object[] { ignoreSelf });
         }
     }
 }
