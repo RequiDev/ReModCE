@@ -4,7 +4,7 @@ using ReModCE.UI;
 
 namespace ReModCE.Core
 {
-    public class ComponentDisabled : Attribute
+    internal class ComponentDisabled : Attribute
     {
     }
 

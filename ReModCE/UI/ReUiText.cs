@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 
 namespace ReModCE.UI
 {
-    internal class ReUiButton : UIElement
+    internal class ReUiText : UIElement
     {
         private readonly Text _textComponent;
 
@@ -18,22 +18,13 @@ namespace ReModCE.UI
             get => _textComponent.text;
             set => _textComponent.text = value;
         }
-
-        private readonly Button _buttonComponent;
-        public bool Interactable
-        {
-            get => _buttonComponent.interactable;
-            set => _buttonComponent.interactable = value;
-        }
-
-        public ReUiButton(string text, Vector2 pos, Vector2 scale, Action onClick, Transform parent = null) : base(
-            GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button"), parent, pos,
+        public ReUiText(string text, Vector2 pos, Vector2 scale, Transform parent = null) : base(
+            GameObject.Find("/UserInterface/MenuContent/Screens/Avatar/Favorite Button"), parent, pos,
             $"{text}UiButton")
         {
 
-            _buttonComponent = GameObject.GetComponentInChildren<Button>();
-            _buttonComponent.onClick = new Button.ButtonClickedEvent();
-            _buttonComponent.onClick.AddListener(new Action(onClick));
+            Object.DestroyImmediate(GameObject.GetComponentInChildren<Button>());
+            Object.DestroyImmediate(GameObject.GetComponentInChildren<Image>());
 
             _textComponent = GameObject.GetComponentInChildren<Text>();
             _textComponent.text = text;

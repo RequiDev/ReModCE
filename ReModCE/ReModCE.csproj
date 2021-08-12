@@ -83,6 +83,7 @@
     <Compile Include="UI\ReAvatarList.cs" />
     <Compile Include="UI\ReScrollView.cs" />
     <Compile Include="UI\ReUiButton.cs" />
+    <Compile Include="UI\ReUiText.cs" />
     <Compile Include="UI\UIElement.cs" />
     <Compile Include="UI\ReQuickButton.cs" />
     <Compile Include="UI\ReQuickMenu.cs" />
@@ -91,7 +92,6 @@
     <Compile Include="VRChat\ExtendedQuickMenu.cs" />
     <Compile Include="VRChat\PlayerExtensions.cs" />
     <Compile Include="VRChat\PopupManagerExtensions.cs" />
-    <Compile Include="VRChat\QuickMenuExtensions.cs" />
     <Compile Include="VRChat\UnityExtensions.cs" />
     <Compile Include="VRChat\VrcUiExtensions.cs" />
   </ItemGroup>

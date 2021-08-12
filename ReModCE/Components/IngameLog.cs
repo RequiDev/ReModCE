@@ -17,7 +17,7 @@ namespace ReModCE.Components
         {
             MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
             {
-                if (nameSection != "ReModCE")
+                if (nameSection != nameof(ReModCE))
                     return;
 
                 if (_log == null)
