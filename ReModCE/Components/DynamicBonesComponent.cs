@@ -627,6 +627,9 @@ namespace ReModCE.Components
 
         public override void OnAvatarIsReady(VRCPlayer vrcPlayer)
         {
+            if (!_settings.Enabled)
+                return;
+
             var apiUser = vrcPlayer.GetPlayer().GetAPIUser();
             if (apiUser == null)
                 return;
