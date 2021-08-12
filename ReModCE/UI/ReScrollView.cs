@@ -45,7 +45,7 @@ namespace ReModCE.UI
             var contentRect = content.GetComponent<RectTransform>();
             contentRect.SetParent(RectTransform);
             contentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
-            contentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F * 4); // make it based on newlines in text?
+            contentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 5040F); // make it based on newlines in text?
             contentRect.ForceUpdateRectTransforms();
             contentRect.localRotation = new Quaternion(0f, 0f, 0f, 0f);
             contentRect.localScale = Vector3.one;
@@ -61,13 +61,13 @@ namespace ReModCE.UI
             var textRect = _logText.GetComponent<RectTransform>();
             textRect.SetParent(contentRect);
             textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
-            textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F * 4); // make it based on newlines in text?
+            textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 5040F); // make it based on newlines in text?
             textRect.ForceUpdateRectTransforms();
-            textRect.localPosition = new Vector3(0f, 0f, 0f);
+            textRect.localPosition = Vector3.zero;
             textRect.localRotation = new Quaternion(0f, 0f, 0f, 0f);
             textRect.localScale = Vector3.one;
 
-            contentRect.localPosition = new Vector3(50f, 1890f, 0f);
+            contentRect.localPosition = new Vector3(50f, 1260F + 1260F / 2, 0f);
 
             _logText.fontSize = (int)(_logText.fontSize * 0.75f);
             _logText.alignment = TextAnchor.LowerLeft;
