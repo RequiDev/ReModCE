@@ -66,7 +66,7 @@ namespace ReModCE.UI
                 GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent);
 
             _refreshButton = new ReUiButton("↻", new Vector3(980f, 0f),
-                new Vector2(0.25f, 1), Refresh, expandButton.transform);
+                new Vector2(0.25f, 1), () => Refresh(), expandButton.transform);
 
             _nextPageButton = new ReUiButton("→", new Vector2(900f, 0f), new Vector2(0.25f, 1f), () =>
             {
@@ -122,20 +122,23 @@ namespace ReModCE.UI
             return false;
         }
 
-        public void Refresh()
+        public void Refresh(Il2CppSystem.Collections.Generic.List<ApiAvatar> avatars = null)
         {
-            var pagesCount = _allAvatars.Count / MaxAvatarsPerPage;
+            if (avatars == null)
+                avatars = _allAvatars;
+
+            var pagesCount = avatars.Count / MaxAvatarsPerPage;
             _currentPage = Mathf.Clamp(_currentPage, 0, pagesCount);
 
             _pageCount.Text = $"{_currentPage + 1} / {pagesCount + 1}";
-            var cutDown = _allAvatars.GetRange(_currentPage * MaxAvatarsPerPage, Math.Abs(_currentPage * MaxAvatarsPerPage - _allAvatars.Count));
+            var cutDown = avatars.GetRange(_currentPage * MaxAvatarsPerPage, Math.Abs(_currentPage * MaxAvatarsPerPage - avatars.Count));
             if (cutDown.Count > MaxAvatarsPerPage)
             {
                 cutDown.RemoveRange(MaxAvatarsPerPage, cutDown.Count - MaxAvatarsPerPage);
             }
 
             _prevPageButton.Interactable = _currentPage > 0;
-            _nextPageButton.Interactable = _currentPage < _allAvatars.Count / MaxAvatarsPerPage;
+            _nextPageButton.Interactable = _currentPage < avatars.Count / MaxAvatarsPerPage;
 
             _avatarList.StartRenderElementsCoroutine(cutDown);
         }
