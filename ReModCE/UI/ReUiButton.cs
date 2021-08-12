@@ -36,7 +36,7 @@ namespace ReModCE.UI
             _buttonComponent.onClick.AddListener(new Action(onClick));
 
             _textComponent = GameObject.GetComponentInChildren<Text>();
-            _textComponent.text = text;
+            Text = text;
 
             var allTextComponents = GameObject.GetComponentsInChildren<Text>(true);
             foreach (var t in allTextComponents)

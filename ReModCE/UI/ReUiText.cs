@@ -27,7 +27,7 @@ namespace ReModCE.UI
             Object.DestroyImmediate(GameObject.GetComponentInChildren<Image>());
 
             _textComponent = GameObject.GetComponentInChildren<Text>();
-            _textComponent.text = text;
+            Text = text;
 
             var allTextComponents = GameObject.GetComponentsInChildren<Text>(true);
             foreach (var t in allTextComponents)

@@ -39,8 +39,8 @@ namespace ReModCE.UI
             Object.DestroyImmediate(GameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != GameObject.transform));
 
             _textComponent = GameObject.GetComponentInChildren<Text>();
-            _textComponent.text = text;
             _textComponent.resizeTextForBestFit = true;
+            Text = text;
 
             var tooltipComponent = GameObject.GetComponent<UiTooltip>();
             tooltipComponent.field_Public_String_0 = tooltip;

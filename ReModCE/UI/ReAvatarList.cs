@@ -55,11 +55,22 @@ namespace ReModCE.UI
 
         private readonly FavoriteListener _favoriteListener;
 
+        private readonly Text _textComponent;
+
+        public string Title
+        {
+            get => _textComponent.text;
+            set => _textComponent.text = value;
+        }
+
+        private string _title;
+
         public ReAvatarList(string title, FavoriteListener favoriteListener) : base(
             LegacyAvatarList,
             LegacyAvatarList.transform.parent,
             $"{title}AvatarList")
         {
+            _title = title;
             _favoriteListener = favoriteListener;
             _avatarList = GameObject.GetComponent<UiAvatarList>();
             _avatarList.clearUnseenListOnCollapse = false;
@@ -72,8 +83,8 @@ namespace ReModCE.UI
             enableDisableListener.OnEnableEvent += () => Refresh();
 
             var expandButton = GameObject.GetComponentInChildren<Button>(true);
-            var textComponent = expandButton.GetComponentInChildren<Text>();
-            textComponent.text = title;
+            _textComponent = expandButton.GetComponentInChildren<Text>();
+            Title = title;
 
             _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.7f, 1f), () => FavoriteAvatar(AvatarPedestal.field_Internal_ApiAvatar_0),
                 GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent);
@@ -158,6 +169,8 @@ namespace ReModCE.UI
 
             _prevPageButton.Interactable = _currentPage > 0;
             _nextPageButton.Interactable = _currentPage < avatars.Count / MaxAvatarsPerPage;
+
+            Title = $"{_title} ({cutDown.Count}/{avatars.Count})";
 
             _avatarList.StartRenderElementsCoroutine(cutDown);
         }
