@@ -26,6 +26,17 @@ namespace ReModCE.Components
 
         private ThirdPersonMode _cameraSetup;
 
+        public ThirdPersonComponent()
+        {
+            RiskyFunctionsManager.OnRiskyFunctionsChanged += allowed =>
+            {
+                if (!allowed)
+                {
+                    SetThirdPersonMode(ThirdPersonMode.Off);
+                }
+            };
+        }
+
         public override void OnUiManagerInit(UiManager uiManager)
         {
             var backCameraObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -67,28 +78,35 @@ namespace ReModCE.Components
         {
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.T))
             {
-                if (++_cameraSetup > ThirdPersonMode.Front)
+                var mode = _cameraSetup;
+                if (++mode > ThirdPersonMode.Front)
                 {
-                    _cameraSetup = ThirdPersonMode.Off;
+                    mode = ThirdPersonMode.Off;
                 }
 
-                switch (_cameraSetup)
-                {
-                    case ThirdPersonMode.Off:
-                        _cameraBack.GetComponent<Camera>().enabled = false;
-                        _cameraFront.GetComponent<Camera>().enabled = false;
-                        break;
-                    case ThirdPersonMode.Back:
-                        _cameraBack.GetComponent<Camera>().enabled = true;
-                        _cameraFront.GetComponent<Camera>().enabled = false;
-                        break;
-                    case ThirdPersonMode.Front:
-                        _cameraBack.GetComponent<Camera>().enabled = false;
-                        _cameraFront.GetComponent<Camera>().enabled = true;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                SetThirdPersonMode(mode);
+            }
+        }
+
+        private void SetThirdPersonMode(ThirdPersonMode mode)
+        {
+            _cameraSetup = mode;
+            switch (mode)
+            {
+                case ThirdPersonMode.Off:
+                    _cameraBack.GetComponent<Camera>().enabled = false;
+                    _cameraFront.GetComponent<Camera>().enabled = false;
+                    break;
+                case ThirdPersonMode.Back:
+                    _cameraBack.GetComponent<Camera>().enabled = true;
+                    _cameraFront.GetComponent<Camera>().enabled = false;
+                    break;
+                case ThirdPersonMode.Front:
+                    _cameraBack.GetComponent<Camera>().enabled = false;
+                    _cameraFront.GetComponent<Camera>().enabled = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -111,6 +129,9 @@ namespace ReModCE.Components
 
         public override void OnUpdate()
         {
+            if (!RiskyFunctionsManager.RiskyFunctionAllowed)
+                return;
+
             if (_cameraBack == null || _cameraFront == null)
             {
                 return;
