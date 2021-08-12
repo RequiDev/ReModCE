@@ -36,6 +36,7 @@ namespace ReModCE.UI
             };
             button.interactable = false;
 
+             // RectTransform = Scroll View
             RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
             RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F);
             RectTransform.ForceUpdateRectTransforms();
@@ -45,18 +46,32 @@ namespace ReModCE.UI
             var content = new GameObject("Content", new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Type>(new Il2CppSystem.Type[1] { Il2CppType.Of<RectTransform>() }));
             var contentRect = content.GetComponent<RectTransform>();
             contentRect.SetParent(RectTransform);
+            contentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
+            contentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F * 4); // make it based on newlines in text?
+            contentRect.ForceUpdateRectTransforms();
+            contentRect.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+            contentRect.localScale = Vector3.one;
 
             var scrollRect = GameObject.AddComponent<ScrollRect>();
-            scrollRect.content = _logText.GetComponent<RectTransform>();
-            scrollRect.movementType = ScrollRect.MovementType.Unrestricted;
+            scrollRect.content = contentRect;
+            scrollRect.movementType = ScrollRect.MovementType.Clamped;
             scrollRect.horizontal = false;
             scrollRect.decelerationRate = 0.03f;
             scrollRect.scrollSensitivity = 3;
+            
+            var textRect = _logText.GetComponent<RectTransform>();
+            textRect.SetParent(contentRect);
+            textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
+            textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F * 4); // make it based on newlines in text?
+            textRect.ForceUpdateRectTransforms();
+            textRect.localPosition = new Vector3(0f, 0f, 0f);
+            textRect.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+            textRect.localScale = Vector3.one;
 
-            //_logText.GetComponent<RectTransform>().SetParent(contentRect);
+            contentRect.localPosition = new Vector3(50f, 1890f, 0f);
+
 
             _logText.fontSize = (int)(_logText.fontSize * 0.75f);
-            _logText.transform.localPosition += new Vector3(0f, -140f);
             _logText.alignment = TextAnchor.LowerLeft;
             _logText.verticalOverflow = VerticalWrapMode.Overflow;
             _logText.text = "";
