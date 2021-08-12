@@ -63,7 +63,7 @@ namespace ReModCE.UI
             set => _textComponent.text = value;
         }
 
-        private string _title;
+        private readonly string _title;
 
         public ReAvatarList(string title, IFavoriteListener favoriteListener) : base(
             LegacyAvatarList,

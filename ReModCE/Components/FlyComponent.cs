@@ -176,6 +176,9 @@ namespace ReModCE.Components
 
         public override void OnUpdate()
         {
+            if (!RiskyFunctionsManager.RiskyFunctionAllowed)
+                return;
+
             HandleHotkeys();
             HandleFly();
         }
@@ -183,9 +186,6 @@ namespace ReModCE.Components
         private VRCMotionState _motionState;
         private void HandleFly()
         {
-            if (!RiskyFunctionsManager.RiskyFunctionAllowed)
-                return;
-
             var player = VRCPlayer.field_Internal_Static_VRCPlayer_0;
             if (player == null)
                 return;
