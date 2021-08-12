@@ -55,7 +55,7 @@ namespace ReModCE.VRChat
             return vrcPlayer._playerNet;
         }
 
-        public static GameObject GetAvatar(this VRCPlayer vrcPlayer)
+        public static GameObject GetAvatarObject(this VRCPlayer vrcPlayer)
         {
             return vrcPlayer.field_Internal_GameObject_0;
         }
