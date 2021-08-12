@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReModCE.VRChat;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,23 +13,9 @@ namespace ReModCE.UI
 {
     internal class ReScrollView : UIElement
     {
-        private static GameObject _reportWorldButton;
-        private static GameObject ReportWorldButton
-        {
-            get
-            {
-                if (_reportWorldButton == null)
-                {
-                    _reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton");
-                }
-
-                return _reportWorldButton;
-            }
-        }
-
         private readonly Text _logText;
 
-        public ReScrollView(string name, Vector2 pos, Transform parent) : base(ReportWorldButton, parent, pos, $"ScrollView_{name}")
+        public ReScrollView(string name, Vector2 pos, Transform parent) : base(ExtendedQuickMenu.ReportWorldButton.gameObject, parent, pos, $"ScrollView_{name}")
         {
             Object.DestroyImmediate(GameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != GameObject.transform));
             Object.DestroyImmediate(GameObject.GetComponent<UiTooltip>());

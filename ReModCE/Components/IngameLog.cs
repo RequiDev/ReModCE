@@ -3,6 +3,7 @@ using MelonLoader;
 using ReModCE.Core;
 using ReModCE.Managers;
 using ReModCE.UI;
+using ReModCE.VRChat;
 using UnityEngine;
 
 namespace ReModCE.Components
@@ -31,10 +32,9 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var cameraButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton");
-            var cameraButtonPos = cameraButton.transform.localPosition;
+            var cameraButton = ExtendedQuickMenu.ShortcutMenu.Find("UserIconCameraButton");
 
-            _log = new ReScrollView("ReModCELog", cameraButtonPos + new Vector3(-3165f, 0f), QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu"));
+            _log = new ReScrollView("ReModCELog", cameraButton.localPosition + new Vector3(-3165f, 0f), ExtendedQuickMenu.ShortcutMenu);
             _log.AddText(_preUiLog);
 
         }

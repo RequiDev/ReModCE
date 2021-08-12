@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ReModCE.Loader;
+using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -12,20 +13,6 @@ namespace ReModCE.UI
 {
     internal class ReQuickButton : UIElement
     {
-        private static GameObject _reportWorldButton;
-        private static GameObject ReportWorldButton
-        {
-            get
-            {
-                if (_reportWorldButton == null)
-                {
-                    _reportWorldButton = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton");
-                }
-
-                return _reportWorldButton;
-            }
-        }
-
         private readonly Text _textComponent;
         public string Text
         {
@@ -40,7 +27,7 @@ namespace ReModCE.UI
             }
         }
 
-        public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(ReportWorldButton, parent, pos, $"{text}Button")
+        public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(ExtendedQuickMenu.ReportWorldButton.gameObject, parent, pos, $"{text}Button")
         {
             Object.DestroyImmediate(GameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != GameObject.transform));
 

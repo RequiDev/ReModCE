@@ -1,4 +1,5 @@
 ﻿using ReModCE.UI;
+using ReModCE.VRChat;
 using UnityEngine;
 using QuickMenuContext = QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique;
 
@@ -15,17 +16,14 @@ namespace ReModCE.Managers
 
         public UiManager(string menuName)
         {
-            GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/UserIconCameraButton").transform.localPosition += new Vector3(ButtonSize, -ButtonSize, 0f);
-            var intialButtonPos = GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/ReportWorldButton").GetComponent<RectTransform>().localPosition;
-
-            var shortcutMenu = QuickMenu.prop_QuickMenu_0.transform.Find("ShortcutMenu");
-            var userInteractMenu = QuickMenu.prop_QuickMenu_0.transform.Find("UserInteractMenu");
-
+            ExtendedQuickMenu.ShortcutMenu.Find("UserIconCameraButton").localPosition += new Vector3(ButtonSize, -ButtonSize, 0f);
+            var intialButtonPos = ExtendedQuickMenu.ReportWorldButton.GetComponent<RectTransform>().localPosition;
+            
             _mainMenu = new ReQuickMenu(menuName);
             ReQuickButton.Create(new Vector2(intialButtonPos.x, intialButtonPos.y + (ButtonSize * 2f)),
                 "ReMod <color=#00ff00>CE</color>", "Access the ReMod Community Edition",
                 () => _mainMenu.Open(),
-                shortcutMenu);
+                ExtendedQuickMenu.ShortcutMenu);
 
             _mainMenu.AddSubMenu("Movement", "Access movement related options");
 
@@ -33,7 +31,7 @@ namespace ReModCE.Managers
             ReQuickButton.Create(new Vector2(intialButtonPos.x, intialButtonPos.y - (ButtonSize * 2f)),
                 "Target Options", "More options for this target",
                 () => _targetMenu.Open(QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique.UserSelected),
-                userInteractMenu);
+                ExtendedQuickMenu.UserInteractMenu);
         }
     }
 }

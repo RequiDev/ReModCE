@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ReModCE.Loader;
+using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -12,20 +13,6 @@ namespace ReModCE.UI
 {
     internal class ReQuickToggle : UIElement
     {
-        private static GameObject _blockButton;
-        private static GameObject BlockButton
-        {
-            get
-            {
-                if (_blockButton == null)
-                {
-                    _blockButton = GameObject.Find("UserInterface/QuickMenu/UserInteractMenu/BlockButton");
-                }
-
-                return _blockButton;
-            }
-        }
-
         private readonly GameObject _toggleStateOn;
         private readonly GameObject _toggleStateOff;
 
@@ -37,7 +24,7 @@ namespace ReModCE.UI
             set => _buttonComponent.interactable = value;
         }
 
-        public ReQuickToggle(Vector2 pos, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false, Transform parent = null) : base(BlockButton, parent, pos, $"{text}Toggle")
+        public ReQuickToggle(Vector2 pos, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false, Transform parent = null) : base(ExtendedQuickMenu.BlockButton.gameObject, parent, pos, $"{text}Toggle")
         {
             var textComponent = GameObject.GetComponentInChildren<Text>();
             textComponent.text = text;

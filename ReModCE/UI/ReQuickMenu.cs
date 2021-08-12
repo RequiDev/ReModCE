@@ -14,20 +14,6 @@ namespace ReModCE.UI
 {
     internal class ReQuickMenu : UIElement
     {
-        private static GameObject _cameraMenu;
-        private static GameObject CameraMenu
-        {
-            get
-            {
-                if (_cameraMenu == null)
-                {
-                    _cameraMenu = GameObject.Find("UserInterface/QuickMenu/CameraMenu");
-                }
-
-                return _cameraMenu;
-            }
-        }
-
         private const int ButtonSize = 420;
         private const int MaxFullButtons = 12;
         
@@ -37,7 +23,7 @@ namespace ReModCE.UI
 
         public event Action OnOpen;
 
-        public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(CameraMenu, QuickMenu.prop_QuickMenu_0.transform, $"{name}Menu", false)
+        public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(ExtendedQuickMenu.CameraMenu.gameObject, ExtendedQuickMenu.Instance.transform, $"{name}Menu", false)
         {
             foreach (var obj in RectTransform)
             {
@@ -53,7 +39,7 @@ namespace ReModCE.UI
                     button.onClick = new Button.ButtonClickedEvent();
                     button.onClick.AddListener(new Action(() =>
                     {
-                        QuickMenu.prop_QuickMenu_0.SetCurrentPage(parent, backButtonContext);
+                        ExtendedQuickMenu.Instance.SetCurrentPage(parent, backButtonContext);
                     }));
                     button.transform.localPosition += new Vector3(420f, 0f);
                     continue;
@@ -65,7 +51,7 @@ namespace ReModCE.UI
 
         public void Open(QuickMenuContext context = QuickMenuContext.NoSelection)
         {
-            QuickMenu.prop_QuickMenu_0.SetCurrentPage(GameObject.name, context);
+            ExtendedQuickMenu.Instance.SetCurrentPage(GameObject.name, context);
             OnOpen?.Invoke();
         }
 
