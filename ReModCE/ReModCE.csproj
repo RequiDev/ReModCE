@@ -39,6 +39,10 @@
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Il2Cppmscorlib, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="MelonLoader, Version=0.4.3.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>S:\Games\steamapps\common\VRChat\MelonLoader\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -74,9 +78,11 @@
     <Compile Include="Components\DynamicBonesComponent.cs" />
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\ThirdPersonComponent.cs" />
+    <Compile Include="Core\EnableDisableListener.cs" />
     <Compile Include="Core\ModComponent.cs" />
     <Compile Include="Core\ConfigValue.cs" />
     <Compile Include="Components\IngameLog.cs" />
+    <Compile Include="Core\ReAvatar.cs" />
     <Compile Include="Managers\RiskyFunctionsManager.cs" />
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,7 +107,6 @@
       <Name>ReModCE.Loader</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y $(TargetFileName) S:\Games\steamapps\common\VRChat\$(TargetFileName)</PostBuildEvent>

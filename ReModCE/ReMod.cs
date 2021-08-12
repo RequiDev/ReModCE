@@ -12,6 +12,7 @@ using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
+using UnhollowerRuntimeLib;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -26,6 +27,8 @@ namespace ReModCE
         {
             ReLogger.Msg("Initializing...");
             
+            ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
+
             RiskyFunctionsManager.AppStart();
 
             InitializePatches();

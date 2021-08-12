@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.VRChat;
 using UnityEngine;
@@ -14,6 +15,12 @@ using Category = UiAvatarList.EnumNPublicSealedvaInPuMiFaSpClPuLiCrUnique;
 
 namespace ReModCE.UI
 {
+    internal interface FavoriteListener
+    {
+        void OnFavoriteAvatar(ApiAvatar avatar);
+        void OnUnfavoriteAvatar(ApiAvatar avatar);
+    }
+
     internal class ReAvatarList : UIElement
     {
         private static GameObject _legacyAvatarList;
@@ -46,17 +53,23 @@ namespace ReModCE.UI
 
         private SimpleAvatarPedestal AvatarPedestal => _avatarList.field_Public_SimpleAvatarPedestal_0;
 
-        public ReAvatarList(string title) : base(
+        private readonly FavoriteListener _favoriteListener;
+
+        public ReAvatarList(string title, FavoriteListener favoriteListener) : base(
             LegacyAvatarList,
             LegacyAvatarList.transform.parent,
             $"{title}AvatarList")
         {
+            _favoriteListener = favoriteListener;
             _avatarList = GameObject.GetComponent<UiAvatarList>();
             _avatarList.clearUnseenListOnCollapse = false;
             _avatarList.field_Public_EnumNPublicSealedvaInPuMiFaSpClPuLiCrUnique_0 =
                 Category.SpecificList;
             GameObject.transform.SetSiblingIndex(0);
             AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
+
+            var enableDisableListener = GameObject.AddComponent<EnableDisableListener>();
+            enableDisableListener.OnEnableEvent += () => Refresh();
 
             var expandButton = GameObject.GetComponentInChildren<Button>(true);
             var textComponent = expandButton.GetComponentInChildren<Text>();
@@ -81,7 +94,14 @@ namespace ReModCE.UI
             }, expandButton.transform);
 
             _pageCount = new ReUiText("0 / 0", new Vector2(825f, 0f), new Vector2(0.25f, 1f), expandButton.transform);
+        }
 
+        public void SetAvatars(List<ApiAvatar> avatars)
+        {
+            foreach (var avi in avatars.Distinct())
+            {
+                _allAvatars.Add(avi);
+            }
             Refresh();
         }
 
@@ -96,14 +116,14 @@ namespace ReModCE.UI
             if (!hasFavorited)
             {
                 _allAvatars.Add(apiAvatar);
-                Refresh();
                 _favoriteButton.Text = "Unfavorite";
+                _favoriteListener.OnFavoriteAvatar(apiAvatar);
             }
             else
             {
                 _allAvatars.Remove(apiAvatar);
-                Refresh();
                 _favoriteButton.Text = "Favorite";
+                _favoriteListener.OnUnfavoriteAvatar(apiAvatar);
             }
 
             Refresh();
@@ -124,8 +144,7 @@ namespace ReModCE.UI
 
         public void Refresh(Il2CppSystem.Collections.Generic.List<ApiAvatar> avatars = null)
         {
-            if (avatars == null)
-                avatars = _allAvatars;
+            avatars ??= _allAvatars;
 
             var pagesCount = avatars.Count / MaxAvatarsPerPage;
             _currentPage = Mathf.Clamp(_currentPage, 0, pagesCount);

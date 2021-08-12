@@ -15,7 +15,7 @@ namespace ReModCE.UI
     {
         private readonly Text _logText;
 
-        public ReScrollView(string name, Vector2 pos, Transform parent) : base(ExtendedQuickMenu.ReportWorldButton.gameObject, parent, pos, $"ScrollView_{name}")
+        public ReScrollView(string name, Vector2 pos, Transform parent) : base(ExtendedQuickMenu.ReportWorldButton.gameObject, parent, pos, $"ScrollView{name}")
         {
             Object.DestroyImmediate(GameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != GameObject.transform));
             Object.DestroyImmediate(GameObject.GetComponent<UiTooltip>());
@@ -41,8 +41,6 @@ namespace ReModCE.UI
             RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1260F);
             RectTransform.ForceUpdateRectTransforms();
 
-            _logText = GameObject.GetComponentInChildren<Text>();
-
             var content = new GameObject("Content", new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Type>(new Il2CppSystem.Type[1] { Il2CppType.Of<RectTransform>() }));
             var contentRect = content.GetComponent<RectTransform>();
             contentRect.SetParent(RectTransform);
@@ -58,7 +56,8 @@ namespace ReModCE.UI
             scrollRect.horizontal = false;
             scrollRect.decelerationRate = 0.03f;
             scrollRect.scrollSensitivity = 3;
-            
+
+            _logText = GameObject.GetComponentInChildren<Text>();
             var textRect = _logText.GetComponent<RectTransform>();
             textRect.SetParent(contentRect);
             textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
@@ -70,12 +69,10 @@ namespace ReModCE.UI
 
             contentRect.localPosition = new Vector3(50f, 1890f, 0f);
 
-
             _logText.fontSize = (int)(_logText.fontSize * 0.75f);
             _logText.alignment = TextAnchor.LowerLeft;
             _logText.verticalOverflow = VerticalWrapMode.Overflow;
             _logText.text = "";
-
         }
 
         public void AddText(string message)
