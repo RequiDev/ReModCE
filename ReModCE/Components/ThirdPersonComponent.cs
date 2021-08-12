@@ -20,9 +20,9 @@ namespace ReModCE.Components
 
     internal class ThirdPersonComponent : ModComponent
     {
-        private GameObject _cameraBack;
-        private GameObject _cameraFront;
-        private GameObject _referenceCamera;
+        private Camera _cameraBack;
+        private Camera _cameraFront;
+        private Camera _referenceCamera;
 
         private ThirdPersonMode _cameraSetup;
 
@@ -39,12 +39,10 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var backCameraObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            Object.Destroy(backCameraObject.GetComponent<MeshRenderer>());
-            _referenceCamera = GameObject.Find("Camera (eye)");
+            _referenceCamera = GameObject.Find("Camera (eye)").GetComponent<Camera>();
             if (_referenceCamera == null)
             {
-                _referenceCamera = GameObject.Find("CenterEyeAnchor");
+                _referenceCamera = GameObject.Find("CenterEyeAnchor").GetComponent<Camera>();
             }
 
             if (_referenceCamera == null)
@@ -56,21 +54,21 @@ namespace ReModCE.Components
             _cameraFront = CreateCamera(ThirdPersonMode.Front, new Vector3(0f, 180f, 0f), 75f);
         }
 
-        private GameObject CreateCamera(ThirdPersonMode cameraType, Vector3 rotation, float fieldOfView)
+        private Camera CreateCamera(ThirdPersonMode cameraType, Vector3 rotation, float fieldOfView)
         {
             var cameraObject = new GameObject($"{cameraType}Camera");
             cameraObject.transform.localScale = _referenceCamera.transform.localScale;
-            
-            var camera = cameraObject.AddComponent<Camera>();
-            camera.enabled = false;
             cameraObject.transform.parent = _referenceCamera.transform;
             cameraObject.transform.rotation = _referenceCamera.transform.rotation;
             cameraObject.transform.Rotate(rotation);
             cameraObject.transform.position = _referenceCamera.transform.position + (-cameraObject.transform.forward * 2f);
+
+            var camera = cameraObject.AddComponent<Camera>();
+            camera.enabled = false;
             camera.fieldOfView = fieldOfView;
             camera.nearClipPlane /= 4f;
 
-            return cameraObject;
+            return camera;
         }
 
 
@@ -94,16 +92,16 @@ namespace ReModCE.Components
             switch (mode)
             {
                 case ThirdPersonMode.Off:
-                    _cameraBack.GetComponent<Camera>().enabled = false;
-                    _cameraFront.GetComponent<Camera>().enabled = false;
+                    _cameraBack.enabled = false;
+                    _cameraFront.enabled = false;
                     break;
                 case ThirdPersonMode.Back:
-                    _cameraBack.GetComponent<Camera>().enabled = true;
-                    _cameraFront.GetComponent<Camera>().enabled = false;
+                    _cameraBack.enabled = true;
+                    _cameraFront.enabled = false;
                     break;
                 case ThirdPersonMode.Front:
-                    _cameraBack.GetComponent<Camera>().enabled = false;
-                    _cameraFront.GetComponent<Camera>().enabled = true;
+                    _cameraBack.enabled = false;
+                    _cameraFront.enabled = true;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
