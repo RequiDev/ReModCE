@@ -15,7 +15,7 @@ namespace ReModCE.VRChat
     {
         public static QuickMenu Instance => QuickMenu.prop_QuickMenu_0;
         private static Transform _shortcutMenu;
-        private static Transform _userInteractMenu;
+        private static UserInteractMenu _userInteractMenu;
         private static Transform _cameraMenu;
         private static Transform _emojiMenu;
         private static Transform _newElements;
@@ -37,13 +37,13 @@ namespace ReModCE.VRChat
                 return _shortcutMenu;
             }
         }
-        public static Transform UserInteractMenu
+        public static UserInteractMenu UserInteractMenu
         {
             get
             {
                 if (_userInteractMenu == null)
                 {
-                    _userInteractMenu = Instance.transform.Find("UserInteractMenu");
+                    _userInteractMenu = Resources.FindObjectsOfTypeAll<UserInteractMenu>()[0];
                 }
                 return _userInteractMenu;
             }

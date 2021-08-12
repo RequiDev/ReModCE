@@ -41,9 +41,9 @@ namespace ReModCE.Components
         public FlyComponent()
         {
             SuppressFlyAnimation = new ConfigValue<bool>(nameof(SuppressFlyAnimation), true);
-            SuppressFlyAnimation.OnValueChanged += (a, b) => _suppressFlyAnimationToggle?.Toggle(b);
+            SuppressFlyAnimation.OnValueChanged += () => _suppressFlyAnimationToggle.Toggle(SuppressFlyAnimation);
             FlySpeed = new ConfigValue<float>(nameof(FlySpeed), 4);
-            FlySpeed.OnValueChanged += (a, b) => _flySpeedButton.Text = $"Fly Speed: {FlySpeed}";
+            FlySpeed.OnValueChanged += () => _flySpeedButton.Text = $"Fly Speed: {FlySpeed}";
 
             RiskyFunctionsManager.OnRiskyFunctionsChanged += allowed =>
             {

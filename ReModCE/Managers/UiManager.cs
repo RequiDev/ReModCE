@@ -31,7 +31,7 @@ namespace ReModCE.Managers
             ReQuickButton.Create(new Vector2(intialButtonPos.x, intialButtonPos.y - (ButtonSize * 2f)),
                 "Target Options", "More options for this target",
                 () => _targetMenu.Open(QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique.UserSelected),
-                ExtendedQuickMenu.UserInteractMenu);
+                ExtendedQuickMenu.UserInteractMenu.transform);
         }
     }
 }
