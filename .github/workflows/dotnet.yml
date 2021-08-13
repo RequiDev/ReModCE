@@ -11,6 +11,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Bump version and push tag
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v5.6
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        
     - uses: actions/checkout@v2
     
     - name: Checkout dependencies
@@ -31,11 +37,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       
-    - name: Bump version and push tag
-      id: tag_version
-      uses: mathieudutour/github-tag-action@v5.6
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
     - name: Publish a release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
