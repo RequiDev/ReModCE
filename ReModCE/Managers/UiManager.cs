@@ -1,4 +1,7 @@
-﻿using ReModCE.UI;
+﻿using System;
+using System.Linq;
+using MelonLoader;
+using ReModCE.UI;
 using ReModCE.VRChat;
 using UnityEngine;
 using QuickMenuContext = QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique;
@@ -16,11 +19,18 @@ namespace ReModCE.Managers
 
         public UiManager(string menuName)
         {
-            ExtendedQuickMenu.ShortcutMenu.Find("UserIconCameraButton").localPosition += new Vector3(ButtonSize, -ButtonSize, 0f);
+            var isReModLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "ReMod");
+
+            if (!isReModLoaded)
+            {
+                ExtendedQuickMenu.ShortcutMenu.Find("UserIconCameraButton").localPosition +=
+                    new Vector3(ButtonSize, -ButtonSize, 0f);
+            }
+
             var intialButtonPos = ExtendedQuickMenu.ReportWorldButton.GetComponent<RectTransform>().localPosition;
             
             _mainMenu = new ReQuickMenu(menuName);
-            ReQuickButton.Create(new Vector2(intialButtonPos.x, intialButtonPos.y + (ButtonSize * 2f)),
+            ReQuickButton.Create(new Vector2(intialButtonPos.x + (Convert.ToInt32(isReModLoaded) * ButtonSize), intialButtonPos.y + (ButtonSize * 2f)),
                 "ReMod <color=#00ff00>CE</color>", "Access the ReMod Community Edition",
                 () => _mainMenu.Open(),
                 ExtendedQuickMenu.ShortcutMenu);

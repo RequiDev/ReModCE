@@ -18,16 +18,19 @@ namespace ReModCE.Components
         {
             MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
             {
-                if (nameSection != nameof(ReModCE))
+                if (nameSection != nameof(ReModCE) && !msg.Contains("[ReMod]"))
                     return;
 
+                var nameSectionPretty = string.IsNullOrEmpty(nameSection)
+                    ? string.Empty
+                    : $"<color={ConsoleColorToHexCode(color)}>[{nameSection}]</color> ";
                 if (_log == null)
                 {
-                    _preUiLog += $"<color={ConsoleColorToHexCode(color)}>[{nameSection}]</color> <color={ConsoleColorToHexCode(consoleColor)}>{msg}</color>\n";
+                    _preUiLog += $"{nameSectionPretty}<color={ConsoleColorToHexCode(consoleColor)}>{msg}</color>\n";
                     return;
                 }
 
-                _log.AddText($"<color={ConsoleColorToHexCode(color)}>[{nameSection}]</color> <color={ConsoleColorToHexCode(consoleColor)}>{msg}</color>\n");
+                _log.AddText($"{nameSectionPretty}<color={ConsoleColorToHexCode(consoleColor)}>{msg}</color>\n");
             };
         }
 
