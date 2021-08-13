@@ -38,37 +38,24 @@ namespace ReModCE.Loader
         {
             "ReModCE.dll",
             "Mods/ReModCE.dll",
-            "https://github.com/RequiDev/ReModCE/releases/latest/download/ReModCE.dll"
         };
 
         public override void OnApplicationStart()
         {
-            var bytes = new byte[] { };
-            foreach (var path in _possiblePaths)
-            {
-                if (path.StartsWith("http"))
-                {
-                    try
-                    {
-                        bytes = new WebClient().DownloadData(path);
-                        if (bytes != null)
-                            break;
-                    }
-                    catch (WebException e)
-                    {
-                        
-                    }
-                }
-                else if (File.Exists(path))
-                {
-                    bytes = File.ReadAllBytes(path);
-                    break;
-                }
-            }
+            var bytes = (from path in _possiblePaths where File.Exists(path) select File.ReadAllBytes(path)).FirstOrDefault();
 
             if (bytes == null)
             {
-                MelonLogger.Error($"Couldn't find ReModCE.dll. Can't load ReModCE.");
+                MelonLogger.Warning($"Couldn't find ReModCE.dll on disk. Loading dynamically from GitHub.");
+                using var wc = new WebClient
+                {
+                    Headers =
+                    {
+                        ["User-Agent"] =
+                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0"
+                    }
+                };
+                bytes = wc.DownloadData("https://github.com/RequiDev/ReModCE/releases/latest/download/ReModCE.dll");
             }
 
             Assembly assembly;
