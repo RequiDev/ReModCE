@@ -33,10 +33,21 @@ namespace ReModCE.Loader
         private Action<int, string> _onSceneWasLoaded;
         private Action<int, string> _onSceneWasInitialized;
 
+        private List<string> _possiblePaths = new List<string>
+        {
+            "ReModCE.dll",
+            "Mods/ReModCE.dll"
+        };
 
         public override void OnApplicationStart()
         {
-            var bytes = File.ReadAllBytes("ReModCE.dll");
+            var bytes = (from path in _possiblePaths where File.Exists(path) select File.ReadAllBytes(path)).FirstOrDefault();
+
+            if (bytes == null)
+            {
+                MelonLogger.Error($"Couldn't find ReModCE.dll. Can't load ReModCE.");
+            }
+
             Assembly assembly;
             try
             {
