@@ -14,6 +14,8 @@ namespace ReModCE.UI
     internal class ReScrollView : UIElement
     {
         private readonly Text _logText;
+        private readonly RectTransform _textTransform;
+        private readonly RectTransform _contentTransform;
 
         public ReScrollView(string name, Vector2 pos, Transform parent) : base(ExtendedQuickMenu.ReportWorldButton.gameObject, parent, pos, $"ScrollView{name}")
         {
@@ -42,32 +44,32 @@ namespace ReModCE.UI
             RectTransform.ForceUpdateRectTransforms();
 
             var content = new GameObject("Content", new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Type>(new Il2CppSystem.Type[1] { Il2CppType.Of<RectTransform>() }));
-            var contentRect = content.GetComponent<RectTransform>();
-            contentRect.SetParent(RectTransform);
-            contentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
-            contentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 5040F); // make it based on newlines in text?
-            contentRect.ForceUpdateRectTransforms();
-            contentRect.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-            contentRect.localScale = Vector3.one;
+            _contentTransform = content.GetComponent<RectTransform>();
+            _contentTransform.SetParent(RectTransform);
+            _contentTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
+            _contentTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 5040F);
+            _contentTransform.ForceUpdateRectTransforms();
+            _contentTransform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+            _contentTransform.localScale = Vector3.one;
 
             var scrollRect = GameObject.AddComponent<ScrollRect>();
-            scrollRect.content = contentRect;
+            scrollRect.content = _contentTransform;
             scrollRect.movementType = ScrollRect.MovementType.Clamped;
             scrollRect.horizontal = false;
             scrollRect.decelerationRate = 0.03f;
             scrollRect.scrollSensitivity = 3;
 
             _logText = GameObject.GetComponentInChildren<Text>();
-            var textRect = _logText.GetComponent<RectTransform>();
-            textRect.SetParent(contentRect);
-            textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
-            textRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 5040F); // make it based on newlines in text?
-            textRect.ForceUpdateRectTransforms();
-            textRect.localPosition = Vector3.zero;
-            textRect.localRotation = new Quaternion(0f, 0f, 0f, 0f);
-            textRect.localScale = Vector3.one;
+            _textTransform = _logText.GetComponent<RectTransform>();
+            _textTransform.SetParent(_contentTransform);
+            _textTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 1680f);
+            _textTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 5040F);
+            _textTransform.ForceUpdateRectTransforms();
+            _textTransform.localPosition = Vector3.zero;
+            _textTransform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+            _textTransform.localScale = Vector3.one;
 
-            contentRect.localPosition = new Vector3(50f, 1260F + 1260F / 2, 0f);
+            _contentTransform.localPosition = new Vector3(50f, 1260F + (1260F / 2), 0f);
 
             _logText.fontSize = (int)(_logText.fontSize * 0.75f);
             _logText.alignment = TextAnchor.LowerLeft;
