@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -33,15 +34,37 @@ namespace ReModCE.Loader
         private Action<int, string> _onSceneWasLoaded;
         private Action<int, string> _onSceneWasInitialized;
 
-        private List<string> _possiblePaths = new List<string>
+        private readonly List<string> _possiblePaths = new List<string>
         {
             "ReModCE.dll",
-            "Mods/ReModCE.dll"
+            "Mods/ReModCE.dll",
+            "https://github.com/RequiDev/ReModCE/releases/latest/download/ReModCE.dll"
         };
 
         public override void OnApplicationStart()
         {
-            var bytes = (from path in _possiblePaths where File.Exists(path) select File.ReadAllBytes(path)).FirstOrDefault();
+            var bytes = new byte[] { };
+            foreach (var path in _possiblePaths)
+            {
+                if (path.StartsWith("http"))
+                {
+                    try
+                    {
+                        bytes = new WebClient().DownloadData(path);
+                        if (bytes != null)
+                            break;
+                    }
+                    catch (WebException e)
+                    {
+                        
+                    }
+                }
+                else if (File.Exists(path))
+                {
+                    bytes = File.ReadAllBytes(path);
+                    break;
+                }
+            }
 
             if (bytes == null)
             {
