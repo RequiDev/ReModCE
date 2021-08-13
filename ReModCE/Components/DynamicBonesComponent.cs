@@ -228,17 +228,17 @@ namespace ReModCE.Components
         private ReQuickButton _friendsColliderOptionButton;
         private ReQuickButton _othersColliderOptionButton;
 
-        private List<DynamicBone> _ownDynamicBones = new List<DynamicBone>();
-        private List<DynamicBoneCollider> _ownDynamicBoneColliders = new List<DynamicBoneCollider>();
+        private readonly List<DynamicBone> _ownDynamicBones = new List<DynamicBone>();
+        private readonly List<DynamicBoneCollider> _ownDynamicBoneColliders = new List<DynamicBoneCollider>();
 
-        private List<DynamicBone> _whitelistedDynamicBones = new List<DynamicBone>();
-        private List<DynamicBoneCollider> _whitelistedBoneColliders = new List<DynamicBoneCollider>();
+        private readonly List<DynamicBone> _whitelistedDynamicBones = new List<DynamicBone>();
+        private readonly List<DynamicBoneCollider> _whitelistedBoneColliders = new List<DynamicBoneCollider>();
 
-        private List<DynamicBone> _friendsDynamicBones = new List<DynamicBone>();
-        private List<DynamicBoneCollider> _friendsDynamicBoneColliders = new List<DynamicBoneCollider>();
+        private readonly List<DynamicBone> _friendsDynamicBones = new List<DynamicBone>();
+        private readonly List<DynamicBoneCollider> _friendsDynamicBoneColliders = new List<DynamicBoneCollider>();
 
-        private List<DynamicBone> _othersDynamicBones = new List<DynamicBone>();
-        private List<DynamicBoneCollider> _othersDynamicBoneColliders = new List<DynamicBoneCollider>();
+        private readonly List<DynamicBone> _othersDynamicBones = new List<DynamicBone>();
+        private readonly List<DynamicBoneCollider> _othersDynamicBoneColliders = new List<DynamicBoneCollider>();
 
         public DynamicBonesComponent()
         {
