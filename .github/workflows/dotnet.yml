@@ -20,7 +20,7 @@ jobs:
       with:
         repository: ${{ secrets.LibsRepository }}
         token: ${{ secrets.LibsRepositoryToken }}
-        path: Depencendies
+        path: Dependencies
         
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
