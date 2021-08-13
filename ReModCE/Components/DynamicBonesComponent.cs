@@ -535,6 +535,7 @@ namespace ReModCE.Components
 
         private void AddBoneCollider(List<DynamicBoneCollider> list, Animator animator, List<HumanBodyBones> bones)
         {
+            if (animator == null) return;
             foreach (var bone in bones)
             {
                 foreach (var collider in animator.GetBoneTransform(bone).GetComponentsInChildren<DynamicBoneCollider>(true))
@@ -634,7 +635,7 @@ namespace ReModCE.Components
             if (apiUser == null)
                 return;
             var avatarObject = vrcPlayer.GetAvatarObject();
-            var animator = avatarObject.GetComponent<Animator>();
+            var animator = avatarObject.GetComponentInChildren<Animator>();
 
             var isSelf = vrcPlayer.gameObject == VRCPlayer.field_Internal_Static_VRCPlayer_0.gameObject;
             var isWhitelisted = !isSelf && _settings.IsWhitelisted(apiUser.id);
