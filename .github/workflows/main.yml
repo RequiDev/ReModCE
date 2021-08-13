@@ -31,13 +31,13 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore -c Release
       
     - name: Publish a release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ReModCE/ReModCE/bin/Release/ReModCE.dll
-          ReModCE/ReModCE.Loader/bin/Release/ReModCE.Loader.dll
+          Build/Release/ReModCE.dll
+          Build/Release/ReModCE.Loader.dll
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
