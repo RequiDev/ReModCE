@@ -101,7 +101,7 @@ namespace ReModCE.UI
 
         public ReQuickMenu GetSubMenu(string menuName)
         {
-            return _subMenus.FirstOrDefault(m => m.Name == menuName || m.Name == $"{menuName}Menu");
+            return _subMenus.FirstOrDefault(m => m.Name == menuName || m.Name == $"{menuName}MenuReModCE");
         }
 
         private Vector2 NextButtonPos => new Vector2(-625 + (_buttonsAdded % 4) * ButtonSize, (ButtonSize * 2.5f) - (_buttonsAdded / 4) * ButtonSize); // meth
