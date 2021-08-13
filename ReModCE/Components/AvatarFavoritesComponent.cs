@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using ReModCE.Core;
 using ReModCE.Managers;
 using ReModCE.UI;
+using UnityEngine;
 using VRC.Core;
 
 namespace ReModCE.Components
@@ -34,6 +35,11 @@ namespace ReModCE.Components
         {
             _avatarList = new ReAvatarList("ReModCE Favorites", this);
             _avatarList.SetAvatars(_savedAvatars.Select(x => x.AsApiAvatar()).ToList());
+
+            if (uiManager.IsRemodLoaded)
+            {
+                _avatarList.FavoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
+            }
         }
 
         public void OnFavoriteAvatar(ApiAvatar avatar)

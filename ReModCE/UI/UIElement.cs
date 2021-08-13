@@ -15,6 +15,12 @@ namespace ReModCE.UI
         protected GameObject GameObject { get; }
         protected RectTransform RectTransform { get; }
 
+        public Vector3 Position
+        {
+            get => RectTransform.localPosition;
+            set => RectTransform.localPosition = value;
+        }
+
         public UIElement(GameObject original, Transform parent, Vector3 pos, string name, bool defaultState = true) : this(original, parent, name, defaultState)
         {
             GameObject.transform.localPosition = pos;

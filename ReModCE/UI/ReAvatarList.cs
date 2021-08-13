@@ -44,6 +44,8 @@ namespace ReModCE.UI
         private readonly ReUiButton _prevPageButton;
         private readonly ReUiText _pageCount;
 
+        public ReUiButton FavoriteButton => _favoriteButton;
+
         private readonly Il2CppSystem.Collections.Generic.List<ApiAvatar> _allAvatars =
             new Il2CppSystem.Collections.Generic.List<ApiAvatar>();
 
@@ -86,7 +88,7 @@ namespace ReModCE.UI
             _textComponent = expandButton.GetComponentInChildren<Text>();
             Title = title;
 
-            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.7f, 1f), () => FavoriteAvatar(AvatarPedestal.field_Internal_ApiAvatar_0),
+            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(AvatarPedestal.field_Internal_ApiAvatar_0),
                 GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent);
 
             _refreshButton = new ReUiButton("↻", new Vector3(980f, 0f),

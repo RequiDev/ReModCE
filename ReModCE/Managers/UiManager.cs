@@ -10,18 +10,20 @@ namespace ReModCE.Managers
 {
     internal class UiManager
     {
-        private const float ButtonSize = 420f;
+        public const float ButtonSize = 420f;
         private readonly ReQuickMenu _mainMenu;
         private readonly ReQuickMenu _targetMenu;
 
         public ReQuickMenu MainMenu => _mainMenu;
         public ReQuickMenu TargetMenu => _targetMenu;
 
+        public bool IsRemodLoaded { get; }
+
         public UiManager(string menuName)
         {
-            var isReModLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "ReMod");
+            IsRemodLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "ReMod");
 
-            if (!isReModLoaded)
+            if (!IsRemodLoaded)
             {
                 ExtendedQuickMenu.ShortcutMenu.Find("UserIconCameraButton").localPosition +=
                     new Vector3(ButtonSize, -ButtonSize, 0f);
@@ -30,7 +32,7 @@ namespace ReModCE.Managers
             var intialButtonPos = ExtendedQuickMenu.ReportWorldButton.GetComponent<RectTransform>().localPosition;
             
             _mainMenu = new ReQuickMenu(menuName);
-            ReQuickButton.Create(new Vector2(intialButtonPos.x + (Convert.ToInt32(isReModLoaded) * ButtonSize), intialButtonPos.y + (ButtonSize * 2f)),
+            ReQuickButton.Create(new Vector2(intialButtonPos.x + (Convert.ToInt32(IsRemodLoaded) * ButtonSize), intialButtonPos.y + (ButtonSize * 2f)),
                 "ReMod <color=#00ff00>CE</color>", "Access the ReMod Community Edition",
                 () => _mainMenu.Open(),
                 ExtendedQuickMenu.ShortcutMenu);
@@ -38,9 +40,9 @@ namespace ReModCE.Managers
             _mainMenu.AddSubMenu("Movement", "Access movement related options");
 
             _targetMenu = new ReQuickMenu("TargetReModCE", "UserInteractMenu", QuickMenuContext.UserSelected);
-            ReQuickButton.Create(new Vector2(intialButtonPos.x, intialButtonPos.y - (ButtonSize * 2f)),
-                "Target Options", "More options for this target",
-                () => _targetMenu.Open(QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique.UserSelected),
+            ReQuickButton.Create(new Vector2(intialButtonPos.x + (Convert.ToInt32(IsRemodLoaded) * ButtonSize), intialButtonPos.y - (ButtonSize * 2f)),
+                "ReMod <color=#00ff00>CE</color> Target Options", "More options for this target",
+                () => _targetMenu.Open(QuickMenuContext.UserSelected),
                 ExtendedQuickMenu.UserInteractMenu.transform);
         }
     }
