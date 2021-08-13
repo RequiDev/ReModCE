@@ -23,7 +23,7 @@ namespace ReModCE.UI
 
         public event Action OnOpen;
 
-        public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(ExtendedQuickMenu.CameraMenu.gameObject, ExtendedQuickMenu.Instance.transform, $"{name}Menu", false)
+        public ReQuickMenu(string name, string parent = "ShortcutMenu", QuickMenuContext backButtonContext = QuickMenuContext.NoSelection) : base(ExtendedQuickMenu.CameraMenu.gameObject, ExtendedQuickMenu.Instance.transform, $"{name}MenuReModCE", false)
         {
             foreach (var obj in RectTransform)
             {
