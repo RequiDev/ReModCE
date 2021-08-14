@@ -65,7 +65,7 @@ namespace ReModCE.Components
             var hasFavorited = HasAvatarFavorited(apiAvatar.id);
             if (!hasFavorited)
             {
-                _allAvatars.Add(apiAvatar);
+                _allAvatars.Insert(0, apiAvatar);
                 _favoriteButton.Text = "Unfavorite";
                 OnFavoriteAvatar(apiAvatar);
             }
@@ -76,7 +76,7 @@ namespace ReModCE.Components
                 OnUnfavoriteAvatar(apiAvatar);
             }
 
-            _avatarList.Refresh(_allAvatars);
+            _avatarList.Refresh(GetAvatars());
         }
 
         private bool HasAvatarFavorited(string id)
@@ -92,12 +92,11 @@ namespace ReModCE.Components
             return false;
         }
 
-
         public void OnFavoriteAvatar(ApiAvatar avatar)
         {
             if (_savedAvatars.FirstOrDefault(a => a.Id == avatar.id) == null)
             {
-                _savedAvatars.Add(new ReAvatar(avatar));
+                _savedAvatars.Insert(0, new ReAvatar(avatar));
             }
             SaveAvatarsToDisk();
         }
