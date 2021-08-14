@@ -1,9 +1,9 @@
-name: main
+name: release_on_tag
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - "v*.*.*"
       
 jobs:
   build:
@@ -30,3 +30,12 @@ jobs:
       
     - name: Build
       run: dotnet build --no-restore -c Release
+      
+    - name: Publish a release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          Build/Release/ReModCE.dll
+          Build/Release/ReModCE.Loader.dll
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
