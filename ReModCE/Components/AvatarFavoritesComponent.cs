@@ -20,9 +20,6 @@ namespace ReModCE.Components
         private ReAvatarList _avatarList;
         private ReUiButton _favoriteButton;
 
-        private readonly AvatarList _allAvatars =
-            new AvatarList();
-
         private readonly List<ReAvatar> _savedAvatars;
 
         public AvatarFavoritesComponent()
@@ -40,10 +37,6 @@ namespace ReModCE.Components
         public override void OnUiManagerInit(UiManager uiManager)
         {
             _avatarList = new ReAvatarList("ReModCE Favorites", this);
-            foreach (var avi in _savedAvatars.Distinct().Select(x => x.AsApiAvatar()).ToList())
-            {
-                _allAvatars.Add(avi);
-            }
 
             _avatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
 
@@ -55,6 +48,7 @@ namespace ReModCE.Components
                 _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
             }
         }
+
         private void OnAvatarInstantiated(string url, GameObject avatar, AvatarPerformanceStats avatarPerformanceStats)
         {
             _favoriteButton.Text = HasAvatarFavorited(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id) ? "Unfavorite" : "Favorite";
@@ -65,48 +59,24 @@ namespace ReModCE.Components
             var hasFavorited = HasAvatarFavorited(apiAvatar.id);
             if (!hasFavorited)
             {
-                _allAvatars.Insert(0, apiAvatar);
+                _savedAvatars.Insert(0, new ReAvatar(apiAvatar));
                 _favoriteButton.Text = "Unfavorite";
-                OnFavoriteAvatar(apiAvatar);
             }
             else
             {
-                _allAvatars.Remove(apiAvatar);
+                _savedAvatars.RemoveAll(a => a.Id == apiAvatar.id);
                 _favoriteButton.Text = "Favorite";
-                OnUnfavoriteAvatar(apiAvatar);
             }
+            SaveAvatarsToDisk();
 
             _avatarList.Refresh(GetAvatars());
         }
 
         private bool HasAvatarFavorited(string id)
         {
-            foreach (var avi in _allAvatars)
-            {
-                if (avi.id == _avatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return _savedAvatars.FirstOrDefault(a => a.Id == id) != null;
         }
-
-        public void OnFavoriteAvatar(ApiAvatar avatar)
-        {
-            if (_savedAvatars.FirstOrDefault(a => a.Id == avatar.id) == null)
-            {
-                _savedAvatars.Insert(0, new ReAvatar(avatar));
-            }
-            SaveAvatarsToDisk();
-        }
-
-        public void OnUnfavoriteAvatar(ApiAvatar avatar)
-        {
-            _savedAvatars.RemoveAll(a => a.Id == avatar.id);
-            SaveAvatarsToDisk();
-        }
-
+        
         private void SaveAvatarsToDisk()
         {
             Directory.CreateDirectory("UserData/ReModCE");
@@ -115,7 +85,12 @@ namespace ReModCE.Components
 
         public AvatarList GetAvatars()
         {
-            return _allAvatars;
+            var list = new AvatarList();
+            foreach (var avi in _savedAvatars.Distinct().Select(x => x.AsApiAvatar()).ToList())
+            {
+                list.Add(avi);
+            }
+            return list;
         }
     }
 }
