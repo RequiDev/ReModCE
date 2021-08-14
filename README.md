@@ -5,8 +5,10 @@ ReMod Community Edition - A All-in-One VRChat mod to suit all your needs using [
 This is essentially a public version of my invite-only VRChat mod. It's a cut-down version with no connection to the ReMod server and with it's security measures removed.
 
 # Installation & Usage
-Grab the latest loader from the Releases (click [here](https://github.com/RequiDev/ReModCE/releases/latest)) and put it in your Mods directory.
-You can choose to have the loader automatically load the latest available version from GitHub or you can download a specific mod version from the various releases and place it in either your VRChat directory or your Mods directory. This will make it only load that specific version in case you don't want to automatically update.
+Grab the latest loader from the Releases (click [here](https://github.com/RequiDev/ReModCE/releases/latest)) and put it in your Mods directory.  
+
+You can choose to have the loader automatically load the latest available version from GitHub or you can download a specific mod version from the various releases and place it in either your VRChat directory or your Mods directory. This will make it only load that specific version in case you don't want to automatically update.  
+
 Placing the mod (not the loader) itself in your Mods directory will throw a warning/error in your MelonLoader that you can safely ignore.
 
 # Credits
