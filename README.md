@@ -1,3 +1,8 @@
+[![main](https://github.com/RequiDev/ReModCE/actions/workflows/main.yml/badge.svg?branch=master&event=push)](https://github.com/RequiDev/ReModCE/actions/workflows/main.yml)
+[![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/total.svg)]()
+[![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/latest/total.svg)]()
+
+
 # ReMod CE
 ReMod Community Edition - A All-in-One VRChat mod to suit all your needs using [MelonLoader](https://github.com/LavaGang/MelonLoader)
 
