@@ -102,6 +102,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
@@ -182,6 +186,7 @@
     <Compile Include="Components\AvatarFavoritesComponent.cs" />
     <Compile Include="Components\DynamicBonesComponent.cs" />
     <Compile Include="Components\FlyComponent.cs" />
+    <Compile Include="Components\PopupExComponent.cs" />
     <Compile Include="Components\RecentAvatarsComponent.cs" />
     <Compile Include="Components\ThirdPersonComponent.cs" />
     <Compile Include="Core\EnableDisableListener.cs" />
