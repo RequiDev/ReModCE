@@ -70,7 +70,13 @@ namespace ReModCE.Managers
         private void OnButtonOffsetChanged()
         {
             var buttonOffset = new Vector3(ButtonSize * ButtonOffsetX, ButtonSize * ButtonOffsetY);
+            var isDefaultButtonPos = buttonOffset == new Vector3(0, ButtonSize * 2f);
+            if (IsRemodLoaded && isDefaultButtonPos)
+            {
+                buttonOffset.x = ButtonSize;
+            }
             _mainMenuButton.Position = _intialButtonPos + buttonOffset;
+
         }
     }
 }
