@@ -36,9 +36,13 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var cameraButton = ExtendedQuickMenu.ShortcutMenu.Find("UserIconCameraButton");
-            
-            _log = new ReScrollView("ReModCELog", new Vector2(-1695, 1470f), ExtendedQuickMenu.ShortcutMenu);
+            var logPos = new Vector2(-1695, 1470f);
+            if (uiManager.IsRubyLoaded)
+            {
+                logPos.x -= 245f;
+            }
+
+            _log = new ReScrollView("ReModCELog", logPos, ExtendedQuickMenu.ShortcutMenu);
             _log.AddText(_preUiLog);
 
         }

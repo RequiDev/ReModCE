@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using MelonLoader;
 using ReModCE.UI;
@@ -16,10 +17,12 @@ namespace ReModCE.Managers
         public ReQuickMenu TargetMenu { get; }
 
         public bool IsRemodLoaded { get; }
+        public bool IsRubyLoaded { get; }
 
         public UiManager(string menuName)
         {
             IsRemodLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "ReMod");
+            IsRubyLoaded = File.Exists("hid.dll");
 
             if (!IsRemodLoaded)
             {
