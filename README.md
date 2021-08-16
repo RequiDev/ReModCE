@@ -1,6 +1,6 @@
 [![main](https://img.shields.io/github/workflow/status/RequiDev/ReModCE/main?style=for-the-badge)](https://github.com/RequiDev/ReModCE/actions/workflows/main.yml)
-[![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/total.svg?style=for-the-badge&logo=appveyor)]()
-[![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/latest/total.svg?style=for-the-badge&logo=appveyor)]()
+[![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/total.svg?style=for-the-badge&logo=appveyor)]
+[![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/latest/total.svg?style=for-the-badge&logo=appveyor)]
 
 
 # ReMod CE
