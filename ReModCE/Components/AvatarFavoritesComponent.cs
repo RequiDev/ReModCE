@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ReModCE.Core;
+using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
+using ReModCE.VRChat;
 using UnityEngine;
 using VRC.Core;
 using VRC.SDKBase.Validation.Performance.Stats;
@@ -24,9 +26,9 @@ namespace ReModCE.Components
 
         public AvatarFavoritesComponent()
         {
-            if (File.Exists("UserData/ReModCE/avatars.json"))
+            if (File.Exists("UserData/ReModCE/avatars.bin"))
             {
-                _savedAvatars = JsonConvert.DeserializeObject<List<ReAvatar>>(File.ReadAllText("UserData/ReModCE/avatars.json"));
+                _savedAvatars = BinaryGZipSerializer.Deserialize("UserData/ReModCE/avatars.bin") as List<ReAvatar>;
             }
             else
             {
@@ -37,7 +39,6 @@ namespace ReModCE.Components
         public override void OnUiManagerInit(UiManager uiManager)
         {
             _avatarList = new ReAvatarList("ReModCE Favorites", this);
-
             _avatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
 
             _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
@@ -56,6 +57,13 @@ namespace ReModCE.Components
 
         private void FavoriteAvatar(ApiAvatar apiAvatar)
         {
+            var isSupporter = APIUser.CurrentUser.isSupporter;
+            if (!isSupporter)
+            {
+                VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "You need VRC+ to use this feature.\nWe're not trying to destroy VRChat's monetization.");
+                return;
+            }
+
             var hasFavorited = HasAvatarFavorited(apiAvatar.id);
             if (!hasFavorited)
             {
@@ -80,7 +88,7 @@ namespace ReModCE.Components
         private void SaveAvatarsToDisk()
         {
             Directory.CreateDirectory("UserData/ReModCE");
-            File.WriteAllText("UserData/ReModCE/avatars.json", JsonConvert.SerializeObject(_savedAvatars));
+            BinaryGZipSerializer.Serialize(_savedAvatars, "UserData/ReModCE/avatars.bin");
         }
 
         public AvatarList GetAvatars()

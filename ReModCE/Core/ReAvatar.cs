@@ -7,6 +7,7 @@ using VRC.Core;
 
 namespace ReModCE.Core
 {
+    [Serializable]
     internal class ReAvatar
     {
         public string Id { get; set; }

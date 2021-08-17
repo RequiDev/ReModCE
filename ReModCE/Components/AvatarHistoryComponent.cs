@@ -16,16 +16,17 @@ using AvatarList = Il2CppSystem.Collections.Generic.List<VRC.Core.ApiAvatar>;
 
 namespace ReModCE.Components
 {
-    internal class RecentAvatarsComponent : ModComponent, IAvatarListOwner
+    internal class AvatarHistoryComponent : ModComponent, IAvatarListOwner
     {
         private ReAvatarList _avatarList;
         private readonly List<ReAvatar> _recentAvatars;
 
-        public RecentAvatarsComponent()
+        public AvatarHistoryComponent()
         {
-            if (File.Exists("UserData/ReModCE/recent_avatars.json"))
+            if (File.Exists("UserData/ReModCE/recent_avatars.bin"))
             {
-                _recentAvatars = JsonConvert.DeserializeObject<List<ReAvatar>>(File.ReadAllText("UserData/ReModCE/recent_avatars.json"));
+                _recentAvatars =
+                    BinaryGZipSerializer.Deserialize("UserData/ReModCE/recent_avatars.bin") as List<ReAvatar>;
             }
             else
             {
@@ -63,7 +64,7 @@ namespace ReModCE.Components
         private void SaveAvatarsToDisk()
         {
             Directory.CreateDirectory("UserData/ReModCE");
-            File.WriteAllText("UserData/ReModCE/recent_avatars.json", JsonConvert.SerializeObject(_recentAvatars));
+            BinaryGZipSerializer.Serialize(_recentAvatars, "UserData/ReModCE/recent_avatars.bin");
         }
 
         public AvatarList GetAvatars()

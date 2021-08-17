@@ -59,6 +59,8 @@ namespace ReModCE.UI
             set => _textComponent.text = value;
         }
 
+        public event Action OnEnable;
+
         private readonly string _title;
 
         private readonly IAvatarListOwner _owner;
@@ -75,10 +77,15 @@ namespace ReModCE.UI
             _avatarList.clearUnseenListOnCollapse = false;
             _avatarList.field_Public_EnumNPublicSealedvaInPuMiFaSpClPuLiCrUnique_0 =
                 Category.SpecificList;
+
             GameObject.transform.SetSiblingIndex(0);
 
             var enableDisableListener = GameObject.AddComponent<EnableDisableListener>();
-            enableDisableListener.OnEnableEvent += RefreshAvatars;
+            enableDisableListener.OnEnableEvent += () =>
+            {
+                OnEnable?.Invoke();
+                RefreshAvatars();
+            };
 
             var expandButton = GameObject.GetComponentInChildren<Button>(true);
             _textComponent = expandButton.GetComponentInChildren<Text>();
