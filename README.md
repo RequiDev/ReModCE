@@ -16,6 +16,15 @@ You can choose to have the loader automatically load the latest available versio
 
 Placing the mod (not the loader) itself in your Mods directory will throw a warning/error in your MelonLoader that you can safely ignore.
 
+# Features
+* Unlimited Avatar Favorites with VRC+ (Locally saved!)
+* Recently Used Avatars/Avatar History (Remembers up to 100 avatars)
+* Global Dynamic Bones with advanced settings so you have full control over where colliders go
+* Fly/Noclip (Not usable in Game/Club worlds)
+* Third Person (Not usable in Game/Club worlds)
+* Ingame Log that will show you anything that ReMod CE will log. At the moment it's a bit unstable (a lot of text will break it) and only supports ReMod CE. More options to come!
+* Small UI adjustments like adding a "Paste" button to input popups.
+
 # Credits
 [loukylor](https://github.com/loukylor) - For selected VRChat function reflections which I am using  
 [knah](https://github.com/knah) - For his usage of GitHub Action which I've looked at to figure out on how to do CI on GitHub
