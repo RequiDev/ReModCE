@@ -32,25 +32,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-	  <Private>false</Private>
-	  <SpecificVersion>False</SpecificVersion>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="MelonLoader, Version=0.4.3.0, Culture=neutral, processorArchitecture=MSIL">
-	  <Private>false</Private>
-	  <SpecificVersion>False</SpecificVersion>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-	  <Private>false</Private>
-	  <SpecificVersion>False</SpecificVersion>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-	  <Private>false</Private>
-	  <SpecificVersion>False</SpecificVersion>
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
