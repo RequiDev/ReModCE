@@ -25,6 +25,10 @@ Placing the mod (not the loader) itself in your Mods directory will throw a warn
 * Ingame Log that will show you anything that ReMod CE will log. At the moment it's a bit unstable (a lot of text will break it) and only supports ReMod CE. More options to come!
 * Small UI adjustments like adding a "Paste" button to input popups.
 
+# Hotkeys
+* CTRL + F = Noclip
+* CTRL + T = Thirdperson
+
 # Credits
 [loukylor](https://github.com/loukylor) - For selected VRChat function reflections which I am using  
 [knah](https://github.com/knah) - For his usage of GitHub Action which I've looked at to figure out on how to do CI on GitHub
