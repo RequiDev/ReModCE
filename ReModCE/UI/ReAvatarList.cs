@@ -84,10 +84,9 @@ namespace ReModCE.UI
             _textComponent = expandButton.GetComponentInChildren<Text>();
             Title = title;
 
+            _refreshButton = new ReUiButton("↻", new Vector3(980f, 0f), new Vector2(0.25f, 1), RefreshAvatars, expandButton.transform);
             if (_hasPagination)
             {
-                _refreshButton = new ReUiButton("↻", new Vector3(980f, 0f), new Vector2(0.25f, 1), RefreshAvatars, expandButton.transform);
-
                 _nextPageButton = new ReUiButton("→", new Vector2(900f, 0f), new Vector2(0.25f, 1f), () =>
                 {
                     _currentPage += 1;
