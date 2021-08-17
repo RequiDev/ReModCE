@@ -184,7 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\AvatarFavoritesComponent.cs" />
-    <Compile Include="Components\ComfyQM.cs" />
+    <Compile Include="Components\ComfyQuickMenuComponent.cs" />
     <Compile Include="Components\DynamicBonesComponent.cs" />
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\PopupExComponent.cs" />
