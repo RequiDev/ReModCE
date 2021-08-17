@@ -14,8 +14,12 @@ namespace ReModCE.Components
         private ReScrollView _log;
         private string _preUiLog;
 
+        private ConfigValue<bool> IngameLogEnabled;
+        private ReQuickToggle _logToggle;
         public IngameLog()
         {
+            IngameLogEnabled = new ConfigValue<bool>(nameof(IngameLogEnabled), true);
+            IngameLogEnabled.OnValueChanged += () => _logToggle.Toggle(IngameLogEnabled);
             MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
             {
                 if (nameSection != nameof(ReModCE) && !msg.Contains("[ReMod]"))
@@ -36,6 +40,9 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
+            var logMenu = uiManager.MainMenu.AddSubMenu("Ingame Log", "Access ingame log related settings.");
+            _logToggle = logMenu.AddToggle("Enabled", "Enable/Disable the ingame log UI", ToggleIngameLog, IngameLogEnabled);
+
             var logPos = new Vector2(-1695, 1470f);
             if (uiManager.IsRubyLoaded)
             {
@@ -44,8 +51,13 @@ namespace ReModCE.Components
 
             _log = new ReScrollView("ReModCELog", logPos, ExtendedQuickMenu.ShortcutMenu);
             _log.AddText(_preUiLog);
-
         }
+
+        private void ToggleIngameLog(bool toggled)
+        {
+            _log.Active = toggled;
+        }
+
         private static string ConsoleColorToHexCode(ConsoleColor c)
         {
             string[] cColors = {

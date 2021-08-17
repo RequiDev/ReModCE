@@ -21,6 +21,12 @@ namespace ReModCE.UI
             set => RectTransform.localPosition = value;
         }
 
+        public bool Active
+        {
+            get => GameObject.activeSelf;
+            set => GameObject.SetActive(value);
+        }
+
         public UIElement(GameObject original, Transform parent, Vector3 pos, string name, bool defaultState = true) : this(original, parent, name, defaultState)
         {
             GameObject.transform.localPosition = pos;
