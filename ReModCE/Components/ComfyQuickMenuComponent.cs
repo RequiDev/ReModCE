@@ -11,7 +11,7 @@ using ReModCE.UI;
 
 namespace ReModCE.Components
 {
-    class ComfyQuickMenuComponent: ModComponent
+    internal class ComfyQuickMenuComponent : ModComponent
     {
         private static ConfigValue<bool> ComfyQuickMenuEnabled;
         private static ReQuickToggle _comfyQMToggle;
