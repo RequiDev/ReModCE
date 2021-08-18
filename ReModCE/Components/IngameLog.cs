@@ -1,7 +1,6 @@
 ﻿using System;
 using MelonLoader;
 using ReModCE.Core;
-using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;

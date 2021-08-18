@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ReModCE.Loader;
 using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 namespace ReModCE.UI
 {

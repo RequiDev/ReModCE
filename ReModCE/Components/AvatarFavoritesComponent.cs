@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using ReModCE.Core;
-using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
@@ -87,7 +83,6 @@ namespace ReModCE.Components
         
         private void SaveAvatarsToDisk()
         {
-            Directory.CreateDirectory("UserData/ReModCE");
             BinaryGZipSerializer.Serialize(_savedAvatars, "UserData/ReModCE/avatars.bin");
         }
 

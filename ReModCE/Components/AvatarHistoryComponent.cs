@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using ReModCE.Core;
 using ReModCE.Managers;
 using ReModCE.UI;
@@ -12,7 +9,6 @@ using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.Core;
-using VRC.SDKBase.Validation.Performance.Stats;
 using AvatarList = Il2CppSystem.Collections.Generic.List<VRC.Core.ApiAvatar>;
 
 namespace ReModCE.Components
@@ -78,7 +74,6 @@ namespace ReModCE.Components
 
         private void SaveAvatarsToDisk()
         {
-            Directory.CreateDirectory("UserData/ReModCE");
             BinaryGZipSerializer.Serialize(_recentAvatars, "UserData/ReModCE/recent_avatars.bin");
         }
 

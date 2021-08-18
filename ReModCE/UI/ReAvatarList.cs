@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ReModCE.Core;
-using ReModCE.Loader;
 using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC;
-using VRC.Core;
-using VRC.SDKBase.Validation.Performance.Stats;
 using Category = UiAvatarList.EnumNPublicSealedvaInPuMiFaSpClPuLiCrUnique;
 using AvatarList = Il2CppSystem.Collections.Generic.List<VRC.Core.ApiAvatar>;
 
