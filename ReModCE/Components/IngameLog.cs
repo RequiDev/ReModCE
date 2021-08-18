@@ -22,7 +22,7 @@ namespace ReModCE.Components
             IngameLogEnabled.OnValueChanged += () => _logToggle.Toggle(IngameLogEnabled);
             MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
             {
-                if (nameSection != nameof(ReModCE) && !msg.Contains("[ReMod]"))
+                if (nameSection != nameof(ReModCE))
                     return;
 
                 var nameSectionPretty = string.IsNullOrEmpty(nameSection)
