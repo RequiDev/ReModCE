@@ -9,7 +9,9 @@ using MelonLoader;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
+using ReModCE.VRChat;
 using UnhollowerRuntimeLib;
+using VRC;
 
 namespace ReModCE
 {
@@ -29,7 +31,6 @@ namespace ReModCE
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
 
             InitializePatches();
-
             InitializeModComponents();
             ReLogger.Msg("Done!");
         }
@@ -44,9 +45,26 @@ namespace ReModCE
             Harmony.Patch(typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake)), GetLocalPatch(nameof(VRCPlayerAwakePatch)));
         }
 
+        private static void InitializeNetworkManager()
+        {
+            var playerJoinedDelegate = NetworkManager.field_Internal_Static_NetworkManager_0.field_Internal_VRCEventDelegate_1_Player_0;
+            var playerLeftDelegate = NetworkManager.field_Internal_Static_NetworkManager_0.field_Internal_VRCEventDelegate_1_Player_1;
+            playerJoinedDelegate.field_Private_HashSet_1_UnityAction_1_T_0.Add(new Action<Player>(p =>
+            {
+                if (p != null) OnPlayerJoined(p);
+            }));
+
+            playerLeftDelegate.field_Private_HashSet_1_UnityAction_1_T_0.Add(new Action<Player>(p =>
+            {
+                if (p != null) OnPlayerLeft(p);
+            }));
+        }
+
         public static void OnUiManagerInit()
         {
             ReLogger.Msg("Initializing UI...");
+
+            InitializeNetworkManager();
 
             _uiManager = new UiManager("ReModCE");
 
@@ -127,6 +145,22 @@ namespace ReModCE
             foreach (var m in Components)
             {
                 m.OnPreferencesSaved();
+            }
+        }
+
+        private static void OnPlayerJoined(Player player)
+        {
+            foreach (var m in Components)
+            {
+                m.OnPlayerJoined(player);
+            }
+        }
+
+        private static void OnPlayerLeft(Player player)
+        {
+            foreach (var m in Components)
+            {
+                m.OnPlayerLeft(player);
             }
         }
 

@@ -3,6 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using MelonLoader;
 using ReModCE.Managers;
+using VRC;
 
 namespace ReModCE.Core
 {
@@ -30,6 +31,9 @@ namespace ReModCE.Core
         public virtual void OnPreferencesLoaded() { }
         public virtual void OnPreferencesSaved() { }
         public virtual void OnAvatarIsReady(VRCPlayer vrcPlayer) { }
+        public virtual void OnPlayerJoined(Player player) {}
+        public virtual void OnPlayerLeft(Player player) {}
+
 
         protected HarmonyMethod GetLocalPatch(string methodName)
         {
