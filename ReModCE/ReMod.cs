@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using HarmonyLib;
 using MelonLoader;
-using ReModCE.Components;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
-using ReModCE.UI;
 using UnhollowerRuntimeLib;
-using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace ReModCE
 {
@@ -23,8 +18,12 @@ namespace ReModCE
         private static readonly List<ModComponent> Components = new List<ModComponent>();
         private static UiManager _uiManager;
 
+        public static HarmonyLib.Harmony Harmony { get; private set; }
+
         public static void OnApplicationStart()
         {
+            Harmony = MelonHandler.Mods.First(m => m.Info.Name == "ReModCE").HarmonyInstance;
+            Directory.CreateDirectory("UserData/ReModCE");
             ReLogger.Msg("Initializing...");
             
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();

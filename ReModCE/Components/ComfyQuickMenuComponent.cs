@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using ReModCE.Core;
 using HarmonyLib;
 using ReModCE.Managers;
@@ -20,8 +15,7 @@ namespace ReModCE.Components
         {
             ComfyQuickMenuEnabled = new ConfigValue<bool>(nameof(ComfyQuickMenuEnabled), false);
             ComfyQuickMenuEnabled.OnValueChanged += () => _comfyQMToggle.Toggle(ComfyQuickMenuEnabled);
-            var harmony = new HarmonyLib.Harmony("ReModCE");
-            harmony.Patch(typeof(QuickMenu).GetMethod(nameof(QuickMenu.Method_Private_Void_Boolean_0)), new HarmonyMethod(typeof(ComfyQuickMenuComponent).GetMethod(nameof(SetupForDesktopOrHMDPatch), BindingFlags.NonPublic | BindingFlags.Static)));
+            ReModCE.Harmony.Patch(typeof(QuickMenu).GetMethod(nameof(QuickMenu.Method_Private_Void_Boolean_0)), GetLocalPatch(nameof(SetupForDesktopOrHMDPatch)));
         }
 
         public override void OnUiManagerInit(UiManager uiManager)

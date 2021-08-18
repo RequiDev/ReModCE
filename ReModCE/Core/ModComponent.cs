@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Reflection;
+using HarmonyLib;
 using ReModCE.Managers;
-using ReModCE.UI;
 
 namespace ReModCE.Core
 {
@@ -28,5 +29,10 @@ namespace ReModCE.Core
         public virtual void OnPreferencesLoaded() { }
         public virtual void OnPreferencesSaved() { }
         public virtual void OnAvatarIsReady(VRCPlayer vrcPlayer) { }
+
+        protected HarmonyMethod GetLocalPatch(string methodName)
+        {
+            return new HarmonyMethod(GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static));
+        }
     }
 }
