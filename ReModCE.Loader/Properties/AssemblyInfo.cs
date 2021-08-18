@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using MelonLoader;
+using ReModCE.Loader;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -36,7 +37,7 @@ using MelonLoader;
 [assembly: AssemblyVersion(ReModCE.Loader.BuildInfo.Version)]
 [assembly: AssemblyFileVersion(ReModCE.Loader.BuildInfo.Version)]
 
-[assembly: MelonInfo(typeof(ReModCE.Loader.ReLoader), ReModCE.Loader.BuildInfo.Name, ReModCE.Loader.BuildInfo.Version, ReModCE.Loader.BuildInfo.Author)]
+[assembly: MelonInfo(typeof(ReLoader), ReModCE.Loader.BuildInfo.Name, ReModCE.Loader.BuildInfo.Version, ReModCE.Loader.BuildInfo.Author, ReModCE.Loader.BuildInfo.DownloadLink)]
 
 // Create and Setup a MelonModGame to mark a Mod as Universal or Compatible with specific Games.
 // If no MelonModGameAttribute is found or any of the Values for any MelonModGame on the Mod is null or empty it will be assumed the Mod is Universal.

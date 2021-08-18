@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace ReModCE.Loader
@@ -17,6 +18,14 @@ namespace ReModCE.Loader
         public const string Author = "Requi, FenrixTheFox";
         public const string Company = null;
         public const string Version = "1.0.0.0";
+        public const string DownloadLink = "https://github.com/RequiDev/ReModCE/releases/latest/";
+    }
+
+    internal static class GitHubInfo
+    {
+        public const string Author = "RequiDev";
+        public const string Repository = "ReModCE";
+        public const string Version = "latest";
     }
 
     public class ReLoader : MelonMod
@@ -33,30 +42,61 @@ namespace ReModCE.Loader
 
         private Action<int, string> _onSceneWasLoaded;
         private Action<int, string> _onSceneWasInitialized;
-
-        private readonly List<string> _possiblePaths = new List<string>
-        {
-            "ReModCE.dll",
-            "Mods/ReModCE.dll",
-        };
-
         public override void OnApplicationStart()
         {
-            var bytes = (from path in _possiblePaths where File.Exists(path) select File.ReadAllBytes(path)).FirstOrDefault();
+            var category = MelonPreferences.CreateCategory("ReModCE");
+            var paranoidMode = category.CreateEntry("ParanoidMode", false, "Paranoid Mode",
+                "If enabled ReModCE will not automatically download the latest version from GitHub. Manual update will be required.",
+                true);
 
+            using var sha256 = SHA256.Create();
+
+            byte[] bytes = null;
+            if (File.Exists("ReModCE.dll"))
+            {
+                bytes = File.ReadAllBytes("ReModCE.dll");
+            }
+
+            using var wc = new WebClient
+            {
+                Headers =
+                {
+                    ["User-Agent"] =
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0"
+                }
+            };
+            var latestBytes = wc.DownloadData($"https://github.com/{GitHubInfo.Author}/{GitHubInfo.Repository}/releases/{GitHubInfo.Version}/download/ReModCE.dll");
             if (bytes == null)
             {
-                MelonLogger.Warning($"Couldn't find ReModCE.dll on disk. Loading dynamically from GitHub.");
-                using var wc = new WebClient
+                if (latestBytes == null)
                 {
-                    Headers =
-                    {
-                        ["User-Agent"] =
-                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0"
-                    }
-                };
-                bytes = wc.DownloadData("https://github.com/RequiDev/ReModCE/releases/latest/download/ReModCE.dll");
+                    MelonLogger.Error($"No local file exists and unable to download latest version from GitHub. ReModCE will not load!");
+                    return;
+                }
+                MelonLogger.Warning($"Couldn't find ReModCE.dll on disk. Downloading latest version from GitHub.");
+                bytes = latestBytes;
+                File.WriteAllBytes("ReModCE.dll", bytes);
             }
+
+#if !DEBUG
+            var latestHash = ComputeHash(sha256, latestBytes);
+            var currentHash = ComputeHash(sha256, bytes);
+
+            if (latestHash != currentHash)
+            {
+                if (paranoidMode.Value)
+                {
+                    MelonLogger.Msg(ConsoleColor.Cyan,
+                        $"There is a new version of ReModCE available. You can either delete the \"ReModCE.dll\" from your VRChat directory or go to https://github.com/{GitHubInfo.Author}/{GitHubInfo.Repository}/releases/latest/ and download the latest version.");
+                }
+                else
+                {
+                    bytes = latestBytes;
+                    File.WriteAllBytes("ReModCE.dll", bytes);
+                    MelonLogger.Msg(ConsoleColor.Green, $"Updated ReModCE to latest version.");
+                }
+            }
+#endif
 
             Assembly assembly;
             try
@@ -188,6 +228,18 @@ namespace ReModCE.Loader
             while (QuickMenu.prop_QuickMenu_0 == null) yield return null;
 
             OnUiManagerInit();
+        }
+
+        private static string ComputeHash(HashAlgorithm sha256, byte[] data)
+        {
+            var bytes = sha256.ComputeHash(data);
+            var sb = new StringBuilder();
+            foreach (var b in bytes)
+            {
+                sb.Append(b.ToString("x2"));
+            }
+
+            return sb.ToString();
         }
     }
 }
