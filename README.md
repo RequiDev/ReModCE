@@ -12,9 +12,10 @@ This is essentially a public version of my invite-only VRChat mod. It's a cut-do
 # Installation & Usage
 Grab the latest loader from the Releases (click [here](https://github.com/RequiDev/ReModCE/releases/latest)) and put it in your Mods directory.  
 
-You can choose to have the loader automatically load the latest available version from GitHub or you can download a specific mod version from the various releases and place it in either your VRChat directory or your Mods directory. This will make it only load that specific version in case you don't want to automatically update.  
+By default the loader will attempt to load the mod from your VRChat directory using the filename 'ReModCE.dll'. If it doesn't exist, it will attempt to download the latest Version from GitHub.  
+If there is a newer version available on GitHub it will automatically update to that version.  
 
-Placing the mod (not the loader) itself in your Mods directory will throw a warning/error in your MelonLoader that you can safely ignore.
+If you don't want automatic updates, you can open your MelonPreferences.cfg with any text editor and set ParanoidMode in the [ReModCE] category to true. This will make it so the loader will notify if there is a new version available, but it won't load it until you download it yourself and replace the old version.
 
 # Features
 * Unlimited Avatar Favorites with VRC+ (Locally saved!)
