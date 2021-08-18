@@ -8,6 +8,13 @@ namespace ReModCE.Core
     {
     }
 
+    internal class ComponentPriority : Attribute
+    {
+        public int Priority;
+
+        public ComponentPriority(int priority = 0) => Priority = priority;
+    }
+
     internal class ModComponent
     {
         public virtual void OnUiManagerInit(UiManager uiManager) { }

@@ -7,21 +7,36 @@ using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
 using MelonLoader;
+using ReModCE.Core;
 using ReModCE.Loader;
 using UnityEngine;
 using VRC.Core;
+using VRC.SDKBase;
 
 namespace ReModCE.Managers
 {
-    // modcomponent + singleton?
-    internal static class RiskyFunctionsManager
+
+    [ComponentPriority(int.MinValue)]
+    internal class RiskyFunctionsManager : ModComponent
     {
-        public static event Action<bool> OnRiskyFunctionsChanged;
+        public static RiskyFunctionsManager Instance;
 
-        public static bool RiskyFunctionAllowed { get; private set; }
+        public event Action<bool> OnRiskyFunctionsChanged;
 
-        public static void AppStart()
+        private static readonly List<string> BlacklistedTags = new List<string>
         {
+            "author_tag_game",
+            "author_tag_games",
+            "author_tag_club",
+            "admin_game"
+        };
+
+        public bool RiskyFunctionAllowed { get; private set; }
+
+        public RiskyFunctionsManager()
+        {
+            Instance = this;
+
             // possibly move this to main mod class?
             var harmony = new HarmonyLib.Harmony("ReModCE");
             harmony.Patch(
@@ -33,8 +48,17 @@ namespace ReModCE.Managers
         private static void EnterWorldPatch(ApiWorld __0, ApiWorldInstance __1)
         {
             var worldName = __0.name.ToLower();
-            RiskyFunctionAllowed = !worldName.Contains("club") && !worldName.Contains("game") && !__0.tags.Contains("author_tag_game") && !__0.tags.Contains("author_tag_club");
-            OnRiskyFunctionsChanged?.Invoke(RiskyFunctionAllowed);
+
+            var tags = new List<string>();
+            foreach (var tag in __0.tags)
+            {
+                tags.Add(tag.ToLower());
+            }
+
+            var hasBlacklistedTag = BlacklistedTags.Any(tag => tags.Contains(tag));
+
+            Instance.RiskyFunctionAllowed = !worldName.Contains("club") && !worldName.Contains("game") && !hasBlacklistedTag;
+            Instance.OnRiskyFunctionsChanged?.Invoke(Instance.RiskyFunctionAllowed);
         }
     }
 }

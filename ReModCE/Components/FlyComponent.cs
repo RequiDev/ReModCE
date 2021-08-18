@@ -45,7 +45,7 @@ namespace ReModCE.Components
             FlySpeed = new ConfigValue<float>(nameof(FlySpeed), 4);
             FlySpeed.OnValueChanged += () => _flySpeedButton.Text = $"Fly Speed: {FlySpeed}";
 
-            RiskyFunctionsManager.OnRiskyFunctionsChanged += allowed =>
+            RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
                 _flyToggle.Interactable = allowed;
                 _noclipToggle.Interactable = allowed;
@@ -176,7 +176,7 @@ namespace ReModCE.Components
 
         public override void OnUpdate()
         {
-            if (!RiskyFunctionsManager.RiskyFunctionAllowed)
+            if (!RiskyFunctionsManager.Instance.RiskyFunctionAllowed)
                 return;
 
             HandleHotkeys();

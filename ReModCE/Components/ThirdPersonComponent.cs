@@ -28,7 +28,7 @@ namespace ReModCE.Components
 
         public ThirdPersonComponent()
         {
-            RiskyFunctionsManager.OnRiskyFunctionsChanged += allowed =>
+            RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
                 if (!allowed)
                 {
@@ -127,7 +127,7 @@ namespace ReModCE.Components
 
         public override void OnUpdate()
         {
-            if (!RiskyFunctionsManager.RiskyFunctionAllowed)
+            if (!RiskyFunctionsManager.Instance.RiskyFunctionAllowed)
                 return;
 
             if (_cameraBack == null || _cameraFront == null)

@@ -29,8 +29,6 @@ namespace ReModCE
             
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
 
-            RiskyFunctionsManager.AppStart();
-
             InitializePatches();
 
             InitializeModComponents();
@@ -147,6 +145,12 @@ namespace ReModCE
             }
         }
 
+        private class LoadableModComponent
+        {
+            public int Priority;
+            public Type Component;
+        }
+
         private static void InitializeModComponents()
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -160,6 +164,7 @@ namespace ReModCE
                 types = reflectionTypeLoadException.Types.Where(t => t != null);
             }
 
+            var loadableModComponents = new List<LoadableModComponent>();
             foreach (var t in types)
             {
                 if (t.IsAbstract)
@@ -169,7 +174,24 @@ namespace ReModCE
                 if (t.IsDefined(typeof(ComponentDisabled), false))
                     continue;
 
-                AddModComponent(t);
+                var priority = 0;
+                if (t.IsDefined(typeof(ComponentPriority)))
+                {
+                    priority = ((ComponentPriority)Attribute.GetCustomAttribute(t, typeof(ComponentPriority)))
+                        .Priority;
+                }
+
+                loadableModComponents.Add(new LoadableModComponent
+                {
+                    Component = t,
+                    Priority = priority
+                });
+            }
+
+            var sortedComponents = loadableModComponents.OrderBy(component => component.Priority);
+            foreach (var modComp in sortedComponents)
+            {
+                AddModComponent(modComp.Component);
             }
 
             ReLogger.Msg(ConsoleColor.Cyan, $"Created {Components.Count} mod components.");
