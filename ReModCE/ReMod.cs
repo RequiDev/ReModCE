@@ -36,7 +36,7 @@ namespace ReModCE
 
         private static HarmonyMethod GetLocalPatch(string name)
         {
-            return new HarmonyMethod(typeof(ReModCE).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static));
+            return typeof(ReModCE).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod();
         }
 
         private static void InitializePatches()

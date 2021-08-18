@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using HarmonyLib;
+using MelonLoader;
 using ReModCE.Managers;
 
 namespace ReModCE.Core
@@ -32,7 +33,7 @@ namespace ReModCE.Core
 
         protected HarmonyMethod GetLocalPatch(string methodName)
         {
-            return new HarmonyMethod(GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static));
+            return GetType().GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod();
         }
     }
 }
