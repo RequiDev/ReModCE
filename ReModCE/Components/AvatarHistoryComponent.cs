@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using ReModCE.Core;
 using ReModCE.Managers;
 using ReModCE.UI;
+using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.Core;
@@ -33,6 +34,7 @@ namespace ReModCE.Components
                 _recentAvatars = new List<ReAvatar>();
             }
         }
+
         public override void OnUiManagerInit(UiManager uiManager)
         {
             _avatarList = new ReAvatarList("Recently Used", this, false);
@@ -41,24 +43,37 @@ namespace ReModCE.Components
             changeButton.GetComponent<Button>().onClick.AddListener(new Action(OnChangeAvatar));
         }
 
-        private void OnChangeAvatar()
+        public override void OnAvatarIsReady(VRCPlayer vrcPlayer)
         {
-            var apiAvatar = _avatarList.AvatarPedestal.field_Internal_ApiAvatar_0;
-            if (_recentAvatars.FirstOrDefault(a => a.Id == apiAvatar.id) != null)
+            if (vrcPlayer.gameObject == VRCPlayer.field_Internal_Static_VRCPlayer_0.gameObject)
             {
-                _recentAvatars.RemoveAll(a => a.Id == apiAvatar.id);
+                AddAvatarToHistory(vrcPlayer.GetPlayer().GetApiAvatar());
+            }
+        }
+
+        private void AddAvatarToHistory(ApiAvatar avatar)
+        {
+            if (_recentAvatars.FirstOrDefault(a => a.Id == avatar.id) != null)
+            {
+                _recentAvatars.RemoveAll(a => a.Id == avatar.id);
             }
 
-            _recentAvatars.Insert(0, new ReAvatar(apiAvatar));
+            _recentAvatars.Insert(0, new ReAvatar(avatar));
 
-            if (_recentAvatars.Count > 100)
+            if (_recentAvatars.Count > 25)
             {
                 _recentAvatars.Remove(_recentAvatars.Last());
             }
-            
+
             SaveAvatarsToDisk();
 
             _avatarList.Refresh(GetAvatars());
+        }
+
+        private void OnChangeAvatar()
+        {
+            var apiAvatar = _avatarList.AvatarPedestal.field_Internal_ApiAvatar_0;
+            AddAvatarToHistory(apiAvatar);
         }
 
         private void SaveAvatarsToDisk()
