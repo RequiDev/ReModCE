@@ -41,8 +41,7 @@ namespace ReModCE
 
         private static void InitializePatches()
         {
-            var harmony = new HarmonyLib.Harmony("ReModCE");
-            harmony.Patch(typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake)), GetLocalPatch(nameof(VRCPlayerAwakePatch)));
+            Harmony.Patch(typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake)), GetLocalPatch(nameof(VRCPlayerAwakePatch)));
         }
 
         public static void OnUiManagerInit()
