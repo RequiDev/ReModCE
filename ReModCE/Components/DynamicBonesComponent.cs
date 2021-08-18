@@ -331,7 +331,7 @@ namespace ReModCE.Components
                 _whitelistToggle.Toggle(_settings.IsWhitelisted(activeUser.id));
             };
 
-            var menu = uiManager.MainMenu.AddSubMenu("Dynamic Bones", "Access your global dynamic bone settings");
+            var menu = uiManager.MainMenu.GetSubMenu("Dynamic Bones");
             menu.AddToggle("Enabled", "Enable/Disable global dynamic bones", ToggleDynamicBones,
                 _settings.Enabled);
             _maxRadiusButton = menu.AddButton($"Max Collider Radius: {_settings.MaxRadius}", "Ignore any colliders that are bigger than this", PromptMaxRadiusInput);

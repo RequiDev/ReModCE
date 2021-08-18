@@ -62,7 +62,7 @@ namespace ReModCE.UI
                 return _nextPageMenu.AddButton(text, tooltip, onClick);
             }
 
-            if ((_buttonsAdded + 1) == MaxFullButtons && text != "Next Page")
+            if ((_buttonsAdded + 1) >= MaxFullButtons && text != "Next Page")
             {
                 _nextPageMenu = AddSubMenu("Next Page", "Next Page");
                 return _nextPageMenu.AddButton(text, tooltip, onClick);
@@ -80,7 +80,7 @@ namespace ReModCE.UI
                 return _nextPageMenu.AddToggle(text, tooltip, onToggle, defaultValue);
             }
 
-            if ((_buttonsAdded + 1) == MaxFullButtons && text != "Next Page")
+            if ((_buttonsAdded + 1) >= MaxFullButtons && text != "Next Page")
             {
                 _nextPageMenu = AddSubMenu("Next Page", "Next Page");
                 return _nextPageMenu.AddToggle(text, tooltip, onToggle, defaultValue);
@@ -89,6 +89,11 @@ namespace ReModCE.UI
             var toggle = new ReQuickToggle(NextButtonPos, text, tooltip, onToggle, defaultValue, RectTransform);
             ++_buttonsAdded;
             return toggle;
+        }
+
+        public void AddSpacing(int spacing = 1)
+        {
+            _buttonsAdded += spacing;
         }
 
         public ReQuickMenu AddSubMenu(string menuName, string tooltip)
@@ -101,7 +106,7 @@ namespace ReModCE.UI
 
         public ReQuickMenu GetSubMenu(string menuName)
         {
-            return _subMenus.FirstOrDefault(m => m.Name == menuName || m.Name == $"{menuName}MenuReModCE");
+            return _subMenus.FirstOrDefault(m => m.Name == menuName || m.Name == string.Concat($"{menuName}MenuReModCE".Where(char.IsLetter)));
         }
 
         private Vector2 NextButtonPos => new Vector2(-625 + (_buttonsAdded % 4) * ButtonSize, (ButtonSize * 2.5f) - (_buttonsAdded / 4) * ButtonSize); // meth

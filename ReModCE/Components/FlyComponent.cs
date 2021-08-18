@@ -31,12 +31,14 @@ namespace ReModCE.Components
         private ConfigValue<bool> SuppressFlyAnimation;
         private ConfigValue<float> FlySpeed;
         private Vector3 _originalGravity;
+        private ConfigValue<bool> EnableFlyHotkey;
 
         private ReQuickToggle _suppressFlyAnimationToggle;
         private ReQuickButton _flySpeedButton;
 
         private ReQuickToggle _flyToggle;
         private ReQuickToggle _noclipToggle;
+        private ReQuickToggle _hotkeyToggle;
 
         public FlyComponent()
         {
@@ -44,6 +46,8 @@ namespace ReModCE.Components
             SuppressFlyAnimation.OnValueChanged += () => _suppressFlyAnimationToggle.Toggle(SuppressFlyAnimation);
             FlySpeed = new ConfigValue<float>(nameof(FlySpeed), 4);
             FlySpeed.OnValueChanged += () => _flySpeedButton.Text = $"Fly Speed: {FlySpeed}";
+            EnableFlyHotkey = new ConfigValue<bool>(nameof(EnableFlyHotkey), true);
+            EnableFlyHotkey.OnValueChanged += () => _hotkeyToggle.Toggle(EnableFlyHotkey);
 
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
@@ -59,9 +63,13 @@ namespace ReModCE.Components
         public override void OnUiManagerInit(UiManager uiManager)
         {
             var movementMenu = uiManager.MainMenu.GetSubMenu("Movement");
+            var hotkeyMenu = uiManager.MainMenu.GetSubMenu("Hotkeys");
 
             _flyToggle = movementMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
             _noclipToggle = movementMenu.AddToggle("Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
+            _hotkeyToggle = hotkeyMenu.AddToggle("Enable Fly Hotkey", "Enable/Disable fly hotkey",
+                EnableFlyHotkey.SetValue, EnableFlyHotkey);
+
             _suppressFlyAnimationToggle = movementMenu.AddToggle("Suppress Fly Animations",
                 "Stay still in the air when flying instead of having dangling legs.",
                 SuppressFlyAnimation.SetValue, SuppressFlyAnimation);
@@ -161,6 +169,8 @@ namespace ReModCE.Components
 
         private void HandleHotkeys()
         {
+            if (!EnableFlyHotkey) return;
+
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F))
             {
                 if (!_flyEnabled)

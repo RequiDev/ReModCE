@@ -26,6 +26,7 @@ namespace ReModCE.Managers
 
         private ConfigValue<float> ButtonOffsetX;
         private ConfigValue<float> ButtonOffsetY;
+
         public UiManager(string menuName)
         {
             ButtonOffsetX = new ConfigValue<float>(nameof(ButtonOffsetX), 0f, "Main Button Offset X", "Offset on the X axis for the main menu button. Relative to \"Report World\" button. 1 = 1 button size.");
@@ -58,7 +59,9 @@ namespace ReModCE.Managers
                 () => MainMenu.Open(),
                 ExtendedQuickMenu.ShortcutMenu);
 
-            MainMenu.AddSubMenu("Movement", "Access movement related options");
+            MainMenu.AddSubMenu("Movement", "Access movement related settings");
+            MainMenu.AddSubMenu("Dynamic Bones", "Access your global dynamic bone settings");
+            MainMenu.AddSubMenu("Hotkeys", "Access hotkey related settings");
 
             TargetMenu = new ReQuickMenu("TargetReModCE", "UserInteractMenu", QuickMenuContext.UserSelected);
             ReQuickButton.Create(new Vector2(_intialButtonPos.x + (Convert.ToInt32(IsRemodLoaded) * ButtonSize), _intialButtonPos.y - (ButtonSize * 2f)),

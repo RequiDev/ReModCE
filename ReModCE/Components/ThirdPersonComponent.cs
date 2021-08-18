@@ -26,8 +26,13 @@ namespace ReModCE.Components
 
         private ThirdPersonMode _cameraSetup;
 
+        private ConfigValue<bool> EnableThirdpersonHotkey;
+        private ReQuickToggle _hotkeyToggle;
+
         public ThirdPersonComponent()
         {
+            EnableThirdpersonHotkey = new ConfigValue<bool>(nameof(EnableThirdpersonHotkey), true);
+            EnableThirdpersonHotkey.OnValueChanged += () => _hotkeyToggle.Toggle(EnableThirdpersonHotkey);
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
                 if (!allowed)
@@ -39,6 +44,9 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
+            var hotkeyMenu = uiManager.MainMenu.GetSubMenu("Hotkeys");
+            _hotkeyToggle = hotkeyMenu.AddToggle("Enable Thirdperson Hotkey", "Enable/Disable thirdperson hotkey", EnableThirdpersonHotkey.SetValue, EnableThirdpersonHotkey);
+
             _referenceCamera = GameObject.Find("Camera (eye)").GetComponent<Camera>();
             if (_referenceCamera == null)
             {
@@ -71,9 +79,10 @@ namespace ReModCE.Components
             return camera;
         }
 
-
         private void HandleHotkeys()
         {
+            if (!EnableThirdpersonHotkey) return;
+
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.T))
             {
                 var mode = _cameraSetup;
