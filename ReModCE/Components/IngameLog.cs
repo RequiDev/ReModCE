@@ -18,7 +18,11 @@ namespace ReModCE.Components
         public IngameLog()
         {
             IngameLogEnabled = new ConfigValue<bool>(nameof(IngameLogEnabled), true);
-            IngameLogEnabled.OnValueChanged += () => _logToggle.Toggle(IngameLogEnabled);
+            IngameLogEnabled.OnValueChanged += () =>
+            {
+                _logToggle.Toggle(IngameLogEnabled);
+                ToggleIngameLog(IngameLogEnabled);
+            };
             MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
             {
                 if (nameSection != nameof(ReModCE))
@@ -40,7 +44,7 @@ namespace ReModCE.Components
         public override void OnUiManagerInit(UiManager uiManager)
         {
             var logMenu = uiManager.MainMenu.AddSubMenu("Ingame Log", "Access ingame log related settings.");
-            _logToggle = logMenu.AddToggle("Enabled", "Enable/Disable the ingame log UI", ToggleIngameLog, IngameLogEnabled);
+            _logToggle = logMenu.AddToggle("Enabled", "Enable/Disable the ingame log UI", IngameLogEnabled.SetValue, IngameLogEnabled);
 
             var logPos = new Vector2(-1695, 1470f);
             if (uiManager.IsRubyLoaded)
@@ -54,6 +58,7 @@ namespace ReModCE.Components
 
         private void ToggleIngameLog(bool toggled)
         {
+            (toggled);
             _log.Active = toggled;
         }
 
