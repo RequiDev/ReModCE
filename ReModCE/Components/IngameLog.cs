@@ -23,6 +23,7 @@ namespace ReModCE.Components
                 _logToggle.Toggle(IngameLogEnabled);
                 ToggleIngameLog(IngameLogEnabled);
             };
+
             MelonLogger.MsgCallbackHandler += (color, consoleColor, nameSection, msg) =>
             {
                 if (nameSection != nameof(ReModCE))
@@ -58,7 +59,6 @@ namespace ReModCE.Components
 
         private void ToggleIngameLog(bool toggled)
         {
-            (toggled);
             _log.Active = toggled;
         }
 
