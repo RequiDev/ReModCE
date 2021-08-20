@@ -61,9 +61,9 @@ namespace ReModCE.UI
                 return _nextPageMenu.AddButton(text, tooltip, onClick);
             }
 
-            if ((_buttonsAdded + 1) >= MaxFullButtons && text != "Next Page")
+            if ((_buttonsAdded + 1) >= MaxFullButtons && !text.Contains("Next Page"))
             {
-                _nextPageMenu = AddSubMenu("Next Page", "Next Page");
+                _nextPageMenu = AddSubMenu("<color=#4287f5>Next Page</color>", "Next Page");
                 return _nextPageMenu.AddButton(text, tooltip, onClick);
             }
 
@@ -79,9 +79,9 @@ namespace ReModCE.UI
                 return _nextPageMenu.AddToggle(text, tooltip, onToggle, defaultValue);
             }
 
-            if ((_buttonsAdded + 1) >= MaxFullButtons && text != "Next Page")
+            if ((_buttonsAdded + 1) >= MaxFullButtons && !text.Contains("Next Page"))
             {
-                _nextPageMenu = AddSubMenu("Next Page", "Next Page");
+                _nextPageMenu = AddSubMenu("<color=#4287f5>Next Page</color>", "Next Page");
                 return _nextPageMenu.AddToggle(text, tooltip, onToggle, defaultValue);
             }
 
