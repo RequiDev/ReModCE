@@ -29,7 +29,7 @@ namespace ReModCE.Managers
         {
             ButtonOffsetX = new ConfigValue<float>(nameof(ButtonOffsetX), 0f, "Main Button Offset X", "Offset on the X axis for the main menu button. Relative to \"Report World\" button. 1 = 1 button size.");
             ButtonOffsetX.OnValueChanged += OnButtonOffsetChanged;
-            ButtonOffsetY = new ConfigValue<float>(nameof(ButtonOffsetY), 2f, "Main Button Offset X", "Offset on the Y axis for the main menu button. Relative to \"Report World\" button. 1 = 1 button size.");
+            ButtonOffsetY = new ConfigValue<float>(nameof(ButtonOffsetY), 2f, "Main Button Offset Y", "Offset on the Y axis for the main menu button. Relative to \"Report World\" button. 1 = 1 button size.");
             ButtonOffsetY.OnValueChanged += OnButtonOffsetChanged;
 
             var buttonOffset = new Vector3(ButtonSize * ButtonOffsetX, ButtonSize * ButtonOffsetY);
