@@ -84,7 +84,7 @@ namespace ReModCE.Components
                     }));
                 });
 
-                sizeMenu.AddToggle($"{buttonName}", "Half \"{buttonName\" button", b =>
+                sizeMenu.AddToggle($"{buttonName}", $"Half \"{buttonName}\" button", b =>
                 {
                     buttonHalfSize.SetValue(b);
                     if (b)
