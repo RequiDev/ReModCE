@@ -29,6 +29,7 @@ namespace ReModCE.Components
 
             var disablerMenu = menu.AddSubMenu("Disabler", "Disable VRChat buttons in your Quick Menu");
             var moverMenu = menu.AddSubMenu("Mover", "Move buttons around in your Qick Menu");
+            var sizeMenu = menu.AddSubMenu("Sizer", "Make any button half size if needed");
             var shortcutMenu = ExtendedQuickMenu.ShortcutMenu;
             var childrenButtons = shortcutMenu.gameObject.GetComponentsInDirectChildren<Button>();
             foreach (var button in childrenButtons)
@@ -37,29 +38,26 @@ namespace ReModCE.Components
                 if (name == "DevToolsButton") continue;
 
                 ReQuickToggle buttonToggle = null;
-                var buttonConfigValue = new ConfigValue<bool>($"{name}Enabled", button.gameObject.activeSelf);
+                var buttonEnabled = new ConfigValue<bool>($"{name}Enabled", button.gameObject.activeSelf);
                 var buttonPosX = new ConfigValue<float>($"{name}PosX", button.transform.localPosition.x, isHidden:true);
                 var buttonPosY = new ConfigValue<float>($"{name}PosY", button.transform.localPosition.y, isHidden: true);
-                buttonConfigValue.OnValueChanged += () =>
+                var buttonHalfSize = new ConfigValue<bool>($"{name}HalfSize", false, isHidden: true);
+
+                buttonEnabled.OnValueChanged += () =>
                 {
-                    buttonToggle.Toggle(buttonConfigValue);
-                    button.gameObject.SetActive(buttonConfigValue);
+                    buttonToggle.Toggle(buttonEnabled);
+                    button.gameObject.SetActive(buttonEnabled);
                 };
 
-                var text = button.GetComponentInChildren<Text>();
-                if (text == null)
+                var text = button.gameObject.GetComponentsInDirectChildren<Text>();
+                if (text == null || text.Length == 0)
                 {
                     continue;
                 }
-                var buttonName = text.text;
+                var buttonName = text[0].text;
 
                 buttonToggle = disablerMenu.AddToggle($"{buttonName}", $"Enable/Disable \"{buttonName}\" button.",
-                    buttonConfigValue.SetValue, buttonConfigValue);
-
-                if (buttonConfigValue != button.gameObject.activeSelf)
-                {
-                    button.gameObject.SetActive(buttonConfigValue);
-                }
+                    buttonEnabled.SetValue, buttonEnabled);
 
                 moverMenu.AddButton($"{buttonName}", $"Move \"{buttonName}\" button", () =>
                 {
@@ -84,13 +82,33 @@ namespace ReModCE.Components
                             moverMenu.Open();
                         }
                     }));
-
                 });
+
+                sizeMenu.AddToggle($"{buttonName}", "Half \"{buttonName\" button", b =>
+                {
+                    buttonHalfSize.SetValue(b);
+                    if (b)
+                    {
+                        button.GetComponent<RectTransform>().sizeDelta *= new Vector2(1f, 0.5f);
+                    }
+                    else
+                    {
+                        button.GetComponent<RectTransform>().sizeDelta *= new Vector2(1f, 2f);
+                    }
+                }, buttonHalfSize);
 
                 var buttonPos = new Vector3(buttonPosX, buttonPosY);
                 if (buttonPos != Vector3.zero)
                 {
                     button.transform.localPosition = buttonPos;
+                }
+                if (buttonEnabled != button.gameObject.activeSelf)
+                {
+                    button.gameObject.SetActive(buttonEnabled);
+                }
+                if (buttonHalfSize)
+                {
+                    button.GetComponent<RectTransform>().sizeDelta *= new Vector2(1f, 0.5f);
                 }
             }
         }
@@ -110,7 +128,7 @@ namespace ReModCE.Components
             {
                 movingGameObjectRect.transform.position = ExtendedCursor.HitPosition;
                 movingGameObjectRect.transform.localPosition = new Vector3(movingGameObjectRect.transform.localPosition.x, movingGameObjectRect.transform.localPosition.y, 25f);
-                movingGameObjectRect.anchoredPosition = movingGameObjectRect.anchoredPosition.RoundAmount(UiManager.ButtonSize / 2f);
+                movingGameObjectRect.anchoredPosition = movingGameObjectRect.anchoredPosition.RoundAmount(UiManager.ButtonSize / 4f);
                 
                 yield return null;
             }
@@ -127,7 +145,7 @@ namespace ReModCE.Components
 
                 movingGameObjectRect.transform.position = ExtendedCursor.HitPosition;
                 movingGameObjectRect.transform.localPosition = new Vector3(movingGameObjectRect.transform.localPosition.x, movingGameObjectRect.transform.localPosition.y, 25f);
-                movingGameObjectRect.anchoredPosition = movingGameObjectRect.anchoredPosition.RoundAmount(UiManager.ButtonSize / 2f);
+                movingGameObjectRect.anchoredPosition = movingGameObjectRect.anchoredPosition.RoundAmount(UiManager.ButtonSize / 4f);
                 
                 yield return null;
             }
