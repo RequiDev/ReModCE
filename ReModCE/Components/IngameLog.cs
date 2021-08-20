@@ -55,6 +55,7 @@ namespace ReModCE.Components
 
             _log = new ReScrollView("ReModCELog", logPos, ExtendedQuickMenu.ShortcutMenu);
             _log.AddText(_preUiLog);
+            _log.Active = IngameLogEnabled;
         }
 
         private void ToggleIngameLog(bool toggled)
