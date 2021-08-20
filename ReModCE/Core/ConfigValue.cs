@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MelonLoader;
 
 namespace ReModCE.Core
@@ -13,7 +14,7 @@ namespace ReModCE.Core
         public ConfigValue(string name, T defaultValue, string displayName = null, string description = null, bool isHidden = false)
         {
             _category ??= MelonPreferences.CreateCategory("ReModCE");
-            _entry = _category.GetEntry<T>(name) ?? _category.CreateEntry(name, defaultValue, displayName, description, isHidden);
+            _entry = _category.GetEntry<T>(string.Concat(name.Where(c => char.IsLetter(c) || char.IsNumber(c)))) ?? _category.CreateEntry(string.Concat(name.Where(c => char.IsLetter(c) || char.IsNumber(c))), defaultValue, displayName, description, isHidden);
             _entry.OnValueChangedUntyped += OnValueChanged;
         }
 
