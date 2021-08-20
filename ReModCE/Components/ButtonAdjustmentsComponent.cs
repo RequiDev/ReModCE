@@ -86,32 +86,6 @@ namespace ReModCE.Components
                     }));
 
                 });
-                
-                //var subMenu = moverMenu.AddSubMenu($"{buttonName}", $"Move \"{buttonName}\" button");
-                //subMenu.AddSpacing();
-                //subMenu.AddButton("UP", $"Move \"{buttonName}\" button up.", () =>
-                //{
-                //    button.transform.localPosition += new Vector3(0f, UiManager.ButtonSize);
-                //    buttonOffsetY.SetValue(buttonOffsetX + 1);
-                //});
-                //subMenu.AddSpacing(2);
-                //subMenu.AddButton("LEFT", $"Move \"{buttonName}\" button left.", () =>
-                //{
-                //    button.transform.localPosition += new Vector3(-UiManager.ButtonSize, 0f);
-                //    buttonOffsetX.SetValue(buttonOffsetX - 1);
-                //});
-                //subMenu.AddSpacing();
-                //subMenu.AddButton("RIGHT", $"Move \"{buttonName}\" button right.", () =>
-                //{
-                //    button.transform.localPosition += new Vector3(UiManager.ButtonSize, 0f);
-                //    buttonOffsetX.SetValue(buttonOffsetX + 1);
-                //});
-                //subMenu.AddSpacing(2);
-                //subMenu.AddButton("DOWN", $"Move \"{buttonName}\" button down.", () =>
-                //{
-                //    button.transform.localPosition += new Vector3(0f, -UiManager.ButtonSize);
-                //    buttonOffsetY.SetValue(buttonOffsetX - 1);
-                //});
 
                 var buttonPos = new Vector3(buttonPosX, buttonPosY);
                 if (buttonPos != Vector3.zero)
