@@ -31,7 +31,7 @@ If you don't want automatic updates, you can open your MelonPreferences.cfg with
 * CTRL + T = Thirdperson
 
 # Credits
-[loukylor](https://github.com/loukylor) - For selected VRChat function reflections which I am using  
+[loukylor](https://github.com/loukylor) - For selected VRChat function reflections and his button mover code which I am using  
 [knah](https://github.com/knah) - For his usage of GitHub Action which I've looked at to figure out on how to do CI on GitHub
 
 # Notable Mentions
