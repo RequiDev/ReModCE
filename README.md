@@ -23,6 +23,7 @@ If you don't want automatic updates, you can open your MelonPreferences.cfg with
 * Global Dynamic Bones with advanced settings so you have full control over where colliders go
 * Fly/Noclip (Not usable in Game/Club worlds)
 * Third Person (Not usable in Game/Club worlds)
+* Button Adjustment Component. Disable, Move or Resize any button in your quickmenu.
 * Ingame Log that will show you anything that ReMod CE will log. At the moment it's a bit unstable (a lot of text will break it) and only supports ReMod CE. More options to come!
 * Small UI adjustments like adding a "Paste" button to input popups.
 
