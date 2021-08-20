@@ -15,7 +15,7 @@ namespace ReModCE.Core
         {
             _category ??= MelonPreferences.CreateCategory("ReModCE");
             _entry = _category.GetEntry<T>(string.Concat(name.Where(c => char.IsLetter(c) || char.IsNumber(c)))) ?? _category.CreateEntry(string.Concat(name.Where(c => char.IsLetter(c) || char.IsNumber(c))), defaultValue, displayName, description, isHidden);
-            _entry.OnValueChangedUntyped += OnValueChanged;
+            _entry.OnValueChangedUntyped += () => OnValueChanged?.Invoke();
         }
 
         public static implicit operator T(ConfigValue<T> conf)
