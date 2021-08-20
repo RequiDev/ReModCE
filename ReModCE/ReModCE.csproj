@@ -192,6 +192,7 @@
     <Compile Include="Components\AvatarFavoritesComponent.cs" />
     <Compile Include="Components\CalibrationSavingComponent.cs" />
     <Compile Include="Components\ComfyQuickMenuComponent.cs" />
+    <Compile Include="Components\ButtonAdjustmentsComponent.cs" />
     <Compile Include="Components\DynamicBonesComponent.cs" />
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\PopupExComponent.cs" />
@@ -215,6 +216,7 @@
     <Compile Include="UI\ReQuickMenu.cs" />
     <Compile Include="UI\ReQuickToggle.cs" />
     <Compile Include="Managers\UiManager.cs" />
+    <Compile Include="VRChat\ExtendedCursor.cs" />
     <Compile Include="VRChat\ExtendedQuickMenu.cs" />
     <Compile Include="VRChat\PlayerExtensions.cs" />
     <Compile Include="VRChat\PopupManagerExtensions.cs" />
