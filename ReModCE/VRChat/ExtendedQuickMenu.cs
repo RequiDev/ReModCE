@@ -17,6 +17,8 @@ namespace ReModCE.VRChat
         private static Transform _newElements;
         private static Transform _infoBar;
 
+        private static Transform _userIconCameraButton;
+        private static Transform _vrcPlusPet;
         private static Transform _reportWorldButton;
         private static GameObject _blockButton;
 
@@ -90,6 +92,28 @@ namespace ReModCE.VRChat
                     _reportWorldButton = ShortcutMenu.Find("ReportWorldButton");
                 }
                 return _reportWorldButton;
+            }
+        }
+        public static Transform VRCPlusPet
+        {
+            get
+            {
+                if (_vrcPlusPet == null)
+                {
+                    _vrcPlusPet = ShortcutMenu.Find("VRCPlusThankYou");
+                }
+                return _vrcPlusPet;
+            }
+        }
+        public static Transform UserIconCameraButton
+        {
+            get
+            {
+                if (_userIconCameraButton == null)
+                {
+                    _userIconCameraButton = ShortcutMenu.Find("UserIconCameraButton");
+                }
+                return _userIconCameraButton;
             }
         }
 
