@@ -53,8 +53,8 @@ namespace ReModCE.Components
                 CreateUiForButton(button.gameObject, text.text);
             }
 
-            CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", size: false);
-            CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, size: false);
+            CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", disable:false, size: false); // 
+            CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, disable: false, size: false);
         }
 
         private void CreateUiForButton(GameObject gameObject, string name, bool hasButton = true, bool disable = true, bool move = true, bool size = true)

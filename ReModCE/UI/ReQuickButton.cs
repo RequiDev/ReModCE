@@ -32,7 +32,7 @@ namespace ReModCE.UI
 
         public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(ExtendedQuickMenu.ReportWorldButton.gameObject, parent, pos, $"{text}Button")
         {
-            Object.DestroyImmediate(RectTransform.Find("CLIcon"));
+            Object.DestroyImmediate(RectTransform.Find("CLIcon").gameObject);
 
             _textComponent = GameObject.GetComponentInChildren<Text>();
             _textComponent.resizeTextForBestFit = true;

@@ -32,13 +32,17 @@ namespace ReModCE.UI
 
             _toggleStateOn.GetComponentsInChildren<Text>()[0].text = $"{text}\nON";
             _toggleStateOn.GetComponentsInChildren<Text>()[0].resizeTextForBestFit = true;
+            _toggleStateOn.GetComponentsInChildren<Text>()[0].supportRichText = true;
             _toggleStateOff.GetComponentsInChildren<Text>()[0].text = $"{text}\nON";
             _toggleStateOff.GetComponentsInChildren<Text>()[0].resizeTextForBestFit = true;
+            _toggleStateOff.GetComponentsInChildren<Text>()[0].supportRichText = true;
 
             _toggleStateOn.GetComponentsInChildren<Text>()[1].text = $"{text}\nOFF";
             _toggleStateOn.GetComponentsInChildren<Text>()[1].resizeTextForBestFit = true;
+            _toggleStateOn.GetComponentsInChildren<Text>()[1].supportRichText = true;
             _toggleStateOff.GetComponentsInChildren<Text>()[1].text = $"{text}\nOFF";
             _toggleStateOff.GetComponentsInChildren<Text>()[1].resizeTextForBestFit = true;
+            _toggleStateOff.GetComponentsInChildren<Text>()[1].supportRichText = true;
 
             _buttonComponent = GameObject.GetComponent<Button>();
             _buttonComponent.onClick = new Button.ButtonClickedEvent();
