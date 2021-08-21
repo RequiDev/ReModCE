@@ -70,7 +70,14 @@ namespace ReModCE
 
             foreach (var m in Components)
             {
-                m.OnUiManagerInit(_uiManager);
+                try
+                {
+                    m.OnUiManagerInit(_uiManager);
+                }
+                catch (Exception e)
+                {
+                    ReLogger.Error($"{m.GetType().Name} had an error during UI initialization:\n{e}");
+                }
             }
         }
 
@@ -173,7 +180,7 @@ namespace ReModCE
             }
             catch (Exception e)
             {
-                ReLogger.Error($"Failed adding ModComponent.\n{e}");
+                ReLogger.Error($"Failed creating {type.Name}:\n{e}");
             }
         }
 
