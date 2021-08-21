@@ -16,6 +16,7 @@ namespace ReModCE.VRChat
         private static Transform _emojiMenu;
         private static Transform _newElements;
         private static Transform _infoBar;
+        private static Transform _quickModeTabs;
 
         private static Transform _userIconCameraButton;
         private static Transform _vrcPlusPet;
@@ -142,6 +143,19 @@ namespace ReModCE.VRChat
             }
         }
 
+        public static Transform QuickModeTabs
+        {
+            get
+            {
+                if (_quickModeTabs == null)
+                {
+                    _quickModeTabs = Instance.transform.Find("QuickModeTabs");
+                }
+
+                return _quickModeTabs;
+            }
+        }
+
 
         private static void EnsureCurrentPageFieldInfo(QuickMenu quickMenu)
         {
@@ -185,6 +199,7 @@ namespace ReModCE.VRChat
             CurrentPage?.SetActive(false);
 
             InfoBar.gameObject.SetActive(pageName == "ShortcutMenu");
+            QuickModeTabs.gameObject.SetActive(pageName == "ShortcutMenu");
             quickMenu.field_Private_QuickMenuContextualDisplay_0.Method_Public_Void_EnumNPublicSealedvaUnNoToUs7vUsNoUnique_0(context);
             newPage.gameObject.SetActive(true);
 

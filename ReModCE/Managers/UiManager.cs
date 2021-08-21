@@ -45,7 +45,7 @@ namespace ReModCE.Managers
 
             if (!IsRemodLoaded && isDefaultButtonPos)
             {
-                ExtendedQuickMenu.ShortcutMenu.Find("UserIconCameraButton").localPosition +=
+                ExtendedQuickMenu.UserIconCameraButton.localPosition +=
                     new Vector3(ButtonSize, -ButtonSize, 0f);
             }
 
