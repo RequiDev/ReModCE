@@ -41,13 +41,16 @@ namespace ReModCE.Components
                 var name = button.name;
                 if (name == "DevToolsButton") continue;
 
-                var text = button.gameObject.GetComponentsInDirectChildren<Text>();
-                if (text == null || text.Length == 0)
+                var texts = button.gameObject.GetComponentsInDirectChildren<Text>();
+                if (texts == null || texts.Length == 0)
                 {
                     continue;
                 }
 
-                CreateUiForButton(button.gameObject, text[0].text);
+                var text = texts[0];
+                if (text.text.Length == 0)
+                    return;
+                CreateUiForButton(button.gameObject, text.text);
             }
 
             CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", size: false);
