@@ -67,7 +67,7 @@ namespace ReModCE.Components
             {
                 ReLogger.Msg($"No saved calibrations found. Creating new.");
                 _savedCalibrations = new Dictionary<string, FbtCalibration>();
-                File.WriteAllText("UserData/ReModCE/calbrations.json", JsonConvert.SerializeObject(_savedCalibrations, Formatting.Indented, new JsonSerializerSettings
+                File.WriteAllText("UserData/ReModCE/calibrations.json", JsonConvert.SerializeObject(_savedCalibrations, Formatting.Indented, new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 }));
