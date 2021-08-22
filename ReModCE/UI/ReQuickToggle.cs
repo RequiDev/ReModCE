@@ -26,6 +26,7 @@ namespace ReModCE.UI
             var tooltipComponent = GameObject.GetComponent<UiTooltip>();
             tooltipComponent.field_Public_String_0 = tooltip;
             tooltipComponent.field_Public_String_1 = tooltip;
+            tooltipComponent.field_Public_Text_0.supportRichText = true;
 
             _toggleStateOn = RectTransform.Find("Toggle_States_Visible/ON").gameObject;
             _toggleStateOff = RectTransform.Find("Toggle_States_Visible/OFF").gameObject;
