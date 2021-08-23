@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ReModCE.Core;
+using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
 using UnityEngine;
+using UnityEngine.UI;
 using VRC.Core;
 using VRC.SDKBase.Validation.Performance.Stats;
 using AvatarList = Il2CppSystem.Collections.Generic.List<VRC.Core.ApiAvatar>;
@@ -19,6 +21,8 @@ namespace ReModCE.Components
         private ReUiButton _favoriteButton;
 
         private readonly List<ReAvatar> _savedAvatars;
+
+        private Button.ButtonClickedEvent _changeButtonEvent;
 
         public AvatarFavoritesComponent()
         {
@@ -39,6 +43,44 @@ namespace ReModCE.Components
 
             _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
                 GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent);
+
+            var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
+            if (changeButton != null)
+            {
+                var button = changeButton.GetComponent<Button>();
+                _changeButtonEvent = button.onClick;
+
+                button.onClick = new Button.ButtonClickedEvent();
+                button.onClick.AddListener(new Action(() =>
+                {
+                    var currentAvatar = _avatarList.AvatarPedestal.field_Internal_ApiAvatar_0;
+                    if (!HasAvatarFavorited(currentAvatar.id)) // this isn't in our list. we don't care about it
+                    {
+                        _changeButtonEvent.Invoke();
+                        return;
+                    }
+                    
+                    new ApiAvatar { id = currentAvatar.id }.Fetch(new Action<ApiContainer>(ac =>
+                    {
+                        var updatedAvatar = ac.Model.Cast<ApiAvatar>();
+                        switch (updatedAvatar.releaseStatus)
+                        {
+                            case "private" when updatedAvatar.authorId != APIUser.CurrentUser.id:
+                                VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar is private and you don't own it. You can't switch into it.");
+                                break;
+                            case "unavailable":
+                                VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar has been deleted. You can't switch into it.");
+                                break;
+                            default:
+                                _changeButtonEvent.Invoke();
+                                break;
+                        }
+                    }), new Action<ApiContainer>(ac =>
+                    {
+                        VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar has been deleted. You can't switch into it.");
+                    }));
+                }));
+            }
 
             if (uiManager.IsRemodLoaded)
             {
