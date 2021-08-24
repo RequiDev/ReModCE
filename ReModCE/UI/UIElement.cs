@@ -7,7 +7,7 @@ namespace ReModCE.UI
     internal class UIElement
     {
         protected string Name { get; }
-        protected GameObject GameObject { get; }
+        public GameObject GameObject { get; }
         protected RectTransform RectTransform { get; }
 
         public Vector3 Position

@@ -40,7 +40,7 @@ namespace ReModCE.UI
 
         private int _currentPage;
 
-        private const int MaxAvatarsPerPage = 100;
+        private int _maxAvatarsPerPage = 100;
 
         public SimpleAvatarPedestal AvatarPedestal => _avatarList.field_Public_SimpleAvatarPedestal_0;
 
@@ -103,6 +103,12 @@ namespace ReModCE.UI
             }
         }
 
+        public void SetMaxAvatarsPerPage(int value)
+        {
+            _maxAvatarsPerPage = value;
+            RefreshAvatars();
+        }
+        
         private void RefreshAvatars()
         {
             Refresh(_owner.GetAvatars());
@@ -112,19 +118,19 @@ namespace ReModCE.UI
         {
             if (_hasPagination)
             {
-                var pagesCount = avatars.Count / MaxAvatarsPerPage;
+                var pagesCount = avatars.Count / _maxAvatarsPerPage;
                 _currentPage = Mathf.Clamp(_currentPage, 0, pagesCount);
 
                 _pageCount.Text = $"{_currentPage + 1} / {pagesCount + 1}";
-                var cutDown = avatars.GetRange(_currentPage * MaxAvatarsPerPage,
-                    Math.Abs(_currentPage * MaxAvatarsPerPage - avatars.Count));
-                if (cutDown.Count > MaxAvatarsPerPage)
+                var cutDown = avatars.GetRange(_currentPage * _maxAvatarsPerPage,
+                    Math.Abs(_currentPage * _maxAvatarsPerPage - avatars.Count));
+                if (cutDown.Count > _maxAvatarsPerPage)
                 {
-                    cutDown.RemoveRange(MaxAvatarsPerPage, cutDown.Count - MaxAvatarsPerPage);
+                    cutDown.RemoveRange(_maxAvatarsPerPage, cutDown.Count - _maxAvatarsPerPage);
                 }
 
                 _prevPageButton.Interactable = _currentPage > 0;
-                _nextPageButton.Interactable = _currentPage < avatars.Count / MaxAvatarsPerPage;
+                _nextPageButton.Interactable = _currentPage < avatars.Count / _maxAvatarsPerPage;
 
                 Title = $"{_title} ({cutDown.Count}/{avatars.Count})";
 

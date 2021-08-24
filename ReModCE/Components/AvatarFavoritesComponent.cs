@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using ReModCE.Core;
@@ -24,8 +25,25 @@ namespace ReModCE.Components
 
         private Button.ButtonClickedEvent _changeButtonEvent;
 
+        private ConfigValue<bool> AvatarFavoritesEnabled;
+        private ReQuickToggle _enabledToggle;
+        private ConfigValue<int> MaxAvatarsPerPage;
+        private ReQuickButton _maxAvatarsPerPageButton;
+
         public AvatarFavoritesComponent()
         {
+            AvatarFavoritesEnabled = new ConfigValue<bool>(nameof(AvatarFavoritesEnabled), true);
+            AvatarFavoritesEnabled.OnValueChanged += () =>
+            {
+                _enabledToggle.Toggle(AvatarFavoritesEnabled);
+                _avatarList.GameObject.SetActive(AvatarFavoritesEnabled);
+            };
+            MaxAvatarsPerPage = new ConfigValue<int>(nameof(MaxAvatarsPerPage), 100);
+            MaxAvatarsPerPage.OnValueChanged += () =>
+            {
+                _avatarList.SetMaxAvatarsPerPage(MaxAvatarsPerPage);
+            };
+
             if (File.Exists("UserData/ReModCE/avatars.bin"))
             {
                 _savedAvatars = BinaryGZipSerializer.Deserialize("UserData/ReModCE/avatars.bin") as List<ReAvatar>;
@@ -38,8 +56,35 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
+            var menu = uiManager.MainMenu.GetSubMenu("Avatars");
+            _enabledToggle = menu.AddToggle("Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)",
+                AvatarFavoritesEnabled.SetValue, AvatarFavoritesEnabled);
+            _maxAvatarsPerPageButton = menu.AddButton($"Max Avatars Per Page: {MaxAvatarsPerPage}",
+                "Set the maximum amount of avatars shown per page",
+                () =>
+                {
+                    VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Max Avatars Per Page",
+                        MaxAvatarsPerPage.ToString(), InputField.InputType.Standard, true, "Submit",
+                        new Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text>((s, k, t) =>
+                        {
+                            if (string.IsNullOrEmpty(s))
+                                return;
+
+                            if (!int.TryParse(s, out var maxAvatarsPerPage))
+                                return;
+
+                            MaxAvatarsPerPage.SetValue(maxAvatarsPerPage);
+                            _maxAvatarsPerPageButton.Text = $"Max Avatars Per Page: {MaxAvatarsPerPage}";
+                        }), null);
+                });
+            
             _avatarList = new ReAvatarList("ReModCE Favorites", this);
             _avatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
+            _avatarList.OnEnable += () =>
+            {
+                // make sure it stays off if it should be off.
+                _avatarList.GameObject.SetActive(AvatarFavoritesEnabled);
+            };
 
             _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
                 GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent);

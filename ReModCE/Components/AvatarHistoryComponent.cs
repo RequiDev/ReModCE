@@ -19,8 +19,19 @@ namespace ReModCE.Components
         private readonly List<ReAvatar> _recentAvatars;
 
         private Button.ButtonClickedEvent _changeButtonEvent;
+
+
+        private ConfigValue<bool> AvatarHistoryEnabled;
+        private ReQuickToggle _enabledToggle;
         public AvatarHistoryComponent()
         {
+            AvatarHistoryEnabled = new ConfigValue<bool>(nameof(AvatarHistoryEnabled), true);
+            AvatarHistoryEnabled.OnValueChanged += () =>
+            {
+                _enabledToggle.Toggle(AvatarHistoryEnabled);
+                _avatarList.GameObject.SetActive(AvatarHistoryEnabled);
+            };
+
             if (File.Exists("UserData/ReModCE/recent_avatars.bin"))
             {
                 _recentAvatars =
@@ -34,6 +45,10 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
+            var menu = uiManager.MainMenu.GetSubMenu("Avatars");
+            _enabledToggle = menu.AddToggle("Avatar History", "Enable/Disable avatar history",
+                AvatarHistoryEnabled.SetValue, AvatarHistoryEnabled);
+
             _avatarList = new ReAvatarList("Recently Used", this, false);
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
