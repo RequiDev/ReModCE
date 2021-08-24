@@ -25,7 +25,8 @@ If you don't want automatic updates, you can open your MelonPreferences.cfg with
 * Third Person (Not usable in Game/Club worlds)
 * Button Adjustment Component. Disable, Move or Resize any button in your quickmenu.
 * Ingame Log that will show you anything that ReMod CE will log. At the moment it's a bit unstable (a lot of text will break it) and only supports ReMod CE. More options to come!
-* Small UI adjustments like adding a "Paste" button to input popups.
+* Small UI adjustments like adding a "Paste" button to input popups.#
+* FBT Calibration Saver as already seen at [RequiDev/FBTSaver](https://github.com/RequiDev/FBTSaver)
 
 # Hotkeys
 * CTRL + F = Noclip
