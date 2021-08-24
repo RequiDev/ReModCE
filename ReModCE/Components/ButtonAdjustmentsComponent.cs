@@ -40,6 +40,7 @@ namespace ReModCE.Components
             {
                 var name = button.name;
                 if (name == "DevToolsButton") continue;
+                if (name.StartsWith("SingleButton")) continue;
 
                 var texts = button.gameObject.GetComponentsInDirectChildren<Text>();
                 if (texts == null || texts.Length == 0)
@@ -49,7 +50,8 @@ namespace ReModCE.Components
 
                 var text = texts[0];
                 if (text.text.Length == 0)
-                    return;
+                    continue;
+                
                 CreateUiForButton(button.gameObject, text.text);
             }
 
@@ -64,11 +66,11 @@ namespace ReModCE.Components
 
             if (disable)
             {
-                var buttonEnabled = new ConfigValue<bool>($"{gameObject.name}Enabled", gameObject.gameObject.activeSelf);
+                var buttonEnabled = new ConfigValue<bool>($"{gameObject.name}Enabled", gameObject.activeSelf);
                 buttonEnabled.OnValueChanged += () =>
                 {
                     buttonToggle.Toggle(buttonEnabled);
-                    gameObject.gameObject.SetActive(buttonEnabled);
+                    gameObject.SetActive(buttonEnabled);
                 };
 
                 buttonToggle = _disablerMenu.AddToggle($"{name}", $"Enable/Disable \"{name}\" button.",
@@ -76,7 +78,7 @@ namespace ReModCE.Components
 
                 if (buttonEnabled != gameObject.gameObject.activeSelf)
                 {
-                    gameObject.gameObject.SetActive(buttonEnabled);
+                    gameObject.SetActive(buttonEnabled);
                 }
             }
 
@@ -91,6 +93,7 @@ namespace ReModCE.Components
                 {
                     if (!_canMoveButtons) return;
                     if (_movingButton) return;
+
                     if (hasButton)
                     {
                         _originalButtonClickedEvent = gameObject.GetComponent<Button>().onClick;
