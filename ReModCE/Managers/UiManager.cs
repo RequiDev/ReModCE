@@ -22,28 +22,18 @@ namespace ReModCE.Managers
         public bool IsRemodLoaded { get; }
         public bool IsRubyLoaded { get; }
 
-        private ConfigValue<float> ButtonOffsetX;
-        private ConfigValue<float> ButtonOffsetY;
-
         public UiManager(string menuName)
         {
-            ButtonOffsetX = new ConfigValue<float>(nameof(ButtonOffsetX), 0f, "Main Button Offset X", "Offset on the X axis for the main menu button. Relative to \"Report World\" button. 1 = 1 button size.");
-            ButtonOffsetX.OnValueChanged += OnButtonOffsetChanged;
-            ButtonOffsetY = new ConfigValue<float>(nameof(ButtonOffsetY), 2f, "Main Button Offset Y", "Offset on the Y axis for the main menu button. Relative to \"Report World\" button. 1 = 1 button size.");
-            ButtonOffsetY.OnValueChanged += OnButtonOffsetChanged;
-
-            var buttonOffset = new Vector3(ButtonSize * ButtonOffsetX, ButtonSize * ButtonOffsetY);
+            var buttonOffset = new Vector3(ButtonSize * 0f, ButtonSize * 2f);
 
             IsRemodLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "ReMod");
             IsRubyLoaded = File.Exists("hid.dll");
 
-            var isDefaultButtonPos = buttonOffset == new Vector3(0, ButtonSize * 2f);
-            if (IsRemodLoaded && isDefaultButtonPos)
+            if (IsRemodLoaded)
             {
                 buttonOffset.x = ButtonSize;
             }
-
-            if (!IsRemodLoaded && isDefaultButtonPos)
+            else
             {
                 ExtendedQuickMenu.UserIconCameraButton.localPosition +=
                     new Vector3(ButtonSize, -ButtonSize, 0f);
@@ -67,18 +57,6 @@ namespace ReModCE.Managers
                 "ReMod <color=#00ff00>CE</color> Target Options", "More options for this target",
                 () => TargetMenu.Open(QuickMenuContext.UserSelected),
                 ExtendedQuickMenu.UserInteractMenu.transform);
-        }
-
-        private void OnButtonOffsetChanged()
-        {
-            var buttonOffset = new Vector3(ButtonSize * ButtonOffsetX, ButtonSize * ButtonOffsetY);
-            var isDefaultButtonPos = buttonOffset == new Vector3(0, ButtonSize * 2f);
-            if (IsRemodLoaded && isDefaultButtonPos)
-            {
-                buttonOffset.x = ButtonSize;
-            }
-            _mainMenuButton.Position = _intialButtonPos + buttonOffset;
-
         }
     }
 }
