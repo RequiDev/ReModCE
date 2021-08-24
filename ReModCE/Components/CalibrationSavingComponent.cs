@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using ReModCE.Core;
 using ReModCE.Loader;
+using ReModCE.Managers;
+using ReModCE.UI;
 using UnityEngine;
 
 namespace ReModCE.Components
@@ -45,10 +47,12 @@ namespace ReModCE.Components
 
         private static Dictionary<string, FbtCalibration> _savedCalibrations;
         private static ConfigValue<bool> CalibrationSaverEnabled;
+        private ReQuickToggle _enableToggle;
 
         public CalibrationSavingComponent()
         {
             CalibrationSaverEnabled = new ConfigValue<bool>(nameof(CalibrationSaverEnabled), true);
+            CalibrationSaverEnabled.OnValueChanged += () => _enableToggle.Toggle(CalibrationSaverEnabled);
             if (MelonHandler.Mods.Any(i => i.Info.Name == "FBT Saver"))
             {
                 ReLogger.Msg(ConsoleColor.Yellow, "Found FBT Saver Mod. Not loading Calibration Saver.");
@@ -87,6 +91,18 @@ namespace ReModCE.Components
                         break;
                 }
             }
+        }
+
+        public override void OnUiManagerInit(UiManager uiManager)
+        {
+            var menu = uiManager.MainMenu.AddSubMenu("FBT", "Access full body tracking related settings");
+            _enableToggle = menu.AddToggle("FBT Calibration Saver", "Enable/Disable the calibration saver",
+                CalibrationSaverEnabled.SetValue, CalibrationSaverEnabled);
+            menu.AddButton("Clear Saved Calibrations", "Clear your saved calibrations from your disk.", () =>
+            {
+                _savedCalibrations.Clear();
+                File.Delete("UserData/ReModCE/calibrations.json");
+            });
         }
 
         private static void PerformCalibration(ref VRCTrackingSteam __instance, Animator __0, bool __1, bool __2)
