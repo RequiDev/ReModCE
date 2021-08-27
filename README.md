@@ -19,7 +19,7 @@ If you don't want automatic updates, you can open your MelonPreferences.cfg with
 
 # Features
 * Unlimited Avatar Favorites with VRC+ (Locally saved!)
-* Recently Used Avatars/Avatar History (Remembers up to 100 avatars)
+* Recently Used Avatars/Avatar History (Remembers up to 25 avatars)
 * Global Dynamic Bones with advanced settings so you have full control over where colliders go
 * Fly/Noclip (Not usable in Game/Club worlds)
 * Third Person (Not usable in Game/Club worlds)
