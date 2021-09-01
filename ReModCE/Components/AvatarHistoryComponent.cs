@@ -20,7 +20,6 @@ namespace ReModCE.Components
 
         private Button.ButtonClickedEvent _changeButtonEvent;
 
-
         private ConfigValue<bool> AvatarHistoryEnabled;
         private ReQuickToggle _enabledToggle;
         public AvatarHistoryComponent()

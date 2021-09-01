@@ -198,12 +198,14 @@
     <Compile Include="Components\PopupExComponent.cs" />
     <Compile Include="Components\AvatarHistoryComponent.cs" />
     <Compile Include="Components\ThirdPersonComponent.cs" />
+    <Compile Include="Core\ApiError.cs" />
     <Compile Include="Core\BinaryGZipSerializer.cs" />
     <Compile Include="Core\EnableDisableListener.cs" />
     <Compile Include="Core\ModComponent.cs" />
     <Compile Include="Core\ConfigValue.cs" />
     <Compile Include="Components\IngameLog.cs" />
     <Compile Include="Core\ReAvatar.cs" />
+    <Compile Include="Core\TaskExtensions.cs" />
     <Compile Include="Managers\RiskyFunctionsManager.cs" />
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using MelonLoader;
+using Newtonsoft.Json;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
@@ -21,7 +27,9 @@ namespace ReModCE.Components
         private ReAvatarList _avatarList;
         private ReUiButton _favoriteButton;
 
-        private readonly List<ReAvatar> _savedAvatars;
+        private List<ReAvatar> _savedAvatars;
+        private HttpClient _httpClient;
+        private HttpClientHandler _httpClientHandler;
 
         private Button.ButtonClickedEvent _changeButtonEvent;
 
@@ -30,8 +38,21 @@ namespace ReModCE.Components
         private ConfigValue<int> MaxAvatarsPerPage;
         private ReQuickButton _maxAvatarsPerPageButton;
 
+        private const string PinPath = "UserData/ReModCE/pin";
+        private int _pinCode;
+        private ReQuickButton _enterPinButton;
+
+        private const string ApiUrl = "https://requi.dev/remod";
+
         public AvatarFavoritesComponent()
         {
+            _httpClientHandler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
+            };
+            _httpClient = new HttpClient(_httpClientHandler);
+
             AvatarFavoritesEnabled = new ConfigValue<bool>(nameof(AvatarFavoritesEnabled), true);
             AvatarFavoritesEnabled.OnValueChanged += () =>
             {
@@ -43,14 +64,15 @@ namespace ReModCE.Components
             {
                 _avatarList.SetMaxAvatarsPerPage(MaxAvatarsPerPage);
             };
+            
+            _savedAvatars = new List<ReAvatar>();
 
-            if (File.Exists("UserData/ReModCE/avatars.bin"))
+            if (File.Exists(PinPath))
             {
-                _savedAvatars = BinaryGZipSerializer.Deserialize("UserData/ReModCE/avatars.bin") as List<ReAvatar>;
-            }
-            else
-            {
-                _savedAvatars = new List<ReAvatar>();
+                if (!int.TryParse(File.ReadAllText(PinPath), out _pinCode))
+                {
+                    ReLogger.Warning($"Couldn't read pin file from \"{PinPath}\". File might be corrupted.");
+                }
             }
         }
 
@@ -77,6 +99,35 @@ namespace ReModCE.Components
                             _maxAvatarsPerPageButton.Text = $"Max Avatars Per Page: {MaxAvatarsPerPage}";
                         }), null);
                 });
+
+            if (_pinCode == 0)
+            {
+                _enterPinButton = menu.AddButton("Set/Enter Pin", "Set or enter your pin for the ReMod CE API", () =>
+                {
+                    VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Enter pin",
+                        "", InputField.InputType.Standard, true, "Submit",
+                        new Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text>((s, k, t) =>
+                        {
+                            if (string.IsNullOrEmpty(s))
+                                return;
+
+                            if (!int.TryParse(s, out var pinCode))
+                                return;
+
+                            _pinCode = pinCode;
+                            File.WriteAllText(PinPath, _pinCode.ToString());
+
+                            _httpClientHandler = new HttpClientHandler
+                            {
+                                UseCookies = true,
+                                CookieContainer = new CookieContainer()
+                            };
+                            _httpClient = new HttpClient(_httpClientHandler);
+
+                            LoginToAPI(APIUser.CurrentUser);
+                        }), null);
+                });
+            }
             
             _avatarList = new ReAvatarList("ReModCE Favorites", this);
             _avatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
@@ -131,6 +182,58 @@ namespace ReModCE.Components
             {
                 _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
             }
+            
+            MelonCoroutines.Start(LoginToAPICoroutine());
+        }
+
+        private IEnumerator LoginToAPICoroutine()
+        {
+            while (APIUser.CurrentUser == null) yield return new WaitForEndOfFrame();
+
+            var user = APIUser.CurrentUser;
+            LoginToAPI(user);
+        }
+
+        private async void LoginToAPI(APIUser user)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{ApiUrl}/login.php")
+            {
+                Content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                {
+                    new("user_id", user.id),
+                    new("pin", _pinCode.ToString())
+                })
+            };
+
+            var loginResponse = await _httpClient.SendAsync(request);
+            if (loginResponse.StatusCode == HttpStatusCode.Forbidden)
+            {
+                var errorData = await loginResponse.Content.ReadAsStringAsync();
+                var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData).Error;
+
+                ReLogger.Error($"Could not login to ReMod CE API\nReason: \"{errorMessage}\"");
+                MelonCoroutines.Start(ShowAlertDelayed($"Could not login to ReMod CE API\nReason: \"{errorMessage}\""));
+                File.Delete(PinPath);
+                return;
+            }
+
+            if (_pinCode != 0 && _enterPinButton != null)
+            {
+                _enterPinButton.Interactable = false;
+            }
+
+            var res = SendAvatarRequest(HttpMethod.Get).Result;
+            var avatars = await res.Content.ReadAsStringAsync();
+            _savedAvatars = JsonConvert.DeserializeObject<List<ReAvatar>>(avatars);
+        }
+
+        private static IEnumerator ShowAlertDelayed(string message, float seconds = 0.5f)
+        {
+            if (VRCUiPopupManager.prop_VRCUiPopupManager_0 == null) yield break;
+
+            yield return new WaitForSeconds(seconds);
+
+            VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", message);
         }
 
         private void OnAvatarInstantiated(string url, GameObject avatar, AvatarPerformanceStats avatarPerformanceStats)
@@ -148,29 +251,53 @@ namespace ReModCE.Components
             }
 
             var hasFavorited = HasAvatarFavorited(apiAvatar.id);
-            if (!hasFavorited)
+
+            var favResponse =
+                SendAvatarRequest(hasFavorited ? HttpMethod.Delete : HttpMethod.Put, new ReAvatar(apiAvatar)).Result;
+
+            if (!favResponse.IsSuccessStatusCode)
             {
-                _savedAvatars.Insert(0, new ReAvatar(apiAvatar));
-                _favoriteButton.Text = "Unfavorite";
+                if (favResponse.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    favResponse.Content.ReadAsStringAsync().ContinueWith(errorData =>
+                    {
+                        var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
+                        ReLogger.Error($"Could not (un)favorite avatar\nReason: \"{errorMessage}\"");
+                        MelonCoroutines.Start(ShowAlertDelayed($"Could not (un)favorite avatar\nReason: \"{errorMessage}\""));
+                    });
+                }
             }
             else
             {
-                _savedAvatars.RemoveAll(a => a.Id == apiAvatar.id);
-                _favoriteButton.Text = "Favorite";
+                if (!hasFavorited)
+                {
+                    _savedAvatars.Insert(0, new ReAvatar(apiAvatar));
+                    _favoriteButton.Text = "Unfavorite";
+                }
+                else
+                {
+                    _savedAvatars.RemoveAll(a => a.Id == apiAvatar.id);
+                    _favoriteButton.Text = "Favorite";
+                }
             }
-            SaveAvatarsToDisk();
 
             _avatarList.Refresh(GetAvatars());
+        }
+
+        private async Task<HttpResponseMessage> SendAvatarRequest(HttpMethod method, ReAvatar avater = null)
+        {
+            var request = new HttpRequestMessage(method, $"{ApiUrl}/avatar.php");
+            if (avater != null)
+            {
+                request.Content = new StringContent(avater.ToJson(), Encoding.UTF8, "application/json");
+            }
+
+            return await _httpClient.SendAsync(request);
         }
 
         private bool HasAvatarFavorited(string id)
         {
             return _savedAvatars.FirstOrDefault(a => a.Id == id) != null;
-        }
-        
-        private void SaveAvatarsToDisk()
-        {
-            BinaryGZipSerializer.Serialize(_savedAvatars, "UserData/ReModCE/avatars.bin");
         }
 
         public AvatarList GetAvatars()

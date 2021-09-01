@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using VRC.Core;
 
 namespace ReModCE.Core
@@ -7,28 +8,28 @@ namespace ReModCE.Core
     internal class ReAvatar
     {
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string AvatarName { get; set; }
         public string AuthorId { get; set; }
         public string AuthorName { get; set; }
         public string Description { get; set; }
         public string AssetUrl { get; set; }
-        public string ThumbnailImageUrl { get; set; }
+        public string ImageUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
         public ApiModel.SupportedPlatforms SupportedPlatforms = ApiModel.SupportedPlatforms.StandaloneWindows;
 
         public ReAvatar()
         {
-
         }
 
         public ReAvatar(ApiAvatar apiAvatar)
         {
             Id = apiAvatar.id;
-            Name = apiAvatar.name;
+            AvatarName = apiAvatar.name;
             AuthorId = apiAvatar.authorId;
             AuthorName = apiAvatar.authorName;
             Description = apiAvatar.description;
             AssetUrl = apiAvatar.assetUrl;
-            ThumbnailImageUrl = apiAvatar.thumbnailImageUrl;
+            ThumbnailUrl = apiAvatar.thumbnailImageUrl;
             SupportedPlatforms = apiAvatar.supportedPlatforms;
         }
 
@@ -37,12 +38,12 @@ namespace ReModCE.Core
             return new ApiAvatar
             {
                 id = Id,
-                name = Name,
+                name = AvatarName,
                 authorId = AuthorId,
                 authorName = AuthorName,
                 description = Description,
                 assetUrl = AssetUrl,
-                thumbnailImageUrl = ThumbnailImageUrl,
+                thumbnailImageUrl = string.IsNullOrEmpty(ThumbnailUrl) ? (string.IsNullOrEmpty(ImageUrl) ? "https://assets.vrchat.com/system/defaultAvatar.png" : ImageUrl) : ThumbnailUrl,
                 releaseStatus = "public",
                 unityVersion = "2019.4.29f1",
                 version = 1,
@@ -53,6 +54,11 @@ namespace ReModCE.Core
                 tags = new Il2CppSystem.Collections.Generic.List<string>(0),
                 supportedPlatforms = SupportedPlatforms,
             };
+        }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 }
