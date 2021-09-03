@@ -18,7 +18,7 @@ If there is a newer version available on GitHub it will automatically update to 
 If you don't want automatic updates, you can open your MelonPreferences.cfg with any text editor and set ParanoidMode in the [ReModCE] category to true. This will make it so the loader will notify if there is a new version available, but it won't load it until you download it yourself and replace the old version.
 
 # Features
-* Unlimited Avatar Favorites with VRC+ (Locally saved!)
+* Unlimited Avatar Favorites with VRC+ (Saved in the Cloud and protected by a PIN!)
 * Recently Used Avatars/Avatar History (Remembers up to 25 avatars)
 * Global Dynamic Bones with advanced settings so you have full control over where colliders go
 * Fly/Noclip (Not usable in Game/Club worlds)
