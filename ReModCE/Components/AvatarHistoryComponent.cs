@@ -108,6 +108,8 @@ namespace ReModCE.Components
 
         private void AddAvatarToHistory(ApiAvatar avatar)
         {
+            if (avatar == null)
+                return;
             if (avatar.IsLocal)
                 return;
 
