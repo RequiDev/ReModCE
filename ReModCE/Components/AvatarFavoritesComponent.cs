@@ -233,7 +233,7 @@ namespace ReModCE.Components
                 var errorData = await avatarResponse.Content.ReadAsStringAsync();
                 var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData).Error;
 
-                ReLogger.Error($"Could fetch avatars: \"{errorMessage}\"");
+                ReLogger.Error($"Could not fetch avatars: \"{errorMessage}\"");
                 return;
             }
 
