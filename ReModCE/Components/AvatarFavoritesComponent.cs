@@ -227,8 +227,17 @@ namespace ReModCE.Components
 
         private async void FetchAvatars()
         {
-            var res = SendAvatarRequest(HttpMethod.Get).Result;
-            var avatars = await res.Content.ReadAsStringAsync();
+            var avatarResponse = SendAvatarRequest(HttpMethod.Get).Result;
+            if (!avatarResponse.IsSuccessStatusCode)
+            {
+                var errorData = await avatarResponse.Content.ReadAsStringAsync();
+                var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData).Error;
+
+                ReLogger.Error($"Could fetch avatars: \"{errorMessage}\"");
+                return;
+            }
+
+            var avatars = await avatarResponse.Content.ReadAsStringAsync();
             _savedAvatars = JsonConvert.DeserializeObject<List<ReAvatar>>(avatars);
         }
 
