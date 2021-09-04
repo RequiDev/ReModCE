@@ -211,7 +211,7 @@ namespace ReModCE.Components
                 var errorData = await loginResponse.Content.ReadAsStringAsync();
                 var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData).Error;
 
-                ReLogger.Error($"Could not login to ReMod CE API\nReason: \"{errorMessage}\"");
+                ReLogger.Error($"Could not login to ReMod CE API: \"{errorMessage}\"");
                 MelonCoroutines.Start(ShowAlertDelayed($"Could not login to ReMod CE API\nReason: \"{errorMessage}\""));
                 File.Delete(PinPath);
                 return;
@@ -266,7 +266,7 @@ namespace ReModCE.Components
                 {
                     var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
 
-                    ReLogger.Error($"Could not (un)favorite avatar\nReason: \"{errorMessage}\"");
+                    ReLogger.Error($"Could not (un)favorite avatar: \"{errorMessage}\"");
                     if (favResponse.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         MelonCoroutines.Start(ShowAlertDelayed($"Could not (un)favorite avatar\nReason: \"{errorMessage}\""));
