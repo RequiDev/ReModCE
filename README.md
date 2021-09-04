@@ -15,8 +15,8 @@ Grab the latest loader from [here](https://api.vrcmg.com/v0/mods/246/ReModCE.Loa
 By default the loader will attempt to load the mod from your VRChat directory using the filename 'ReModCE.dll'. If it doesn't exist, it will attempt to download the latest Version from GitHub.  
 If there is a newer version available on GitHub it will automatically update to that version.  
 
-If you don't want automatic updates, you can open your MelonPreferences.cfg with any text editor and set ParanoidMode in the [ReModCE] category to true. This will make it so the loader will notify if there is a new version available, but it won't load it until you download it yourself and replace the old version.  
-In case you want to update you can always grab the latest and previous versions of ReModCE.dll [here](https://github.com/RequiDev/ReModCE/releases/).
+If you don't want automatic updates, you can open your MelonPreferences.cfg with any text editor and set **ParanoidMode** in the **[ReModCE]** category to **true**. That way the loader will notify if there is a new version available, but it won't load it until you download it yourself and replace the old version.  
+In case you want to update you can always grab the latest and even previous versions of ReModCE.dll [here](https://github.com/RequiDev/ReModCE/releases/).
 
 # Features
 * Unlimited Avatar Favorites with VRC+ (Saved in the Cloud and protected by a PIN!)
