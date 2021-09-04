@@ -222,6 +222,11 @@ namespace ReModCE.Components
                 _enterPinButton.Interactable = false;
             }
 
+            FetchAvatars();
+        }
+
+        private async void FetchAvatars()
+        {
             var res = SendAvatarRequest(HttpMethod.Get).Result;
             var avatars = await res.Content.ReadAsStringAsync();
             _savedAvatars = JsonConvert.DeserializeObject<List<ReAvatar>>(avatars);
@@ -257,15 +262,16 @@ namespace ReModCE.Components
 
             if (!favResponse.IsSuccessStatusCode)
             {
-                if (favResponse.StatusCode == HttpStatusCode.Unauthorized)
+                favResponse.Content.ReadAsStringAsync().ContinueWith(errorData =>
                 {
-                    favResponse.Content.ReadAsStringAsync().ContinueWith(errorData =>
+                    var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
+
+                    ReLogger.Error($"Could not (un)favorite avatar\nReason: \"{errorMessage}\"");
+                    if (favResponse.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
-                        ReLogger.Error($"Could not (un)favorite avatar\nReason: \"{errorMessage}\"");
                         MelonCoroutines.Start(ShowAlertDelayed($"Could not (un)favorite avatar\nReason: \"{errorMessage}\""));
-                    });
-                }
+                    }
+                });
             }
             else
             {
