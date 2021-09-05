@@ -178,7 +178,7 @@ namespace ReModCE.Components
                 }));
             }
 
-            if (uiManager.IsRemodLoaded)
+            if (uiManager.IsRemodLoaded || uiManager.IsRubyLoaded)
             {
                 _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
             }
