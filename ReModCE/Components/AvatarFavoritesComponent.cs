@@ -44,6 +44,8 @@ namespace ReModCE.Components
 
         private const string ApiUrl = "https://requi.dev/remod";
 
+        private List<ReAvatar> _localAvatars;
+
         public AvatarFavoritesComponent()
         {
             _httpClientHandler = new HttpClientHandler
@@ -73,6 +75,11 @@ namespace ReModCE.Components
                 {
                     ReLogger.Warning($"Couldn't read pin file from \"{PinPath}\". File might be corrupted.");
                 }
+            }
+
+            if (File.Exists("UserData/ReModCE/avatars.bin"))
+            {
+                _localAvatars = BinaryGZipSerializer.Deserialize("UserData/ReModCE/avatars.bin") as List<ReAvatar>;
             }
         }
 
@@ -137,8 +144,9 @@ namespace ReModCE.Components
                 _avatarList.GameObject.SetActive(AvatarFavoritesEnabled);
             };
 
+            var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent;
             _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
-                GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent);
+                parent);
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
             if (changeButton != null)
@@ -182,7 +190,22 @@ namespace ReModCE.Components
             {
                 _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
             }
-            
+
+            if (_localAvatars != null && _localAvatars.Count > 0)
+            {
+                var button = new ReUiButton($"Transfer {_localAvatars.Count}", new Vector2(165f, 375f), new Vector2(0.5f, 1f), () =>
+                {
+                    foreach (var avi in _localAvatars)
+                    {
+                        FavoriteAvatar(avi.AsApiAvatar());
+                    }
+
+                    File.Move("UserData/ReModCE/avatars.bin", "UserData/ReModCE/avatars_old.bin");
+
+                    FetchAvatars();
+                }, parent);
+            }
+
             MelonCoroutines.Start(LoginToAPICoroutine());
         }
 
@@ -284,15 +307,18 @@ namespace ReModCE.Components
             }
             else
             {
-                if (!hasFavorited)
+                if (_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id == apiAvatar.id)
                 {
-                    _savedAvatars.Insert(0, new ReAvatar(apiAvatar));
-                    _favoriteButton.Text = "Unfavorite";
-                }
-                else
-                {
-                    _savedAvatars.RemoveAll(a => a.Id == apiAvatar.id);
-                    _favoriteButton.Text = "Favorite";
+                    if (!hasFavorited)
+                    {
+                        _savedAvatars.Insert(0, new ReAvatar(apiAvatar));
+                        _favoriteButton.Text = "Unfavorite";
+                    }
+                    else
+                    {
+                        _savedAvatars.RemoveAll(a => a.Id == apiAvatar.id);
+                        _favoriteButton.Text = "Favorite";
+                    }
                 }
             }
 
