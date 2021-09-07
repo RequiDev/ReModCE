@@ -20,6 +20,8 @@ namespace ReModCE
         private static readonly List<ModComponent> Components = new List<ModComponent>();
         private static UiManager _uiManager;
 
+        public static bool IsOculus { get; private set; }
+
         public static HarmonyLib.Harmony Harmony { get; private set; }
 
         public static void OnApplicationStart()
@@ -30,9 +32,28 @@ namespace ReModCE
             
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
 
+            SetIsOculus();
+
+            ReLogger.Msg($"Running on {(IsOculus ? "Not Steam" : "Steam")}");
+
             InitializePatches();
             InitializeModComponents();
             ReLogger.Msg("Done!");
+        }
+
+        private static void SetIsOculus()
+        {
+            try
+            {
+                var steamTracking = typeof(VRCTrackingSteam);
+            }
+            catch (TypeLoadException)
+            {
+                IsOculus = true;
+                return;
+            }
+
+            IsOculus = false;
         }
 
         private static HarmonyMethod GetLocalPatch(string name)

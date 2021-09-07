@@ -51,6 +51,9 @@ namespace ReModCE.Components
 
         public CalibrationSavingComponent()
         {
+            if (ReModCE.IsOculus)
+                return;
+
             CalibrationSaverEnabled = new ConfigValue<bool>(nameof(CalibrationSaverEnabled), true);
             CalibrationSaverEnabled.OnValueChanged += () => _enableToggle.Toggle(CalibrationSaverEnabled);
             if (MelonHandler.Mods.Any(i => i.Info.Name == "FBT Saver"))
@@ -77,19 +80,30 @@ namespace ReModCE.Components
                 }));
             }
 
+            PatchSteamTracking();
+        }
 
-            var methods = typeof(VRCTrackingSteam).GetMethods();
-            foreach (var methodInfo in methods)
+        private void PatchSteamTracking()
+        {
+            try
             {
-                switch (methodInfo.GetParameters().Length)
+                var methods = typeof(VRCTrackingSteam).GetMethods();
+                foreach (var methodInfo in methods)
                 {
-                    case 1 when methodInfo.GetParameters().First().ParameterType == typeof(string) && methodInfo.ReturnType == typeof(bool) && methodInfo.GetRuntimeBaseDefinition() == methodInfo:
-                        ReModCE.Harmony.Patch(methodInfo, GetLocalPatch(nameof(IsCalibratedForAvatar)));
-                        break;
-                    case 3 when methodInfo.GetParameters().First().ParameterType == typeof(Animator) && methodInfo.ReturnType == typeof(void) && methodInfo.GetRuntimeBaseDefinition() == methodInfo:
-                        ReModCE.Harmony.Patch(methodInfo, GetLocalPatch(nameof(PerformCalibration)));
-                        break;
+                    switch (methodInfo.GetParameters().Length)
+                    {
+                        case 1 when methodInfo.GetParameters().First().ParameterType == typeof(string) && methodInfo.ReturnType == typeof(bool) && methodInfo.GetRuntimeBaseDefinition() == methodInfo:
+                            ReModCE.Harmony.Patch(methodInfo, GetLocalPatch(nameof(IsCalibratedForAvatar)));
+                            break;
+                        case 3 when methodInfo.GetParameters().First().ParameterType == typeof(Animator) && methodInfo.ReturnType == typeof(void) && methodInfo.GetRuntimeBaseDefinition() == methodInfo:
+                            ReModCE.Harmony.Patch(methodInfo, GetLocalPatch(nameof(PerformCalibration)));
+                            break;
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                ReLogger.Warning($"Could not patch VRCTrackingSteam methods. CalibrationSaver won't work.");
             }
         }
 

@@ -42,16 +42,21 @@ namespace ReModCE.Components
             var hotkeyMenu = uiManager.MainMenu.GetSubMenu("Hotkeys");
             _hotkeyToggle = hotkeyMenu.AddToggle("Enable Thirdperson Hotkey", "Enable/Disable thirdperson hotkey", EnableThirdpersonHotkey.SetValue, EnableThirdpersonHotkey);
 
-            _referenceCamera = GameObject.Find("Camera (eye)").GetComponent<Camera>();
-            if (_referenceCamera == null)
+            var cameraObject = GameObject.Find("Camera (eye)");
+
+            if (cameraObject == null)
             {
-                _referenceCamera = GameObject.Find("CenterEyeAnchor").GetComponent<Camera>();
+                cameraObject = GameObject.Find("CenterEyeAnchor");
+
+                if (cameraObject == null)
+                {
+                    return;
+                }
             }
 
+            _referenceCamera = cameraObject.GetComponent<Camera>();
             if (_referenceCamera == null)
-            {
                 return;
-            }
 
             _cameraBack = CreateCamera(ThirdPersonMode.Back, Vector3.zero, 75f);
             _cameraFront = CreateCamera(ThirdPersonMode.Front, new Vector3(0f, 180f, 0f), 75f);
