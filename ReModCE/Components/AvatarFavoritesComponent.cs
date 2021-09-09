@@ -148,7 +148,9 @@ namespace ReModCE.Components
                         }, null);
                 });
             }
-            
+
+            _searchedAvatarList = new ReAvatarList("ReMod CE Search", this);
+
             _avatarList = new ReAvatarList("ReModCE Favorites", this);
             _avatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
             _avatarList.OnEnable += () =>
@@ -156,10 +158,6 @@ namespace ReModCE.Components
                 // make sure it stays off if it should be off.
                 _avatarList.GameObject.SetActive(AvatarFavoritesEnabled);
             };
-
-            _searchedAvatarList = new ReAvatarList("ReMod CE Search", this);
-            _searchedAvatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
-
 
             var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent;
             _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
