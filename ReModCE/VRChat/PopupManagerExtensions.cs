@@ -9,6 +9,7 @@ namespace ReModCE.VRChat
     internal static class PopupManagerExtensions
     {
         public delegate void ShowAlertDelegate(VRCUiPopupManager popupManager, string title, string body, float timeout);
+        public delegate void ShowStandardPopupV2Fn(string title, string body, string leftButtonText, Il2CppSystem.Action leftButtonAction, string rightButtonText, Il2CppSystem.Action rightButtonAction, Il2CppSystem.Action<VRCUiPopup> additionalSetup = null);
 
         private static ShowAlertDelegate _showAlertDelegate;
 
@@ -44,14 +45,21 @@ namespace ReModCE.VRChat
 
         public static void ShowInputPopupWithCancel(this VRCUiPopupManager popupManager, string title, string preFilledText,
             InputField.InputType inputType, bool useNumericKeypad, string submitButtonText,
-            Il2CppSystem.Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text> submitButtonAction,
-            Il2CppSystem.Action cancelButtonAction, string placeholderText = "Enter text....", bool hidePopupOnSubmit = true,
+            Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text> submitButtonAction,
+            Action cancelButtonAction, string placeholderText = "Enter text....", bool hidePopupOnSubmit = true,
             Action<VRCUiPopup> additionalSetup = null)
         {
             popupManager.Method_Public_Void_String_String_InputType_Boolean_String_Action_3_String_List_1_KeyCode_Text_Action_String_Boolean_Action_1_VRCUiPopup_Boolean_Int32_0(
                     title,
                     preFilledText,
                     inputType, useNumericKeypad, submitButtonText, submitButtonAction, cancelButtonAction, placeholderText, hidePopupOnSubmit, additionalSetup);
+        }
+
+        public static void ShowStandardPopupV2(this VRCUiPopupManager popupManager, string title, string body, string leftButtonText,
+            Action leftButtonAction, string rightButtonText, Action rightButtonAction,
+            Action<VRCUiPopup> additonalSetup)
+        {
+            popupManager.Method_Public_Void_String_String_String_Action_String_Action_Action_1_VRCUiPopup_0(title, body, leftButtonText, leftButtonAction, rightButtonText, rightButtonAction, additonalSetup);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace ReModCE.Components
             _flySpeedButton = movementMenu.AddButton($"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
             {
                 VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Set fly speed", FlySpeed.ToString(), InputField.InputType.Standard, false, "Submit",
-                    new Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text>((s, k, t) =>
+                    (s, k, t) =>
                     {
                         if (string.IsNullOrEmpty(s))
                             return;
@@ -83,7 +83,7 @@ namespace ReModCE.Components
                             return;
 
                         FlySpeed.SetValue(flySpeed);
-                    }), null);
+                    }, null);
             });
         }
 

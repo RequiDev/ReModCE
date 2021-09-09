@@ -1,5 +1,6 @@
 ﻿using System;
 using ReModCE.Core;
+using ReModCE.Loader;
 using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ namespace ReModCE.UI
 {
     internal interface IAvatarListOwner
     {
-        AvatarList GetAvatars();
+        AvatarList GetAvatars(ReAvatarList avatarList);
     }
 
     internal class ReAvatarList : UIElement
@@ -90,13 +91,13 @@ namespace ReModCE.UI
                 _nextPageButton = new ReUiButton("→", new Vector2(900f, 0f), new Vector2(0.25f, 1f), () =>
                 {
                     _currentPage += 1;
-                    Refresh(_owner.GetAvatars());
+                    RefreshAvatars();
                 }, expandButton.transform);
 
                 _prevPageButton = new ReUiButton("←", new Vector2(750f, 0f), new Vector2(0.25f, 1f), () =>
                 {
                     _currentPage -= 1;
-                    Refresh(_owner.GetAvatars());
+                    RefreshAvatars();
                 }, expandButton.transform);
 
                 _pageCount = new ReUiText("0 / 0", new Vector2(825f, 0f), new Vector2(0.25f, 1f), expandButton.transform);
@@ -109,13 +110,19 @@ namespace ReModCE.UI
             RefreshAvatars();
         }
         
-        private void RefreshAvatars()
+        public void RefreshAvatars()
         {
-            Refresh(_owner.GetAvatars());
+            Refresh(_owner.GetAvatars(this));
         }
 
         public void Refresh(AvatarList avatars)
         {
+            if (avatars == null)
+            {
+                ReLogger.Warning($"avatars was null when refreshing avatar list. This is a bug!");
+                return;
+            }
+
             if (_hasPagination)
             {
                 var pagesCount = avatars.Count / _maxAvatarsPerPage;

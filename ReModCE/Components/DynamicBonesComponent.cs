@@ -684,7 +684,7 @@ namespace ReModCE.Components
         {
             VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Max Collider Radius",
                 _settings.MaxRadius.ToString(CultureInfo.InvariantCulture), InputField.InputType.Standard, false, "Submit",
-                new Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text>((s, k, t) =>
+                (s, k, t) =>
                 {
                     if (string.IsNullOrEmpty(s))
                         return;
@@ -694,7 +694,7 @@ namespace ReModCE.Components
 
                     _settings.MaxRadius = maxRadius;
                     _maxRadiusButton.Text = $"Max Collider Radius: {_settings.MaxRadius}";
-                }), null);
+                }, null);
         }
 
         private void WhitelistUser(string userId)

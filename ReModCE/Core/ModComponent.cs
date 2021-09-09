@@ -20,7 +20,13 @@ namespace ReModCE.Core
 
     internal class ModComponent
     {
-        public virtual void OnUiManagerInit(UiManager uiManager) { }
+        protected UiManager UiManager;
+
+        public virtual void OnUiManagerInit(UiManager uiManager)
+        {
+            UiManager = uiManager;
+
+        }
         public virtual void OnFixedUpdate() { }
         public virtual void OnUpdate() { }
         public virtual void OnLateUpdate() { }

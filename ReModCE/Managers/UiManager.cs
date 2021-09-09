@@ -19,12 +19,14 @@ namespace ReModCE.Managers
 
         public bool IsRemodLoaded { get; }
         public bool IsRubyLoaded { get; }
+        public bool IsEmmVRCLoaded { get; }
 
         public UiManager(string menuName)
         {
             var buttonOffset = new Vector3(ButtonSize * 0f, ButtonSize * 2f);
 
             IsRemodLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "ReMod");
+            IsEmmVRCLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "emmVRCLoader");
             IsRubyLoaded = File.Exists("hid.dll");
 
             if (IsRemodLoaded)

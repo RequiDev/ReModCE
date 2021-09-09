@@ -14,7 +14,9 @@ using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
+using UnhollowerRuntimeLib;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using VRC.Core;
 using VRC.SDKBase.Validation.Performance.Stats;
@@ -27,24 +29,32 @@ namespace ReModCE.Components
         private ReAvatarList _avatarList;
         private ReUiButton _favoriteButton;
 
-        private List<ReAvatar> _savedAvatars;
+        private ReAvatarList _searchedAvatarList;
+
+        private Button.ButtonClickedEvent _changeButtonEvent;
+
+        private const string ApiUrl = "https://requi.dev/remod";
         private HttpClient _httpClient;
         private HttpClientHandler _httpClientHandler;
 
-        private Button.ButtonClickedEvent _changeButtonEvent;
+        private const string PinPath = "UserData/ReModCE/pin";
+        private int _pinCode;
+        private ReQuickButton _enterPinButton;
 
         private ConfigValue<bool> AvatarFavoritesEnabled;
         private ReQuickToggle _enabledToggle;
         private ConfigValue<int> MaxAvatarsPerPage;
         private ReQuickButton _maxAvatarsPerPageButton;
 
-        private const string PinPath = "UserData/ReModCE/pin";
-        private int _pinCode;
-        private ReQuickButton _enterPinButton;
+        private List<ReAvatar> _savedAvatars;
+        private AvatarList _searchedAvatars;
+        private readonly List<ReAvatar> _localAvatars;
 
-        private const string ApiUrl = "https://requi.dev/remod";
-
-        private List<ReAvatar> _localAvatars;
+        private GameObject _avatarScreen;
+        private UiInputField _searchBox;
+        private UnityAction<string> _searchAvatarsAction;
+        private UnityAction<string> _overrideSearchAvatarsAction;
+        private UnityAction<string> _emmVRCsearchAvatarsAction;
 
         public AvatarFavoritesComponent()
         {
@@ -68,6 +78,7 @@ namespace ReModCE.Components
             };
             
             _savedAvatars = new List<ReAvatar>();
+            _searchedAvatars = new AvatarList();
 
             if (File.Exists(PinPath))
             {
@@ -85,6 +96,8 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
+            base.OnUiManagerInit(uiManager);
+
             var menu = uiManager.MainMenu.GetSubMenu("Avatars");
             _enabledToggle = menu.AddToggle("Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)",
                 AvatarFavoritesEnabled.SetValue, AvatarFavoritesEnabled);
@@ -94,7 +107,7 @@ namespace ReModCE.Components
                 {
                     VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Max Avatars Per Page",
                         MaxAvatarsPerPage.ToString(), InputField.InputType.Standard, true, "Submit",
-                        new Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text>((s, k, t) =>
+                        (s, k, t) =>
                         {
                             if (string.IsNullOrEmpty(s))
                                 return;
@@ -104,7 +117,7 @@ namespace ReModCE.Components
 
                             MaxAvatarsPerPage.SetValue(maxAvatarsPerPage);
                             _maxAvatarsPerPageButton.Text = $"Max Avatars Per Page: {MaxAvatarsPerPage}";
-                        }), null);
+                        }, null);
                 });
 
             if (_pinCode == 0)
@@ -113,7 +126,7 @@ namespace ReModCE.Components
                 {
                     VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Enter pin",
                         "", InputField.InputType.Standard, true, "Submit",
-                        new Action<string, Il2CppSystem.Collections.Generic.List<KeyCode>, Text>((s, k, t) =>
+                        (s, k, t) =>
                         {
                             if (string.IsNullOrEmpty(s))
                                 return;
@@ -132,7 +145,7 @@ namespace ReModCE.Components
                             _httpClient = new HttpClient(_httpClientHandler);
 
                             LoginToAPI(APIUser.CurrentUser);
-                        }), null);
+                        }, null);
                 });
             }
             
@@ -143,6 +156,10 @@ namespace ReModCE.Components
                 // make sure it stays off if it should be off.
                 _avatarList.GameObject.SetActive(AvatarFavoritesEnabled);
             };
+
+            _searchedAvatarList = new ReAvatarList("ReMod CE Search", this);
+            _searchedAvatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
+
 
             var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent;
             _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
@@ -155,41 +172,21 @@ namespace ReModCE.Components
                 _changeButtonEvent = button.onClick;
 
                 button.onClick = new Button.ButtonClickedEvent();
-                button.onClick.AddListener(new Action(() =>
-                {
-                    var currentAvatar = _avatarList.AvatarPedestal.field_Internal_ApiAvatar_0;
-                    if (!HasAvatarFavorited(currentAvatar.id)) // this isn't in our list. we don't care about it
-                    {
-                        _changeButtonEvent.Invoke();
-                        return;
-                    }
-                    
-                    new ApiAvatar { id = currentAvatar.id }.Fetch(new Action<ApiContainer>(ac =>
-                    {
-                        var updatedAvatar = ac.Model.Cast<ApiAvatar>();
-                        switch (updatedAvatar.releaseStatus)
-                        {
-                            case "private" when updatedAvatar.authorId != APIUser.CurrentUser.id:
-                                VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar is private and you don't own it. You can't switch into it.");
-                                break;
-                            case "unavailable":
-                                VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar has been deleted. You can't switch into it.");
-                                break;
-                            default:
-                                _changeButtonEvent.Invoke();
-                                break;
-                        }
-                    }), new Action<ApiContainer>(ac =>
-                    {
-                        VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar has been deleted. You can't switch into it.");
-                    }));
-                }));
+                button.onClick.AddListener(new Action(ChangeAvatarChecked));
             }
 
             if (uiManager.IsRemodLoaded || uiManager.IsRubyLoaded)
             {
                 _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
             }
+            
+            _searchAvatarsAction = DelegateSupport.ConvertDelegate<UnityAction<string>>(
+                (Action<string>)SearchAvatars);
+            _overrideSearchAvatarsAction = DelegateSupport.ConvertDelegate<UnityAction<string>>(
+                (Action<string>)PromptChooseSearch);
+
+            _avatarScreen = GameObject.Find("UserInterface/MenuContent/Screens/Avatar");
+            _searchBox = GameObject.Find("UserInterface/MenuContent/Backdrop/Header/Tabs/ViewPort/Content/Search/InputField").GetComponent<UiInputField>();
 
             if (_localAvatars != null && _localAvatars.Count > 0)
             {
@@ -207,6 +204,136 @@ namespace ReModCE.Components
             }
 
             MelonCoroutines.Start(LoginToAPICoroutine());
+        }
+
+        public override void OnUpdate()
+        {
+            if (_searchBox == null)
+                return;
+
+            if (!_avatarScreen.active)
+            {
+                return;
+            }
+
+            if (!_searchBox.field_Public_Button_0.interactable)
+            {
+                if (!UiManager.IsEmmVRCLoaded)
+                {
+                    _searchBox.field_Public_Button_0.interactable = true;
+                    _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
+                }
+                // emmVRC will set it to be interactable. We want to grab their search function
+            }
+            else
+            {
+                if (UiManager.IsEmmVRCLoaded)
+                {
+                    if (_searchBox.field_Public_UnityAction_1_String_0 == null)
+                        return;
+                    
+                    if (_searchBox.field_Public_UnityAction_1_String_0.method != _overrideSearchAvatarsAction.method)
+                    {
+                        if (_emmVRCsearchAvatarsAction == null)
+                        {
+                            _emmVRCsearchAvatarsAction = _searchBox.field_Public_UnityAction_1_String_0;
+                        }
+                        _searchBox.field_Public_UnityAction_1_String_0 = _overrideSearchAvatarsAction;
+                    }
+                }
+            }
+        }
+
+        private void PromptChooseSearch(string searchTerm)
+        {
+            MelonCoroutines.Start(PrompSearchDelayed(searchTerm));
+        }
+
+        private IEnumerator PrompSearchDelayed(string searchTerm)
+        {
+            yield return new WaitForSeconds(1f);
+            VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowStandardPopupV2("Choose Search",
+                "Choose whether you want to search with ReMod CE or emmVRC", "ReModCE",
+                () =>
+                {
+                    SearchAvatars(searchTerm);
+                    VRCUiManager.prop_VRCUiManager_0.HideScreen("POPUP");
+                }, "emmVRC", () =>
+                {
+                    _emmVRCsearchAvatarsAction?.Invoke(searchTerm);
+                    VRCUiManager.prop_VRCUiManager_0.HideScreen("POPUP");
+                }, null);
+        }
+
+        private void SearchAvatars(string searchTerm)
+        {
+            ReLogger.Msg($"Searching for avatar {searchTerm}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiUrl}/search.php?searchTerm={searchTerm}");
+
+            _httpClient.SendAsync(request).ContinueWith(rsp =>
+            {
+                var searchResponse = rsp.Result;
+                if (!searchResponse.IsSuccessStatusCode)
+                {
+                    searchResponse.Content.ReadAsStringAsync().ContinueWith(t =>
+                    {
+                        var errorMessage = JsonConvert.DeserializeObject<ApiError>(t.Result).Error;
+                        ReLogger.Error($"Could not search for avatars: \"{errorMessage}\"");
+                    });
+
+                    return;
+                }
+
+                searchResponse.Content.ReadAsStringAsync().ContinueWith(t =>
+                {
+                    var avatars = JsonConvert.DeserializeObject<List<ReAvatar>>(t.Result);
+                    MelonCoroutines.Start(RefreshSearchedAvatars(avatars));
+                });
+            });
+        }
+
+        private IEnumerator RefreshSearchedAvatars(List<ReAvatar> results)
+        {
+            yield return new WaitForEndOfFrame();
+
+            _searchedAvatars.Clear();
+            foreach (var avi in results.Select(x => x.AsApiAvatar()).ToList())
+            {
+                _searchedAvatars.Add(avi);
+            }
+
+            ReLogger.Msg($"Found {_searchedAvatars.Count} avatars");
+            _searchedAvatarList.RefreshAvatars();
+        }
+
+        private void ChangeAvatarChecked()
+        {
+            var currentAvatar = _avatarList.AvatarPedestal.field_Internal_ApiAvatar_0;
+            if (!HasAvatarFavorited(currentAvatar.id)) // this isn't in our list. we don't care about it
+            {
+                _changeButtonEvent.Invoke();
+                return;
+            }
+
+            new ApiAvatar { id = currentAvatar.id }.Fetch(new Action<ApiContainer>(ac =>
+            {
+                var updatedAvatar = ac.Model.Cast<ApiAvatar>();
+                switch (updatedAvatar.releaseStatus)
+                {
+                    case "private" when updatedAvatar.authorId != APIUser.CurrentUser.id:
+                        VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar is private and you don't own it. You can't switch into it.");
+                        break;
+                    case "unavailable":
+                        VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar has been deleted. You can't switch into it.");
+                        break;
+                    default:
+                        _changeButtonEvent.Invoke();
+                        break;
+                }
+            }), new Action<ApiContainer>(ac =>
+            {
+                VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar has been deleted. You can't switch into it.");
+            }));
         }
 
         private IEnumerator LoginToAPICoroutine()
@@ -248,20 +375,26 @@ namespace ReModCE.Components
             FetchAvatars();
         }
 
-        private async void FetchAvatars()
+        private void FetchAvatars()
         {
-            var avatarResponse = SendAvatarRequest(HttpMethod.Get).Result;
-            if (!avatarResponse.IsSuccessStatusCode)
+            SendAvatarRequest(HttpMethod.Get, avatarResponse =>
             {
-                var errorData = await avatarResponse.Content.ReadAsStringAsync();
-                var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData).Error;
+                if (!avatarResponse.IsSuccessStatusCode)
+                {
+                    avatarResponse.Content.ReadAsStringAsync().ContinueWith(t =>
+                    {
+                        var errorMessage = JsonConvert.DeserializeObject<ApiError>(t.Result).Error;
+                        ReLogger.Error($"Could not fetch avatars: \"{errorMessage}\"");
+                    });
 
-                ReLogger.Error($"Could not fetch avatars: \"{errorMessage}\"");
-                return;
-            }
+                    return;
+                }
 
-            var avatars = await avatarResponse.Content.ReadAsStringAsync();
-            _savedAvatars = JsonConvert.DeserializeObject<List<ReAvatar>>(avatars);
+                avatarResponse.Content.ReadAsStringAsync().ContinueWith(t =>
+                {
+                    _savedAvatars = JsonConvert.DeserializeObject<List<ReAvatar>>(t.Result);
+                });
+            });
         }
 
         private static IEnumerator ShowAlertDelayed(string message, float seconds = 0.5f)
@@ -288,44 +421,41 @@ namespace ReModCE.Components
             }
 
             var hasFavorited = HasAvatarFavorited(apiAvatar.id);
-
-            var favResponse =
-                SendAvatarRequest(hasFavorited ? HttpMethod.Delete : HttpMethod.Put, new ReAvatar(apiAvatar)).Result;
-
-            if (!favResponse.IsSuccessStatusCode)
+            
+            SendAvatarRequest(hasFavorited ? HttpMethod.Delete : HttpMethod.Put, favResponse =>
             {
-                favResponse.Content.ReadAsStringAsync().ContinueWith(errorData =>
+                if (!favResponse.IsSuccessStatusCode)
                 {
-                    var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
+                    favResponse.Content.ReadAsStringAsync().ContinueWith(errorData =>
+                    {
+                        var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
 
-                    ReLogger.Error($"Could not (un)favorite avatar: \"{errorMessage}\"");
-                    if (favResponse.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        MelonCoroutines.Start(ShowAlertDelayed($"Could not (un)favorite avatar\nReason: \"{errorMessage}\""));
-                    }
-                });
-            }
-            else
+                        ReLogger.Error($"Could not (un)favorite avatar: \"{errorMessage}\"");
+                        if (favResponse.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            MelonCoroutines.Start(ShowAlertDelayed($"Could not (un)favorite avatar\nReason: \"{errorMessage}\""));
+                        }
+                    });
+                }
+            }, new ReAvatar(apiAvatar));
+
+            if (_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id == apiAvatar.id)
             {
-                if (_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id == apiAvatar.id)
+                if (!HasAvatarFavorited(apiAvatar.id))
                 {
-                    if (!hasFavorited)
-                    {
-                        _savedAvatars.Insert(0, new ReAvatar(apiAvatar));
-                        _favoriteButton.Text = "Unfavorite";
-                    }
-                    else
-                    {
-                        _savedAvatars.RemoveAll(a => a.Id == apiAvatar.id);
-                        _favoriteButton.Text = "Favorite";
-                    }
+                    _savedAvatars.Insert(0, new ReAvatar(apiAvatar));
+                    _favoriteButton.Text = "Unfavorite";
+                }
+                else
+                {
+                    _savedAvatars.RemoveAll(a => a.Id == apiAvatar.id);
+                    _favoriteButton.Text = "Favorite";
                 }
             }
-
-            _avatarList.Refresh(GetAvatars());
+            _avatarList.RefreshAvatars();
         }
 
-        private async Task<HttpResponseMessage> SendAvatarRequest(HttpMethod method, ReAvatar avater = null)
+        private void SendAvatarRequest(HttpMethod method, Action<HttpResponseMessage> onResponse, ReAvatar avater = null)
         {
             var request = new HttpRequestMessage(method, $"{ApiUrl}/avatar.php");
             if (avater != null)
@@ -333,7 +463,7 @@ namespace ReModCE.Components
                 request.Content = new StringContent(avater.ToJson(), Encoding.UTF8, "application/json");
             }
 
-            return await _httpClient.SendAsync(request);
+            _httpClient.SendAsync(request).ContinueWith(t => onResponse(t.Result));
         }
 
         private bool HasAvatarFavorited(string id)
@@ -341,14 +471,24 @@ namespace ReModCE.Components
             return _savedAvatars.FirstOrDefault(a => a.Id == id) != null;
         }
 
-        public AvatarList GetAvatars()
+        public AvatarList GetAvatars(ReAvatarList avatarList)
         {
-            var list = new AvatarList();
-            foreach (var avi in _savedAvatars.Distinct().Select(x => x.AsApiAvatar()).ToList())
+            if (avatarList == _avatarList)
             {
-                list.Add(avi);
+                var list = new AvatarList();
+                foreach (var avi in _savedAvatars.Select(x => x.AsApiAvatar()).ToList())
+                {
+                    list.Add(avi);
+                }
+
+                return list;
             }
-            return list;
+            else if (avatarList == _searchedAvatarList)
+            {
+                return _searchedAvatars;
+            }
+
+            return null;
         }
     }
 }

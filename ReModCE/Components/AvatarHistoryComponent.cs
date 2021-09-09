@@ -78,7 +78,7 @@ namespace ReModCE.Components
                             case "unavailable":
                                 VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "This avatar has been deleted. You can't switch into it.");
                                 _recentAvatars.RemoveAll(a => a.Id == currentAvatar.id);
-                                _avatarList.Refresh(GetAvatars());
+                                _avatarList.RefreshAvatars();
                                 break;
                             default:
                                 _changeButtonEvent.Invoke();
@@ -127,7 +127,7 @@ namespace ReModCE.Components
 
             SaveAvatarsToDisk();
 
-            _avatarList.Refresh(GetAvatars());
+            _avatarList.RefreshAvatars();
         }
 
         private void OnChangeAvatar()
@@ -141,7 +141,7 @@ namespace ReModCE.Components
             BinaryGZipSerializer.Serialize(_recentAvatars, "UserData/ReModCE/recent_avatars.bin");
         }
 
-        public AvatarList GetAvatars()
+        public AvatarList GetAvatars(ReAvatarList avatarList)
         {
             var list = new AvatarList();
             foreach (var avi in _recentAvatars.Distinct().Select(x => x.AsApiAvatar()).ToList())
