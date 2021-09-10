@@ -273,20 +273,25 @@ namespace ReModCE.Components
                 var searchResponse = rsp.Result;
                 if (!searchResponse.IsSuccessStatusCode)
                 {
+                    searchResponse.Content.ReadAsStringAsync().ContinueWith(errorData =>
+                    {
+                        var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
+
+                        ReLogger.Error($"Could not search for avatars: \"{errorMessage}\"");
+                        if (searchResponse.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            MelonCoroutines.Start(ShowAlertDelayed($"Could not search for avatars\nReason: \"{errorMessage}\""));
+                        }
+                    });
+                }
+                else
+                {
                     searchResponse.Content.ReadAsStringAsync().ContinueWith(t =>
                     {
-                        var errorMessage = JsonConvert.DeserializeObject<ApiError>(t.Result).Error;
-                        ReLogger.Error($"Could not search for avatars: \"{errorMessage}\"");
+                        var avatars = JsonConvert.DeserializeObject<List<ReAvatar>>(t.Result);
+                        MelonCoroutines.Start(RefreshSearchedAvatars(avatars));
                     });
-
-                    return;
                 }
-
-                searchResponse.Content.ReadAsStringAsync().ContinueWith(t =>
-                {
-                    var avatars = JsonConvert.DeserializeObject<List<ReAvatar>>(t.Result);
-                    MelonCoroutines.Start(RefreshSearchedAvatars(avatars));
-                });
             });
         }
 
