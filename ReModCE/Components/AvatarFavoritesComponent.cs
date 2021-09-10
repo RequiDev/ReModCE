@@ -47,7 +47,7 @@ namespace ReModCE.Components
         private ReQuickButton _maxAvatarsPerPageButton;
 
         private List<ReAvatar> _savedAvatars;
-        private AvatarList _searchedAvatars;
+        private readonly AvatarList _searchedAvatars;
         private readonly List<ReAvatar> _localAvatars;
 
         private GameObject _avatarScreen;
@@ -55,6 +55,8 @@ namespace ReModCE.Components
         private UnityAction<string> _searchAvatarsAction;
         private UnityAction<string> _overrideSearchAvatarsAction;
         private UnityAction<string> _emmVRCsearchAvatarsAction;
+
+        private int _loginRetries;
 
         public AvatarFavoritesComponent()
         {
@@ -144,7 +146,7 @@ namespace ReModCE.Components
                             };
                             _httpClient = new HttpClient(_httpClientHandler);
 
-                            LoginToAPI(APIUser.CurrentUser);
+                            LoginToAPI(APIUser.CurrentUser, FetchAvatars);
                         }, null);
                 });
             }
@@ -265,7 +267,6 @@ namespace ReModCE.Components
 
         private void SearchAvatars(string searchTerm)
         {
-            ReLogger.Msg($"Searching for avatar {searchTerm}");
             var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiUrl}/search.php?searchTerm={searchTerm}");
 
             _httpClient.SendAsync(request).ContinueWith(rsp =>
@@ -273,12 +274,19 @@ namespace ReModCE.Components
                 var searchResponse = rsp.Result;
                 if (!searchResponse.IsSuccessStatusCode)
                 {
+                    if (searchResponse.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ReLogger.Msg($"Not logged into ReMod CE API anymore. Trying to login again and resuming request.");
+                        LoginToAPI(APIUser.CurrentUser, () => SearchAvatars(searchTerm));
+                        return;
+                    }
+
                     searchResponse.Content.ReadAsStringAsync().ContinueWith(errorData =>
                     {
                         var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
 
                         ReLogger.Error($"Could not search for avatars: \"{errorMessage}\"");
-                        if (searchResponse.StatusCode == HttpStatusCode.Unauthorized)
+                        if (searchResponse.StatusCode == HttpStatusCode.Forbidden)
                         {
                             MelonCoroutines.Start(ShowAlertDelayed($"Could not search for avatars\nReason: \"{errorMessage}\""));
                         }
@@ -344,11 +352,14 @@ namespace ReModCE.Components
             while (APIUser.CurrentUser == null) yield return new WaitForEndOfFrame();
 
             var user = APIUser.CurrentUser;
-            LoginToAPI(user);
+            LoginToAPI(user, FetchAvatars);
         }
 
-        private async void LoginToAPI(APIUser user)
+        private void LoginToAPI(APIUser user, Action onLogin)
         {
+            if (_loginRetries >= 3)
+                return;
+
             var request = new HttpRequestMessage(HttpMethod.Post, $"{ApiUrl}/login.php")
             {
                 Content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
@@ -358,24 +369,31 @@ namespace ReModCE.Components
                 })
             };
 
-            var loginResponse = await _httpClient.SendAsync(request);
-            if (loginResponse.StatusCode == HttpStatusCode.Forbidden)
+            _httpClient.SendAsync(request).ContinueWith(t =>
             {
-                var errorData = await loginResponse.Content.ReadAsStringAsync();
-                var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData).Error;
+                var loginResponse = t.Result;
+                if (loginResponse.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    ++_loginRetries;
+                    loginResponse.Content.ReadAsStringAsync().ContinueWith(tsk =>
+                    {
+                        var errorMessage = JsonConvert.DeserializeObject<ApiError>(tsk.Result).Error;
 
-                ReLogger.Error($"Could not login to ReMod CE API: \"{errorMessage}\"");
-                MelonCoroutines.Start(ShowAlertDelayed($"Could not login to ReMod CE API\nReason: \"{errorMessage}\""));
-                File.Delete(PinPath);
-                return;
-            }
+                        ReLogger.Error($"Could not login to ReMod CE API: \"{errorMessage}\"");
+                        MelonCoroutines.Start(ShowAlertDelayed($"Could not login to ReMod CE API\nReason: \"{errorMessage}\""));
+                        File.Delete(PinPath);
+                    });
+                }
 
-            if (_pinCode != 0 && _enterPinButton != null)
-            {
-                _enterPinButton.Interactable = false;
-            }
+                if (_pinCode != 0 && _enterPinButton != null)
+                {
+                    _enterPinButton.Interactable = false;
+                }
 
-            FetchAvatars();
+                _loginRetries = 0;
+
+                onLogin();
+            });
         }
 
         private void FetchAvatars()
@@ -429,12 +447,18 @@ namespace ReModCE.Components
             {
                 if (!favResponse.IsSuccessStatusCode)
                 {
+                    if (favResponse.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ReLogger.Msg($"Not logged into ReMod CE API anymore. Trying to login again and resuming request.");
+                        LoginToAPI(APIUser.CurrentUser, () => FavoriteAvatar(apiAvatar));
+                        return;
+                    }
+
                     favResponse.Content.ReadAsStringAsync().ContinueWith(errorData =>
                     {
                         var errorMessage = JsonConvert.DeserializeObject<ApiError>(errorData.Result).Error;
-
                         ReLogger.Error($"Could not (un)favorite avatar: \"{errorMessage}\"");
-                        if (favResponse.StatusCode == HttpStatusCode.Unauthorized)
+                        if (favResponse.StatusCode == HttpStatusCode.Forbidden)
                         {
                             MelonCoroutines.Start(ShowAlertDelayed($"Could not (un)favorite avatar\nReason: \"{errorMessage}\""));
                         }
@@ -455,6 +479,7 @@ namespace ReModCE.Components
                     _favoriteButton.Text = "Favorite";
                 }
             }
+
             _avatarList.RefreshAvatars();
         }
 
