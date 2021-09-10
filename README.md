@@ -22,6 +22,7 @@ In case you want to update you can always grab the latest and even previous vers
 
 # Features
 * Unlimited Avatar Favorites with VRC+ (Saved in the Cloud and protected by a PIN!)
+* Search public avatars by name, description, author name and author id
 * Recently Used Avatars/Avatar History (Remembers up to 25 avatars)
 * Global Dynamic Bones with advanced settings so you have full control over where colliders go
 * Fly/Noclip (Not usable in Game/Club worlds)
