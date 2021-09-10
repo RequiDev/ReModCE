@@ -21,7 +21,10 @@ namespace ReModCE.Components
         private Button.ButtonClickedEvent _changeButtonEvent;
 
         private ConfigValue<bool> AvatarHistoryEnabled;
+        private ConfigValue<bool> AvatarHistoryExcludeOwn;
         private ReQuickToggle _enabledToggle;
+        private ReQuickToggle _excludeOwnToggle;
+
         public AvatarHistoryComponent()
         {
             AvatarHistoryEnabled = new ConfigValue<bool>(nameof(AvatarHistoryEnabled), true);
@@ -29,6 +32,12 @@ namespace ReModCE.Components
             {
                 _enabledToggle.Toggle(AvatarHistoryEnabled);
                 _avatarList.GameObject.SetActive(AvatarHistoryEnabled);
+            };
+
+            AvatarHistoryExcludeOwn = new ConfigValue<bool>(nameof(AvatarHistoryExcludeOwn), false);
+            AvatarHistoryExcludeOwn.OnValueChanged += () =>
+            {
+                _excludeOwnToggle.Toggle(AvatarHistoryExcludeOwn);
             };
 
             if (File.Exists("UserData/ReModCE/recent_avatars.bin"))
@@ -47,6 +56,8 @@ namespace ReModCE.Components
             var menu = uiManager.MainMenu.GetSubMenu("Avatars");
             _enabledToggle = menu.AddToggle("Avatar History", "Enable/Disable avatar history",
                 AvatarHistoryEnabled.SetValue, AvatarHistoryEnabled);
+            _excludeOwnToggle = menu.AddToggle("Exclude own avatars", "Exclude own avatars for avatar history",
+                AvatarHistoryExcludeOwn.SetValue, AvatarHistoryExcludeOwn);
 
             _avatarList = new ReAvatarList("Recently Used", this, false);
 
@@ -111,6 +122,9 @@ namespace ReModCE.Components
             if (avatar == null)
                 return;
             if (avatar.IsLocal)
+                return;
+
+            if (AvatarHistoryExcludeOwn && avatar.authorId == APIUser.CurrentUser.id)
                 return;
 
             if (IsAvatarInHistory(avatar.id))
