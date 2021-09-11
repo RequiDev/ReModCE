@@ -72,6 +72,7 @@ namespace ReModCE.Components
             {
                 _enabledToggle.Toggle(AvatarFavoritesEnabled);
                 _favoriteAvatarList.GameObject.SetActive(AvatarFavoritesEnabled);
+                _favoriteButton.GameObject.SetActive(AvatarFavoritesEnabled);
             };
             MaxAvatarsPerPage = new ConfigValue<int>(nameof(MaxAvatarsPerPage), 100);
             MaxAvatarsPerPage.OnValueChanged += () =>
