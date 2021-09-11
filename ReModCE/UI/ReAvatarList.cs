@@ -101,6 +101,18 @@ namespace ReModCE.UI
                 }, expandButton.transform);
 
                 _pageCount = new ReUiText("0 / 0", new Vector2(825f, 0f), new Vector2(0.25f, 1f), expandButton.transform);
+                {
+                    VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Goto Page", string.Empty, InputField.InputType.Standard, true, "Submit",
+                        (s, k, t) =>
+                        {
+                            if (string.IsNullOrEmpty(s))
+                                return;
+
+                            _currentPage = int.Parse(s);
+                            _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
+                            RefreshAvatars();
+                        }, null, "Enter page...");
+                }, expandButton.transform);
             }
         }
 

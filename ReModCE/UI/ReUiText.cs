@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -13,12 +14,15 @@ namespace ReModCE.UI
             get => _textComponent.text;
             set => _textComponent.text = value;
         }
-        public ReUiText(string text, Vector2 pos, Vector2 scale, Transform parent = null) : base(
+
+        public ReUiText(string text, Vector2 pos, Vector2 scale, Action onClick = null, Transform parent = null) : base(
             GameObject.Find("/UserInterface/MenuContent/Screens/Avatar/Favorite Button"), parent, pos,
             $"{text}UiButton")
         {
-
-            Object.DestroyImmediate(GameObject.GetComponentInChildren<Button>());
+            var button = GameObject.GetComponentInChildren<Button>();
+            button.onClick = new Button.ButtonClickedEvent();
+            button.onClick.AddListener(new Action(() => onClick?.Invoke()));
+            //Object.DestroyImmediate(GameObject.GetComponentInChildren<Button>());
             Object.DestroyImmediate(GameObject.GetComponentInChildren<Image>());
 
             _textComponent = GameObject.GetComponentInChildren<Text>();
