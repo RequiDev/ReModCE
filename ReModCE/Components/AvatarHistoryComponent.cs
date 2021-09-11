@@ -59,7 +59,7 @@ namespace ReModCE.Components
             _excludeOwnToggle = menu.AddToggle("Exclude own avatars", "Exclude own avatars for avatar history",
                 AvatarHistoryExcludeOwn.SetValue, AvatarHistoryExcludeOwn);
 
-            _avatarList = new ReAvatarList("Recently Used", this, false);
+            _avatarList = new ReAvatarList("Recently Used", this, true, false);
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
             
@@ -163,6 +163,13 @@ namespace ReModCE.Components
                 list.Add(avi);
             }
             return list;
+        }
+
+        public void Clear(ReAvatarList avatarList)
+        {
+            _recentAvatars.Clear();
+            SaveAvatarsToDisk();
+            avatarList.RefreshAvatars();
         }
     }
 }

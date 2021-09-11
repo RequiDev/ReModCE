@@ -13,6 +13,7 @@ namespace ReModCE.UI
     internal interface IAvatarListOwner
     {
         AvatarList GetAvatars(ReAvatarList avatarList);
+        void Clear(ReAvatarList avatarList);
     }
 
     internal class ReAvatarList : UIElement
@@ -58,7 +59,7 @@ namespace ReModCE.UI
         private readonly string _title;
 
         private readonly IAvatarListOwner _owner;
-        public ReAvatarList(string title, IAvatarListOwner owner, bool addPagination = true) : base(
+        public ReAvatarList(string title, IAvatarListOwner owner, bool addClearButton = true, bool addPagination = true) : base(
             LegacyAvatarList,
             LegacyAvatarList.transform.parent,
             $"{title}AvatarList")
@@ -85,22 +86,31 @@ namespace ReModCE.UI
             _textComponent = expandButton.GetComponentInChildren<Text>();
             Title = title;
 
-            _refreshButton = new ReUiButton("↻", new Vector3(980f, 0f), new Vector2(0.25f, 1), RefreshAvatars, expandButton.transform);
+            var offset = 0f;
+            if (addClearButton)
+            {
+                var clearButton = new ReUiButton("Clear", new Vector3(975, 0f), new Vector2(0.3f, 1), () => { _owner.Clear(this); }, expandButton.transform);
+                offset = 85f;
+            }
+
+            _refreshButton = new ReUiButton("↻", new Vector3(980f - offset, 0f), new Vector2(0.25f, 1), RefreshAvatars, expandButton.transform);
             if (_hasPagination)
             {
-                _nextPageButton = new ReUiButton("→", new Vector2(900f, 0f), new Vector2(0.25f, 1f), () =>
+                _nextPageButton = new ReUiButton("→", new Vector2(900f - offset, 0f), new Vector2(0.25f, 1f), () =>
                 {
                     _currentPage += 1;
+                    _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
                     RefreshAvatars();
                 }, expandButton.transform);
 
-                _prevPageButton = new ReUiButton("←", new Vector2(750f, 0f), new Vector2(0.25f, 1f), () =>
+                _prevPageButton = new ReUiButton("←", new Vector2(750f - offset, 0f), new Vector2(0.25f, 1f), () =>
                 {
                     _currentPage -= 1;
+                    _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
                     RefreshAvatars();
                 }, expandButton.transform);
 
-                _pageCount = new ReUiText("0 / 0", new Vector2(825f, 0f), new Vector2(0.25f, 1f), expandButton.transform);
+                _pageCount = new ReUiText("0 / 0", new Vector2(825f - offset, 0f), new Vector2(0.25f, 1f), () =>
                 {
                     VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Goto Page", string.Empty, InputField.InputType.Standard, true, "Submit",
                         (s, k, t) =>

@@ -26,7 +26,7 @@ namespace ReModCE.Components
 {
     internal class AvatarFavoritesComponent : ModComponent, IAvatarListOwner
     {
-        private ReAvatarList _avatarList;
+        private ReAvatarList _favoriteAvatarList;
         private ReUiButton _favoriteButton;
 
         private ReAvatarList _searchedAvatarList;
@@ -71,12 +71,12 @@ namespace ReModCE.Components
             AvatarFavoritesEnabled.OnValueChanged += () =>
             {
                 _enabledToggle.Toggle(AvatarFavoritesEnabled);
-                _avatarList.GameObject.SetActive(AvatarFavoritesEnabled);
+                _favoriteAvatarList.GameObject.SetActive(AvatarFavoritesEnabled);
             };
             MaxAvatarsPerPage = new ConfigValue<int>(nameof(MaxAvatarsPerPage), 100);
             MaxAvatarsPerPage.OnValueChanged += () =>
             {
-                _avatarList.SetMaxAvatarsPerPage(MaxAvatarsPerPage);
+                _favoriteAvatarList.SetMaxAvatarsPerPage(MaxAvatarsPerPage);
             };
             
             _savedAvatars = new List<ReAvatar>();
@@ -151,18 +151,18 @@ namespace ReModCE.Components
                 });
             }
 
-            _searchedAvatarList = new ReAvatarList("ReMod CE Search", this);
+            _searchedAvatarList = new ReAvatarList("ReModCE Search", this);
 
-            _avatarList = new ReAvatarList("ReModCE Favorites", this);
-            _avatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
-            _avatarList.OnEnable += () =>
+            _favoriteAvatarList = new ReAvatarList("ReModCE Favorites", this, false);
+            _favoriteAvatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
+            _favoriteAvatarList.OnEnable += () =>
             {
                 // make sure it stays off if it should be off.
-                _avatarList.GameObject.SetActive(AvatarFavoritesEnabled);
+                _favoriteAvatarList.GameObject.SetActive(AvatarFavoritesEnabled);
             };
 
             var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent;
-            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
+            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
                 parent);
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
@@ -319,7 +319,7 @@ namespace ReModCE.Components
 
         private void ChangeAvatarChecked()
         {
-            var currentAvatar = _avatarList.AvatarPedestal.field_Internal_ApiAvatar_0;
+            var currentAvatar = _favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0;
             if (!HasAvatarFavorited(currentAvatar.id)) // this isn't in our list. we don't care about it
             {
                 _changeButtonEvent.Invoke();
@@ -429,7 +429,7 @@ namespace ReModCE.Components
 
         private void OnAvatarInstantiated(string url, GameObject avatar, AvatarPerformanceStats avatarPerformanceStats)
         {
-            _favoriteButton.Text = HasAvatarFavorited(_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id) ? "Unfavorite" : "Favorite";
+            _favoriteButton.Text = HasAvatarFavorited(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id) ? "Unfavorite" : "Favorite";
         }
 
         private void FavoriteAvatar(ApiAvatar apiAvatar)
@@ -466,7 +466,7 @@ namespace ReModCE.Components
                 }
             }, new ReAvatar(apiAvatar));
 
-            if (_avatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id == apiAvatar.id)
+            if (_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id == apiAvatar.id)
             {
                 if (!HasAvatarFavorited(apiAvatar.id))
                 {
@@ -480,7 +480,7 @@ namespace ReModCE.Components
                 }
             }
 
-            _avatarList.RefreshAvatars();
+            _favoriteAvatarList.RefreshAvatars();
         }
 
         private void SendAvatarRequest(HttpMethod method, Action<HttpResponseMessage> onResponse, ReAvatar avater = null)
@@ -501,7 +501,7 @@ namespace ReModCE.Components
 
         public AvatarList GetAvatars(ReAvatarList avatarList)
         {
-            if (avatarList == _avatarList)
+            if (avatarList == _favoriteAvatarList)
             {
                 var list = new AvatarList();
                 foreach (var avi in _savedAvatars.Select(x => x.AsApiAvatar()).ToList())
@@ -517,6 +517,15 @@ namespace ReModCE.Components
             }
 
             return null;
+        }
+
+        public void Clear(ReAvatarList avatarList)
+        {
+            if (avatarList == _searchedAvatarList)
+            {
+                _searchedAvatars.Clear();
+                avatarList.RefreshAvatars();
+            }
         }
     }
 }
