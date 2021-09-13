@@ -147,7 +147,11 @@ namespace ReModCE.UI
 
             if (_hasPagination)
             {
-                var pagesCount = avatars.Count / _maxAvatarsPerPage;
+                var pagesCount = 0;
+                if (avatars.Count != 0)
+                {
+                    pagesCount = (avatars.Count - 1) / _maxAvatarsPerPage;
+                }
                 _currentPage = Mathf.Clamp(_currentPage, 0, pagesCount);
 
                 _pageCount.Text = $"{_currentPage + 1} / {pagesCount + 1}";
@@ -159,7 +163,7 @@ namespace ReModCE.UI
                 }
 
                 _prevPageButton.Interactable = _currentPage > 0;
-                _nextPageButton.Interactable = _currentPage < avatars.Count / _maxAvatarsPerPage;
+                _nextPageButton.Interactable = _currentPage < pagesCount;
 
                 Title = $"{_title} ({cutDown.Count}/{avatars.Count})";
 
