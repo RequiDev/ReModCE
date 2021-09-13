@@ -118,7 +118,7 @@ namespace ReModCE.UI
                             if (string.IsNullOrEmpty(s))
                                 return;
 
-                            _currentPage = int.Parse(s);
+                            _currentPage = int.Parse(s) - 1;
                             _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
                             RefreshAvatars();
                         }, null, "Enter page...");
