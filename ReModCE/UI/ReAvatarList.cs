@@ -5,7 +5,7 @@ using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC;
-using Category = UiAvatarList.EnumNPublicSealedvaInPuMiFaSpClPuLiCrUnique;
+using Category = UiAvatarList.EnumNPublicSealedvaInPuMiFaSpClPuLi11Unique;
 using AvatarList = Il2CppSystem.Collections.Generic.List<VRC.Core.ApiAvatar>;
 
 namespace ReModCE.UI
@@ -70,7 +70,7 @@ namespace ReModCE.UI
 
             _avatarList = GameObject.GetComponent<UiAvatarList>();
             _avatarList.clearUnseenListOnCollapse = false;
-            _avatarList.field_Public_EnumNPublicSealedvaInPuMiFaSpClPuLiCrUnique_0 =
+            _avatarList.field_Public_EnumNPublicSealedvaInPuMiFaSpClPuLi11Unique_0 =
                 Category.SpecificList;
 
             GameObject.transform.SetSiblingIndex(0);
@@ -99,14 +99,12 @@ namespace ReModCE.UI
                 _nextPageButton = new ReUiButton("→", new Vector2(900f - offset, 0f), new Vector2(0.25f, 1f), () =>
                 {
                     _currentPage += 1;
-                    _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
                     RefreshAvatars();
                 }, expandButton.transform);
 
                 _prevPageButton = new ReUiButton("←", new Vector2(750f - offset, 0f), new Vector2(0.25f, 1f), () =>
                 {
                     _currentPage -= 1;
-                    _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
                     RefreshAvatars();
                 }, expandButton.transform);
 
@@ -119,7 +117,6 @@ namespace ReModCE.UI
                                 return;
 
                             _currentPage = int.Parse(s) - 1;
-                            _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
                             RefreshAvatars();
                         }, null, "Enter page...");
                 }, expandButton.transform);
@@ -139,6 +136,7 @@ namespace ReModCE.UI
 
         public void Refresh(AvatarList avatars)
         {
+            _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
             if (avatars == null)
             {
                 ReLogger.Warning($"avatars was null when refreshing avatar list. This is a bug!");
