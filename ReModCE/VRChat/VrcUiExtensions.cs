@@ -1,4 +1,5 @@
 ﻿using Il2CppSystem.Collections.Generic;
+using UnityEngine;
 using VRC.Core;
 
 namespace ReModCE.VRChat
@@ -11,6 +12,10 @@ namespace ReModCE.VRChat
                 !instance.enabled)
                 return;
 
+            if (instance.scrollRect != null)
+            {
+                instance.scrollRect.normalizedPosition = new Vector2(0f, 0f);
+            }
             instance.Method_Protected_Void_List_1_T_Int32_Boolean_VRCUiContentButton_0(avaterList, offset, endOfPickers, contentHeaderElement);
         }
     }

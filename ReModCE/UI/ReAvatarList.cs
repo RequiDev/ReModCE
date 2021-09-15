@@ -136,7 +136,6 @@ namespace ReModCE.UI
 
         public void Refresh(AvatarList avatars)
         {
-            _avatarList.scrollRect.normalizedPosition = new Vector2(0f, 0f);
             if (avatars == null)
             {
                 ReLogger.Warning($"avatars was null when refreshing avatar list. This is a bug!");
