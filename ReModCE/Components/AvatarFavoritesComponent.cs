@@ -55,6 +55,7 @@ namespace ReModCE.Components
         private UnityAction<string> _searchAvatarsAction;
         private UnityAction<string> _overrideSearchAvatarsAction;
         private UnityAction<string> _emmVRCsearchAvatarsAction;
+        private int _updatesWithoutSearch;
 
         private int _loginRetries;
 
@@ -219,16 +220,20 @@ namespace ReModCE.Components
 
             if (!_searchBox.field_Public_Button_0.interactable)
             {
-                if (!UiManager.IsEmmVRCLoaded)
+                if (!UiManager.IsEmmVRCLoaded || _updatesWithoutSearch >= 10)
                 {
                     _searchBox.field_Public_Button_0.interactable = true;
                     _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
+                }
+                else if (UiManager.IsEmmVRCLoaded)
+                {
+                    ++_updatesWithoutSearch;
                 }
                 // emmVRC will set it to be interactable. We want to grab their search function
             }
             else
             {
-                if (UiManager.IsEmmVRCLoaded)
+                if (UiManager.IsEmmVRCLoaded && _updatesWithoutSearch < 10)
                 {
                     if (_searchBox.field_Public_UnityAction_1_String_0 == null)
                         return;
