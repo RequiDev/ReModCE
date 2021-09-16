@@ -15,6 +15,8 @@ using UnityEngine.UI;
 
 namespace ReModCE.Components
 {
+    // We want this to run last.
+    [ComponentPriority(int.MaxValue)]
     internal class ButtonAdjustmentsComponent : ModComponent
     {
         private Button.ButtonClickedEvent _originalButtonClickedEvent;
