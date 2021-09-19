@@ -17,7 +17,7 @@ namespace ReModCE.Components
         private ReQuickToggle _logToggle;
         public IngameLog()
         {
-            IngameLogEnabled = new ConfigValue<bool>(nameof(IngameLogEnabled), true);
+            IngameLogEnabled = new ConfigValue<bool>(nameof(IngameLogEnabled), false);
             IngameLogEnabled.OnValueChanged += () =>
             {
                 _logToggle.Toggle(IngameLogEnabled);
