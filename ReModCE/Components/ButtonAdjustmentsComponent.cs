@@ -34,6 +34,8 @@ namespace ReModCE.Components
             _disablerMenu = menu.AddSubMenu("Disabler", "Disable VRChat buttons in your Quick Menu");
             _moverMenu = menu.AddSubMenu("Mover", "Move buttons around in your Qick Menu");
             _sizerMenu = menu.AddSubMenu("Sizer", "Make any button half size if needed");
+
+            MelonCoroutines.Start(RunDelayed());
         }
 
         private IEnumerator RunDelayed()
