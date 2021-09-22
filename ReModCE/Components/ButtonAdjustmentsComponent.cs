@@ -15,8 +15,6 @@ using UnityEngine.UI;
 
 namespace ReModCE.Components
 {
-    // We want this to run last.
-    [ComponentPriority(int.MaxValue)]
     internal class ButtonAdjustmentsComponent : ModComponent
     {
         private Button.ButtonClickedEvent _originalButtonClickedEvent;
@@ -36,6 +34,13 @@ namespace ReModCE.Components
             _disablerMenu = menu.AddSubMenu("Disabler", "Disable VRChat buttons in your Quick Menu");
             _moverMenu = menu.AddSubMenu("Mover", "Move buttons around in your Qick Menu");
             _sizerMenu = menu.AddSubMenu("Sizer", "Make any button half size if needed");
+        }
+
+        private IEnumerator RunDelayed()
+        {
+            // wait 1 frame so other mods are initialized and won't copy a resized/moved button
+            yield return new WaitForEndOfFrame();
+
             var shortcutMenu = ExtendedQuickMenu.ShortcutMenu;
             var childrenButtons = shortcutMenu.gameObject.GetComponentsInDirectChildren<Button>();
             foreach (var button in childrenButtons)
@@ -53,11 +58,11 @@ namespace ReModCE.Components
                 var text = texts[0];
                 if (text.text.Length == 0)
                     continue;
-                
+
                 CreateUiForButton(button.gameObject, text.text);
             }
 
-            CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", disable:false, size: false); // 
+            CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", disable: false, size: false); // 
             CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, disable: false, size: false);
         }
 
