@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MelonLoader.ICSharpCode.SharpZipLib.GZip;
 using ReModCE.Core;
+using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
@@ -42,8 +44,17 @@ namespace ReModCE.Components
 
             if (File.Exists("UserData/ReModCE/recent_avatars.bin"))
             {
-                _recentAvatars =
-                    BinaryGZipSerializer.Deserialize("UserData/ReModCE/recent_avatars.bin") as List<ReAvatar>;
+                try
+                {
+                    _recentAvatars =
+                        BinaryGZipSerializer.Deserialize("UserData/ReModCE/recent_avatars.bin") as List<ReAvatar>;
+                }
+                catch (GZipException e)
+                {
+                    ReLogger.Error($"Your recent avatars file seems to be corrupted. I renamed it for you, so this error doesn't happen again.");
+                    File.Delete("UserData/ReModCE/recent_avatars.bin.corrupted");
+                    File.Move("UserData/ReModCE/recent_avatars.bin", "UserData/ReModCE/recent_avatars.bin.corrupted");
+                }
             }
             else
             {
