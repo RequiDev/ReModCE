@@ -4,12 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Il2CppSystem.IO;
 using MelonLoader;
+using Newtonsoft.Json;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
+using Tomlet;
+using Tomlet.Exceptions;
+using Tomlet.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +22,13 @@ namespace ReModCE.Components
 {
     internal class ButtonAdjustmentsComponent : ModComponent
     {
+        internal class AdjustedButton
+        {
+            public bool Active { get; set; }
+            public Vector2 Position { get; set; }
+            public bool HalfSize { get; set; }
+        }
+
         private Button.ButtonClickedEvent _originalButtonClickedEvent;
         private bool _movingButton;
 
@@ -25,6 +37,26 @@ namespace ReModCE.Components
         private ReQuickMenu _disablerMenu;
         private ReQuickMenu _moverMenu;
         private ReQuickMenu _sizerMenu;
+
+        private readonly Dictionary<string, AdjustedButton> _adjustButtonConfig;
+
+        private readonly TomlTable _remodTomlTable;
+
+        public ButtonAdjustmentsComponent()
+        {
+            if (File.Exists("UserData/ReModCE/adjusted_buttons.json"))
+            {
+                _adjustButtonConfig =
+                    JsonConvert.DeserializeObject<Dictionary<string, AdjustedButton>>(File.ReadAllText("UserData/ReModCE/adjusted_buttons.json"));
+            }
+            else
+            {
+                _adjustButtonConfig = new Dictionary<string, AdjustedButton>();
+            }
+
+            var melonPrefs = TomlParser.ParseFile(Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg"));
+            _remodTomlTable = melonPrefs.GetSubTable("ReModCE");
+        }
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
@@ -64,40 +96,82 @@ namespace ReModCE.Components
                 CreateUiForButton(button.gameObject, text.text);
             }
 
-            CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", disable: false, size: false); // 
-            CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, disable: false, size: false);
+            CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", allowDisable: false, allowSize: false); // 
+            CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, allowDisable: false, allowSize: false);
+
+            if (!File.Exists("UserData/ReModCE/adjusted_buttons.json"))
+            {
+                SaveButtonAdjustments();
+            }
         }
 
-        private void CreateUiForButton(GameObject gameObject, string name, bool hasButton = true, bool disable = true, bool move = true, bool size = true)
+        private void SaveButtonAdjustments()
         {
-            ReQuickToggle buttonToggle = null;
-            var buttonHalfSize = new ConfigValue<bool>($"{gameObject.name}HalfSize", false, isHidden: true);
-
-            if (disable)
+            File.WriteAllText("UserData/ReModCE/adjusted_buttons.json", JsonConvert.SerializeObject(_adjustButtonConfig, Formatting.Indented, new JsonSerializerSettings
             {
-                var buttonEnabled = new ConfigValue<bool>($"{gameObject.name}Enabled", gameObject.activeSelf);
-                buttonEnabled.OnValueChanged += () =>
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new DynamicContractResolver(new List<string>
                 {
-                    buttonToggle.Toggle(buttonEnabled);
-                    gameObject.SetActive(buttonEnabled);
+                    "normalized",
+                    "magnitude",
+                    "sqrMagnitude"
+                })
+            }));
+        }
+
+        private T GetValueFromPrefs<T>(string prefName, T dflt)
+        {
+            try
+            {
+                return TomletMain.To<T>(_remodTomlTable.Entries[prefName]);
+            }
+            catch (Exception ex)
+            {
+                return dflt;
+            }
+        }
+
+        private void CreateUiForButton(GameObject gameObject, string name, bool hasButton = true, bool allowDisable = true, bool allowMove = true, bool allowSize = true)
+        {
+            AdjustedButton adjustedButton;
+            if (_adjustButtonConfig.ContainsKey(gameObject.name))
+            {
+                adjustedButton = _adjustButtonConfig[gameObject.name];
+            }
+            else
+            {
+                var baseEntryName = string.Concat(gameObject.name.Where(c => char.IsLetter(c) || char.IsNumber(c)));
+                
+                adjustedButton = new AdjustedButton
+                {
+                    Active = GetValueFromPrefs($"{baseEntryName}Enabled", gameObject.activeSelf),
+                    HalfSize = GetValueFromPrefs($"{baseEntryName}HalfSize", false),
+                    Position = new Vector2(
+                        GetValueFromPrefs($"{baseEntryName}PosX", gameObject.transform.localPosition.x),
+                        GetValueFromPrefs($"{baseEntryName}PosY", gameObject.transform.localPosition.y))
                 };
 
-                buttonToggle = _disablerMenu.AddToggle($"{name}", $"Enable/Disable \"{name}\" button.",
-                    buttonEnabled.SetValue, buttonEnabled);
+                _adjustButtonConfig.Add(gameObject.name, adjustedButton);
+            }
 
-                if (buttonEnabled != gameObject.gameObject.activeSelf)
+            if (allowDisable)
+            {
+                _disablerMenu.AddToggle($"{name}", $"Enable/Disable \"{name}\" button.",
+                    b =>
+                    {
+                        adjustedButton.Active = b;
+                        gameObject.SetActive(b);
+                        SaveButtonAdjustments();
+                    }, adjustedButton.Active);
+
+                if (adjustedButton.Active != gameObject.gameObject.activeSelf)
                 {
-                    gameObject.SetActive(buttonEnabled);
+                    gameObject.SetActive(adjustedButton.Active);
                 }
             }
 
-            if (move)
+            if (allowMove)
             {
-                var buttonPosX = new ConfigValue<float>($"{gameObject.name}PosX", gameObject.transform.localPosition.x,
-                    isHidden: true);
-                var buttonPosY = new ConfigValue<float>($"{gameObject.name}PosY", gameObject.transform.localPosition.y,
-                    isHidden: true);
-
                 _moverMenu.AddButton($"{name}", $"Move \"{name}\" button", () =>
                 {
                     if (!_canMoveButtons) return;
@@ -120,10 +194,9 @@ namespace ReModCE.Components
                             gameObject.GetComponent<Button>().onClick = _originalButtonClickedEvent;
                         }
 
-                        buttonPosX.SetValue(gameObject.transform.localPosition.x);
-                        buttonPosY.SetValue(gameObject.transform.localPosition.y);
-                        gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x,
-                            gameObject.transform.localPosition.y, 0f);
+                        adjustedButton.Position = gameObject.transform.localPosition;
+                        SaveButtonAdjustments();
+                        gameObject.transform.localPosition = adjustedButton.Position;
                         MelonCoroutines.Start(EnableCanMoveButtonsDelayed());
                         if (openPrevMenu)
                         {
@@ -131,15 +204,16 @@ namespace ReModCE.Components
                         }
                     }));
                 });
-                
-                gameObject.transform.localPosition = new Vector3(buttonPosX, buttonPosY);
+
+                gameObject.transform.localPosition = adjustedButton.Position;
             }
 
-            if (size)
+            if (allowSize)
             {
                 _sizerMenu.AddToggle($"{name}", $"Half \"{name}\" button", b =>
                 {
-                    buttonHalfSize.SetValue(b);
+                    adjustedButton.HalfSize = b;
+                    SaveButtonAdjustments();
                     if (b)
                     {
                         gameObject.GetComponent<RectTransform>().sizeDelta *= new Vector2(1f, 0.5f);
@@ -148,9 +222,9 @@ namespace ReModCE.Components
                     {
                         gameObject.GetComponent<RectTransform>().sizeDelta *= new Vector2(1f, 2f);
                     }
-                }, buttonHalfSize);
+                }, adjustedButton.HalfSize);
 
-                if (buttonHalfSize)
+                if (adjustedButton.HalfSize)
                 {
                     gameObject.GetComponent<RectTransform>().sizeDelta *= new Vector2(1f, 0.5f);
                 }

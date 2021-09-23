@@ -14,7 +14,9 @@ namespace ReModCE.Core
         public ConfigValue(string name, T defaultValue, string displayName = null, string description = null, bool isHidden = false)
         {
             _category ??= MelonPreferences.CreateCategory("ReModCE");
-            _entry = _category.GetEntry<T>(string.Concat(name.Where(c => char.IsLetter(c) || char.IsNumber(c)))) ?? _category.CreateEntry(string.Concat(name.Where(c => char.IsLetter(c) || char.IsNumber(c))), defaultValue, displayName, description, isHidden);
+
+            var entryName = string.Concat(name.Where(c => char.IsLetter(c) || char.IsNumber(c)));
+            _entry = _category.GetEntry<T>(entryName) ?? _category.CreateEntry(entryName, defaultValue, displayName, description, isHidden);
             _entry.OnValueChangedUntyped += () => OnValueChanged?.Invoke();
         }
 

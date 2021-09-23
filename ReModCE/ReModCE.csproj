@@ -201,6 +201,7 @@
     <Compile Include="Components\ThirdPersonComponent.cs" />
     <Compile Include="Core\ApiError.cs" />
     <Compile Include="Core\BinaryGZipSerializer.cs" />
+    <Compile Include="Core\DynamicContractResolver.cs" />
     <Compile Include="Core\EnableDisableListener.cs" />
     <Compile Include="Core\ModComponent.cs" />
     <Compile Include="Core\ConfigValue.cs" />

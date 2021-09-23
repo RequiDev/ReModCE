@@ -17,27 +17,6 @@ namespace ReModCE.Components
 {
     internal class CalibrationSavingComponent : ModComponent
     {
-        private class DynamicContractResolver : DefaultContractResolver
-        {
-            private readonly string _propertyNameToExclude;
-
-            public DynamicContractResolver(string propertyNameToExclude)
-            {
-                _propertyNameToExclude = propertyNameToExclude;
-            }
-
-            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-            {
-                var properties = base.CreateProperties(type, memberSerialization);
-
-                // only serializer properties that are not named after the specified property.
-                properties =
-                    properties.Where(p => string.Compare(p.PropertyName, _propertyNameToExclude, StringComparison.OrdinalIgnoreCase) != 0).ToList();
-
-                return properties;
-            }
-        }
-
         private class FbtCalibration
         {
             public KeyValuePair<Vector3, Quaternion> Hip;
@@ -142,7 +121,7 @@ namespace ReModCE.Components
                 File.WriteAllText("UserData/ReModCE/calibrations.json", JsonConvert.SerializeObject(_savedCalibrations, Formatting.Indented, new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    ContractResolver = new DynamicContractResolver("normalized")
+                    ContractResolver = new DynamicContractResolver(new List<string> { "normalized" })
                 }));
             }
             catch (Exception e)
