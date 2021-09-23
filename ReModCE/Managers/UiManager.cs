@@ -48,6 +48,7 @@ namespace ReModCE.Managers
                 ExtendedQuickMenu.ShortcutMenu);
 
             MainMenu.AddSubMenu("Movement", "Access movement related settings");
+            MainMenu.AddSubMenu("Visuals", "Access anything that will affect your game visually");
             MainMenu.AddSubMenu("Dynamic Bones", "Access your global dynamic bone settings");
             MainMenu.AddSubMenu("Hotkeys", "Access hotkey related settings");
             MainMenu.AddSubMenu("Avatars", "Access avatar related settings");

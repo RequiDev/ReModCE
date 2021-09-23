@@ -8,14 +8,14 @@ using UnityEngine;
 
 namespace ReModCE.Components
 {
-    internal class IngameLog : ModComponent
+    internal class IngameLogComponent : ModComponent
     {
         private ReScrollView _log;
         private string _preUiLog;
 
         private ConfigValue<bool> IngameLogEnabled;
         private ReQuickToggle _logToggle;
-        public IngameLog()
+        public IngameLogComponent()
         {
             IngameLogEnabled = new ConfigValue<bool>(nameof(IngameLogEnabled), false);
             IngameLogEnabled.OnValueChanged += () =>

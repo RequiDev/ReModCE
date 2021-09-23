@@ -157,6 +157,7 @@ namespace ReModCE
                 m.OnApplicationQuit();
             }
 
+            MelonPreferences.Save();
             Process.GetCurrentProcess().Kill();
         }
 
