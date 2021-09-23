@@ -11,6 +11,8 @@ namespace ReModCE.Core
         private readonly MelonPreferences_Entry<T> _entry;
         private static MelonPreferences_Category _category;
 
+        public T Value => _entry.Value;
+
         public ConfigValue(string name, T defaultValue, string displayName = null, string description = null, bool isHidden = false)
         {
             _category ??= MelonPreferences.CreateCategory("ReModCE");

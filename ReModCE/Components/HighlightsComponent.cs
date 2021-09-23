@@ -8,6 +8,7 @@ using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
 using UnityEngine;
+using UnityEngine.UI;
 using VRC;
 using VRC.Core;
 
@@ -22,6 +23,8 @@ namespace ReModCE.Components
         private ConfigValue<Vector4> OthersColor;
         private ConfigValue<bool> ESPEnabled;
         private ReQuickToggle _espToggle;
+        private ReQuickButton _friendsColorButton;
+        private ReQuickButton _othersColorButton;
 
         public HighlightsComponent()
         {
@@ -46,9 +49,9 @@ namespace ReModCE.Components
             var highlightsFx = HighlightsFX.field_Private_Static_HighlightsFX_0;
 
             _friendsHighlights = highlightsFx.gameObject.AddComponent<HighlightsFXStandalone>();
-            _friendsHighlights.highlightColor = ((Vector4)FriendsColor).ToColor();
+            _friendsHighlights.highlightColor = FriendsColor.Value.ToColor();
             _othersHighlights = highlightsFx.gameObject.AddComponent<HighlightsFXStandalone>();
-            _othersHighlights.highlightColor = ((Vector4)OthersColor).ToColor();
+            _othersHighlights.highlightColor = OthersColor.Value.ToColor();
 
             var menu = uiManager.MainMenu.GetSubMenu("Visuals");
             _espToggle = menu.AddToggle("ESP", "Enable ESP (Highlight players through walls)", b =>
@@ -56,6 +59,38 @@ namespace ReModCE.Components
                 ESPEnabled.SetValue(b);
                 ToggleESP(b);
             }, ESPEnabled);
+
+            _friendsColorButton = menu.AddButton($"<color=#{FriendsColor.Value.ToColor().ToHex()}>Friends</color> Color",
+                $"Set your <color=#{FriendsColor.Value.ToColor().ToHex()}>friends</color> highlight color",
+                () =>
+                {
+                    PopupColorInput(_friendsColorButton, "Friends", FriendsColor);
+                });
+
+            _othersColorButton = menu.AddButton($"<color=#{OthersColor.Value.ToColor().ToHex()}>Others</color> Color",
+                $"Set <color=#{OthersColor.Value.ToColor().ToHex()}>other</color> peoples highlight color",
+                () =>
+                {
+                    PopupColorInput(_othersColorButton, "Others", OthersColor);
+                });
+        }
+
+        private void PopupColorInput(ReQuickButton button, string who, ConfigValue<Vector4> configValue)
+        {
+            VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Input hex color code",
+                configValue.Value.ToColor().ToHex(), InputField.InputType.Standard, false, "Submit",
+                (s, k, t) =>
+                {
+                    if (string.IsNullOrEmpty(s))
+                        return;
+
+                    if (!ColorUtility.TryParseHtmlString(s, out var color))
+                        return;
+
+                    configValue.SetValue(color.ToVector4());
+
+                    button.Text = $"<color=#{configValue.Value.ToColor().ToHex()}>{who}</color> Color";
+                }, null);
         }
 
         private void ToggleESP(bool enabled)
