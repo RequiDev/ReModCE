@@ -18,6 +18,7 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.XR;
 using VRC.Core;
 using VRC.SDKBase.Validation.Performance.Stats;
 using AvatarList = Il2CppSystem.Collections.Generic.List<VRC.Core.ApiAvatar>;
@@ -67,6 +68,7 @@ namespace ReModCE.Components
                 CookieContainer = new CookieContainer()
             };
             _httpClient = new HttpClient(_httpClientHandler);
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/1.0 ({(XRDevice.isPresent ? XRDevice.model : "Desktop")}; {Application.version})");
 
             AvatarFavoritesEnabled = new ConfigValue<bool>(nameof(AvatarFavoritesEnabled), true);
             AvatarFavoritesEnabled.OnValueChanged += () =>
@@ -147,6 +149,7 @@ namespace ReModCE.Components
                                 CookieContainer = new CookieContainer()
                             };
                             _httpClient = new HttpClient(_httpClientHandler);
+                            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/1.0 ({(XRDevice.isPresent ? XRDevice.model : "Desktop")}; {Application.version})");
 
                             LoginToAPI(APIUser.CurrentUser, FetchAvatars);
                         }, null);
