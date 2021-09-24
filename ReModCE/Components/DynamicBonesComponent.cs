@@ -730,7 +730,9 @@ namespace ReModCE.Components
 
         private void AddBoneCollider(List<DynamicBoneCollider> list, Animator animator, List<HumanBodyBones> bones)
         {
-            if (animator == null) return;
+            if (!animator.isHuman)
+                return;
+
             foreach (var bone in bones)
             {
                 foreach (var collider in animator.GetBoneTransform(bone).GetComponentsInChildren<DynamicBoneCollider>(true))
