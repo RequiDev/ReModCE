@@ -62,13 +62,7 @@ namespace ReModCE.Components
 
         public AvatarFavoritesComponent()
         {
-            _httpClientHandler = new HttpClientHandler
-            {
-                UseCookies = true,
-                CookieContainer = new CookieContainer()
-            };
-            _httpClient = new HttpClient(_httpClientHandler);
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/1.0 ({(XRDevice.isPresent ? XRDevice.model : "Desktop")}; {Application.version})");
+            InitializeNetworkClient();
 
             AvatarFavoritesEnabled = new ConfigValue<bool>(nameof(AvatarFavoritesEnabled), true);
             AvatarFavoritesEnabled.OnValueChanged += () =>
@@ -98,6 +92,17 @@ namespace ReModCE.Components
             {
                 _localAvatars = BinaryGZipSerializer.Deserialize("UserData/ReModCE/avatars.bin") as List<ReAvatar>;
             }
+        }
+
+        private void InitializeNetworkClient()
+        {
+            _httpClientHandler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
+            };
+            _httpClient = new HttpClient(_httpClientHandler);
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/{(XRDevice.isPresent ? XRDevice.model : "Desktop")}.{Application.version} (Windows NT 10.0; Win64; x64)");
         }
 
         public override void OnUiManagerInit(UiManager uiManager)
@@ -143,13 +148,7 @@ namespace ReModCE.Components
                             _pinCode = pinCode;
                             File.WriteAllText(PinPath, _pinCode.ToString());
 
-                            _httpClientHandler = new HttpClientHandler
-                            {
-                                UseCookies = true,
-                                CookieContainer = new CookieContainer()
-                            };
-                            _httpClient = new HttpClient(_httpClientHandler);
-                            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/1.0 ({(XRDevice.isPresent ? XRDevice.model : "Desktop")}; {Application.version})");
+                            InitializeNetworkClient();
 
                             LoginToAPI(APIUser.CurrentUser, FetchAvatars);
                         }, null);
