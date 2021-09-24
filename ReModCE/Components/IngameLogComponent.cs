@@ -1,10 +1,12 @@
 ﻿using System;
 using MelonLoader;
 using ReModCE.Core;
+using ReModCE.Loader;
 using ReModCE.Managers;
 using ReModCE.UI;
 using ReModCE.VRChat;
 using UnityEngine;
+using VRC;
 
 namespace ReModCE.Components
 {
@@ -44,8 +46,8 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var logMenu = uiManager.MainMenu.AddSubMenu("Ingame Log", "Access ingame log related settings.");
-            _logToggle = logMenu.AddToggle("Enabled", "Enable/Disable the ingame log UI", IngameLogEnabled.SetValue, IngameLogEnabled);
+            var menu = uiManager.MainMenu.GetSubMenu("Logging");
+            _logToggle = menu.AddToggle("Ingame Log UI", "Enable/Disable the ingame log UI", IngameLogEnabled.SetValue, IngameLogEnabled);
 
             var logPos = new Vector2(-1695, 1470f);
             if (uiManager.IsRubyLoaded)

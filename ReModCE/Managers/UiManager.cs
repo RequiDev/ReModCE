@@ -52,6 +52,7 @@ namespace ReModCE.Managers
             MainMenu.AddSubMenu("Dynamic Bones", "Access your global dynamic bone settings");
             MainMenu.AddSubMenu("Hotkeys", "Access hotkey related settings");
             MainMenu.AddSubMenu("Avatars", "Access avatar related settings");
+            MainMenu.AddSubMenu("Logging", "Access logging related settings");
 
             TargetMenu = new ReQuickMenu("TargetReModCE", "UserInteractMenu", QuickMenuContext.UserSelected);
             ReQuickButton.Create(new Vector2(intialButtonPos.x + (Convert.ToInt32(IsRemodLoaded) * ButtonSize), intialButtonPos.y - (ButtonSize * 2f)),
