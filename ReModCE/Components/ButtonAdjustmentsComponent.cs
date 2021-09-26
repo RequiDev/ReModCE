@@ -55,7 +55,14 @@ namespace ReModCE.Components
             }
 
             var melonPrefs = TomlParser.ParseFile(Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg"));
-            _remodTomlTable = melonPrefs.GetSubTable("ReModCE");
+            try
+            {
+                _remodTomlTable = melonPrefs.GetSubTable("ReModCE");
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         public override void OnUiManagerInit(UiManager uiManager)
