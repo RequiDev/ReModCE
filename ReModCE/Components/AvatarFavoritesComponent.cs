@@ -102,7 +102,7 @@ namespace ReModCE.Components
                 CookieContainer = new CookieContainer()
             };
             _httpClient = new HttpClient(_httpClientHandler);
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/{(XRDevice.isPresent ? XRDevice.model : "Desktop")}.{Application.version} (Windows NT 10.0; Win64; x64)");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/{((XRDevice.isPresent ? XRDevice.model : "Desktop").Replace(' ', '_'))}.{Application.version} (Windows NT 10.0; Win64; x64)");
         }
 
         public override void OnUiManagerInit(UiManager uiManager)
