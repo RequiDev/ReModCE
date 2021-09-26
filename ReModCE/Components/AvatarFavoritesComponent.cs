@@ -366,7 +366,10 @@ namespace ReModCE.Components
         private void LoginToAPI(APIUser user, Action onLogin)
         {
             if (_loginRetries >= 3)
+            {
+                ReLogger.Error($"Could not login to ReModCE API: Exceeded retries. Please restart your game and make sure your pin is correct!");
                 return;
+            }
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"{ApiUrl}/login.php")
             {
@@ -377,12 +380,12 @@ namespace ReModCE.Components
                 })
             };
 
+            ++_loginRetries;
             _httpClient.SendAsync(request).ContinueWith(t =>
             {
                 var loginResponse = t.Result;
                 if (loginResponse.StatusCode == HttpStatusCode.Forbidden)
                 {
-                    ++_loginRetries;
                     loginResponse.Content.ReadAsStringAsync().ContinueWith(tsk =>
                     {
                         var errorMessage = JsonConvert.DeserializeObject<ApiError>(tsk.Result).Error;
@@ -390,7 +393,9 @@ namespace ReModCE.Components
                         ReLogger.Error($"Could not login to ReMod CE API: \"{errorMessage}\"");
                         MelonCoroutines.Start(ShowAlertDelayed($"Could not login to ReMod CE API\nReason: \"{errorMessage}\""));
                         File.Delete(PinPath);
+                        _pinCode = 0;
                     });
+                    return;
                 }
 
                 if (_pinCode != 0 && _enterPinButton != null)
