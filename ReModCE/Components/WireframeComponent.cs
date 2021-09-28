@@ -156,20 +156,20 @@ namespace ReModCE.Components
 
             if (WireframeIncludeDefault)
             {
-                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+                camera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
             }
             else
             {
-                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+                camera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
             }
 
             if (WireframeIncludePickups)
             {
-                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+                camera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
             }
             else
             {
-                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+                camera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
             }
 
             camera.nearClipPlane /= 4f;
