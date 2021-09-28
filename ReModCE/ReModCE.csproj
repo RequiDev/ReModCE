@@ -200,6 +200,7 @@
     <Compile Include="Components\PopupExComponent.cs" />
     <Compile Include="Components\AvatarHistoryComponent.cs" />
     <Compile Include="Components\ThirdPersonComponent.cs" />
+    <Compile Include="Components\WireframeComponent.cs" />
     <Compile Include="Core\ApiError.cs" />
     <Compile Include="Core\BinaryGZipSerializer.cs" />
     <Compile Include="Core\DynamicContractResolver.cs" />

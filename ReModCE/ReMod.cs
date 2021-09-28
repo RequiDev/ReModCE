@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using MelonLoader;
+using ReModCE.Components;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
@@ -31,6 +32,7 @@ namespace ReModCE
             ReLogger.Msg("Initializing...");
             
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
+            ClassInjector.RegisterTypeInIl2Cpp<WireframeEnabler>();
 
             SetIsOculus();
 

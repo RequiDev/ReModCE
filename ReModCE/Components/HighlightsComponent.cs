@@ -54,7 +54,7 @@ namespace ReModCE.Components
             _othersHighlights.highlightColor = OthersColor;
 
             var menu = uiManager.MainMenu.GetSubMenu("Visuals");
-            _espToggle = menu.AddToggle("ESP", "Enable ESP (Highlight players through walls)", b =>
+            _espToggle = menu.AddToggle("ESP/Highlights", "Enable ESP (Highlight players through walls)", b =>
             {
                 ESPEnabled.SetValue(b);
                 ToggleESP(b);

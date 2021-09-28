@@ -735,7 +735,11 @@ namespace ReModCE.Components
 
             foreach (var bone in bones)
             {
-                foreach (var collider in animator.GetBoneTransform(bone).GetComponentsInChildren<DynamicBoneCollider>(true))
+                var boneTransform = animator.GetBoneTransform(bone);
+                if (boneTransform == null)
+                    continue;
+
+                foreach (var collider in boneTransform.GetComponentsInChildren<DynamicBoneCollider>(true))
                 {
                     if (collider.m_Bound == DynamicBoneColliderBound.Inside)
                         continue;
