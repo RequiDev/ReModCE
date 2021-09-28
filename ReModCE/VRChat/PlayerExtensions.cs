@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using ReModCE.Core;
 using UnityEngine;
 using VRC;
 using VRC.Core;
@@ -71,15 +72,13 @@ namespace ReModCE.VRChat
             {
                 if (_reloadAvatarMethod == null)
                 {
-                    _reloadAvatarMethod = typeof(VRCPlayer).GetMethods().First(mi =>
-                        mi.Name.StartsWith("Method_Private_Void_Boolean_") && mi.Name.Length < 31 &&
-                        mi.GetParameters().Any(pi => pi.IsOptional));
+                    _reloadAvatarMethod = typeof(VRCPlayer).GetMethods().First(mi => mi.Name.StartsWith("Method_Private_Void_Boolean_") && mi.Name.Length < 31 && mi.GetParameters().Any(pi => pi.IsOptional) && XrefUtils.CheckUsedBy(mi, "ReloadAvatarNetworkedRPC"));
                 }
 
                 return _reloadAvatarMethod;
             }
         }
-        
+
         private static MethodInfo _reloadAllAvatarsMethod;
         private static MethodInfo ReloadAllAvatarsMethod
         {
@@ -87,7 +86,7 @@ namespace ReModCE.VRChat
             {
                 if (_reloadAllAvatarsMethod == null)
                 {
-                    _reloadAllAvatarsMethod = typeof(VRCPlayer).GetMethods().First(mi => mi.Name.StartsWith("Method_Public_Void_Boolean_") && mi.Name.Length < 30 && mi.GetParameters().Any(pi => pi.IsOptional));
+                    _reloadAllAvatarsMethod = typeof(VRCPlayer).GetMethods().First(mi => mi.Name.StartsWith("Method_Public_Void_Boolean_") && mi.Name.Length < 30 && mi.GetParameters().All(pi => pi.IsOptional) && XrefUtils.CheckUsedBy(mi, "Method_Public_Void_", typeof(FeaturePermissionManager)));// Both methods seem to do the same thing;
                 }
 
                 return _reloadAllAvatarsMethod;
@@ -97,6 +96,7 @@ namespace ReModCE.VRChat
         {
             LoadAvatarMethod.Invoke(instance, new object[] { true }); // parameter is forceLoad and has to be true
         }
+
         public static void ReloadAllAvatars(this VRCPlayer instance, bool ignoreSelf = false)
         {
             ReloadAllAvatarsMethod.Invoke(instance, new object[] { ignoreSelf });

@@ -211,6 +211,7 @@
     <Compile Include="Core\ReAvatar.cs" />
     <Compile Include="Core\TaskExtensions.cs" />
     <Compile Include="Core\ColorExtensions.cs" />
+    <Compile Include="Core\XrefUtils.cs" />
     <Compile Include="Managers\RiskyFunctionsManager.cs" />
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
