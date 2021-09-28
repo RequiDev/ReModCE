@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections;
+using MelonLoader;
 using ReModCE.Core;
 using ReModCE.Managers;
 using ReModCE.UI;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
+using Object = UnityEngine.Object;
 
 namespace ReModCE.Components
 {
@@ -28,6 +32,9 @@ namespace ReModCE.Components
         private ConfigValue<bool> WireframeEnabled;
         private ReQuickToggle _wireframeToggle;
 
+        private ConfigValue<bool> WireframeIncludePlayers;
+        private ReQuickToggle _includePlayersToggle;
+
         private ConfigValue<bool> WireframeIncludeSelf;
         private ReQuickToggle _includeSelfToggle;
 
@@ -44,6 +51,21 @@ namespace ReModCE.Components
             {
                 _wireframeToggle.Toggle(WireframeEnabled);
                 _wireframeCamera.enabled = WireframeEnabled;
+                _wireframeCamera.clearFlags = CameraClearFlags.Nothing;
+            };
+
+            WireframeIncludePlayers = new ConfigValue<bool>(nameof(WireframeIncludePlayers), true);
+            WireframeIncludePlayers.OnValueChanged += () =>
+            {
+                _includePlayersToggle.Toggle(WireframeIncludePlayers);
+                if (WireframeIncludePlayers)
+                {
+                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
+                }
+                else
+                {
+                    _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+                }
             };
 
             WireframeIncludeSelf = new ConfigValue<bool>(nameof(WireframeIncludeSelf), true);
@@ -60,7 +82,7 @@ namespace ReModCE.Components
                 }
             };
 
-            WireframeIncludeDefault = new ConfigValue<bool>(nameof(WireframeIncludeDefault), true);
+            WireframeIncludeDefault = new ConfigValue<bool>(nameof(WireframeIncludeDefault), false);
             WireframeIncludeDefault.OnValueChanged += () =>
             {
                 _includeWorldToggle.Toggle(WireframeIncludeDefault);
@@ -74,7 +96,7 @@ namespace ReModCE.Components
                 }
             };
 
-            WireframeIncludePickups = new ConfigValue<bool>(nameof(WireframeIncludePickups), true);
+            WireframeIncludePickups = new ConfigValue<bool>(nameof(WireframeIncludePickups), false);
             WireframeIncludePickups.OnValueChanged += () =>
             {
                 _includePickupsToggle.Toggle(WireframeIncludePickups);
@@ -104,10 +126,51 @@ namespace ReModCE.Components
 
             _wireframeCamera.enabled = WireframeEnabled;
             _wireframeCamera.gameObject.AddComponent<WireframeEnabler>();
+            _wireframeCamera.cullingMask = 0;
+
+            if (WireframeIncludePlayers)
+            {
+                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
+            }
+            else
+            {
+                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+            }
+
+            if (WireframeIncludeSelf)
+            {
+                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+            }
+            else
+            {
+                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+            }
+
+            if (WireframeIncludeDefault)
+            {
+                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+            }
+            else
+            {
+                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+            }
+
+            if (WireframeIncludePickups)
+            {
+                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+            }
+            else
+            {
+                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+            }
+
+            _wireframeCamera.clearFlags = CameraClearFlags.Nothing;
 
             var menu = uiManager.MainMenu.GetSubMenu("Visuals");
-            _wireframeToggle = menu.AddToggle("Wireframe", "Highlight players using wireframe.",
+            _wireframeToggle = menu.AddToggle("Wireframe", "Highlight objects using wireframe.",
                 WireframeEnabled.SetValue, WireframeEnabled);
+            _includePlayersToggle = menu.AddToggle("Include Players (Wireframe)", "Include players in wireframe ESP",
+                WireframeIncludePlayers.SetValue, WireframeIncludePlayers);
             _includeSelfToggle = menu.AddToggle("Include Self (Wireframe)", "Include yourself in wireframe ESP",
                 WireframeIncludeSelf.SetValue, WireframeIncludeSelf);
             _includeWorldToggle = menu.AddToggle("Include Default/World (Wireframe)", "Include default layer stuff like the world in wireframe ESP",
@@ -116,6 +179,29 @@ namespace ReModCE.Components
                 WireframeIncludePickups.SetValue, WireframeIncludePickups);
         }
 
+        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
+        {
+            if (_wireframeCamera == null)
+                return;
+
+            switch (buildIndex)
+            {
+                case 0:
+                case 1:
+                    break;
+                default:
+                    MelonCoroutines.Start(FixCameraDelayed());
+                    break;
+            }
+        }
+
+        private IEnumerator FixCameraDelayed()
+        {
+            yield return new WaitForSecondsRealtime(5f);
+
+            _wireframeCamera.clearFlags = CameraClearFlags.Nothing;
+            Object.DestroyImmediate(_wireframeCamera.GetComponent<PostProcessLayer>()); // make sure we don't double or PostProcessing
+        }
 
         private Camera CreateCamera()
         {
@@ -142,36 +228,6 @@ namespace ReModCE.Components
 
             var camera = cameraObject.AddComponent<Camera>();
             camera.fieldOfView = referenceCamera.fieldOfView;
-            camera.clearFlags = CameraClearFlags.Nothing;
-            camera.cullingMask = 1 << LayerMask.NameToLayer("Player");
-
-            if (WireframeIncludeSelf)
-            {
-                camera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
-            }
-            else
-            {
-                camera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
-            }
-
-            if (WireframeIncludeDefault)
-            {
-                camera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
-            }
-            else
-            {
-                camera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
-            }
-
-            if (WireframeIncludePickups)
-            {
-                camera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
-            }
-            else
-            {
-                camera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
-            }
-
             camera.nearClipPlane /= 4f;
 
             return camera;
