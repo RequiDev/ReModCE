@@ -109,11 +109,11 @@ namespace ReModCE.Components
 
             if (WireframeIncludeSelf)
             {
-                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+                camera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
             }
             else
             {
-                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                camera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
             }
             camera.nearClipPlane /= 4f;
 
