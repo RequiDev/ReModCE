@@ -52,7 +52,6 @@ namespace ReModCE.Components
                 {
                     _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
                 }
-                _wireframeCamera.enabled = WireframeEnabled;
             };
 
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
