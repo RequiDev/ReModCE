@@ -730,6 +730,9 @@ namespace ReModCE.Components
 
         private void AddBoneCollider(List<DynamicBoneCollider> list, Animator animator, List<HumanBodyBones> bones)
         {
+            if (animator == null)
+                return;
+
             if (!animator.isHuman)
                 return;
 
