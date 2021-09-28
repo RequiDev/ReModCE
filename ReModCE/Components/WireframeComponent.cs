@@ -4,8 +4,10 @@ using MelonLoader;
 using ReModCE.Core;
 using ReModCE.Managers;
 using ReModCE.UI;
+using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace ReModCE.Components
@@ -28,6 +30,7 @@ namespace ReModCE.Components
     internal class WireframeComponent : ModComponent
     {
         private Camera _wireframeCamera;
+        private Camera _originalCamera;
 
         private ConfigValue<bool> WireframeEnabled;
         private ReQuickToggle _wireframeToggle;
@@ -47,6 +50,12 @@ namespace ReModCE.Components
         private ConfigValue<bool> WireframeIncludePickups;
         private ReQuickToggle _includePickupsToggle;
 
+        private ConfigValue<float> WireframeRange;
+        private ReQuickButton _rangeButton;
+
+        private ConfigValue<bool> WireframeHideOriginalObjects;
+        private ReQuickToggle _hideOriginalObjectsToggle;
+
         public WireframeComponent()
         {
             WireframeEnabled = new ConfigValue<bool>(nameof(WireframeEnabled), false);
@@ -63,6 +72,56 @@ namespace ReModCE.Components
                 _wireframeCamera.clearFlags = WireframeIgnoreZ ? CameraClearFlags.Depth : CameraClearFlags.Nothing;
             };
 
+            WireframeHideOriginalObjects = new ConfigValue<bool>(nameof(WireframeHideOriginalObjects), false);
+            WireframeHideOriginalObjects.OnValueChanged += () =>
+            {
+                _hideOriginalObjectsToggle.Toggle(WireframeHideOriginalObjects);
+                if (!WireframeHideOriginalObjects)
+                {
+                    if (WireframeIncludePlayers)
+                    {
+                        _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
+                    }
+
+                    if (WireframeIncludeSelf)
+                    {
+                        _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+                    }
+
+                    if (WireframeIncludeDefault)
+                    {
+                        _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+                    }
+
+                    if (WireframeIncludePickups)
+                    {
+                        _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+                    }
+                }
+                else
+                {
+                    if (WireframeIncludePlayers)
+                    {
+                        _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+                    }
+
+                    if (WireframeIncludeSelf)
+                    {
+                        _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                    }
+
+                    if (WireframeIncludeDefault)
+                    {
+                        _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+                    }
+
+                    if (WireframeIncludePickups)
+                    {
+                        _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+                    }
+                }
+            };
+
             WireframeIncludePlayers = new ConfigValue<bool>(nameof(WireframeIncludePlayers), true);
             WireframeIncludePlayers.OnValueChanged += () =>
             {
@@ -70,10 +129,18 @@ namespace ReModCE.Components
                 if (WireframeIncludePlayers)
                 {
                     _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
+                    if (WireframeHideOriginalObjects)
+                    {
+                        _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+                    }
                 }
                 else
                 {
                     _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+                    if (WireframeHideOriginalObjects)
+                    {
+                        _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
+                    }
                 }
             };
 
@@ -84,10 +151,18 @@ namespace ReModCE.Components
                 if (WireframeIncludeSelf)
                 {
                     _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+                    if (WireframeHideOriginalObjects)
+                    {
+                        _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                    }
                 }
                 else
                 {
                     _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                    if (WireframeHideOriginalObjects)
+                    {
+                        _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+                    }
                 }
             };
 
@@ -98,10 +173,18 @@ namespace ReModCE.Components
                 if (WireframeIncludeDefault)
                 {
                     _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+                    if (WireframeHideOriginalObjects)
+                    {
+                        _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+                    }
                 }
                 else
                 {
                     _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+                    if (WireframeHideOriginalObjects)
+                    {
+                        _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+                    }
                 }
             };
 
@@ -112,11 +195,26 @@ namespace ReModCE.Components
                 if (WireframeIncludePickups)
                 {
                     _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+                    if (WireframeHideOriginalObjects)
+                    {
+                        _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+                    }
                 }
                 else
                 {
                     _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+                    if (WireframeHideOriginalObjects)
+                    {
+                        _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+                    }
                 }
+            };
+
+            WireframeRange = new ConfigValue<float>(nameof(WireframeRange), 100f);
+            WireframeRange.OnValueChanged += () =>
+            {
+                _rangeButton.Text = $"Range: {WireframeRange}";
+                _wireframeCamera.farClipPlane = WireframeRange;
             };
 
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
@@ -174,20 +272,44 @@ namespace ReModCE.Components
             }
 
             _wireframeCamera.clearFlags = WireframeIgnoreZ ? CameraClearFlags.Depth : CameraClearFlags.Nothing;
-            
-            var subMenu = uiManager.MainMenu.GetSubMenu("Visuals").AddSubMenu("Wireframe", "Access wireframe settings");
-            _wireframeToggle = subMenu.AddToggle("Enable", "Highlight objects using wireframe.",
+            _wireframeCamera.farClipPlane = WireframeRange;
+
+            var menu = uiManager.MainMenu.GetSubMenu("Visuals").AddSubMenu("Wireframe", "Access wireframe settings");
+            _wireframeToggle = menu.AddToggle("Enable", "Highlight objects using wireframe.",
                 WireframeEnabled.SetValue, WireframeEnabled);
-            _wireframeIgnoreZToggle = subMenu.AddToggle("Ignore Z", "Enable/Disable Ignore Z (Visible through walls)",
+
+            _rangeButton = menu.AddButton($"Range: {WireframeRange}",
+                "Set the range on when wireframe starts rendering",
+                () =>
+                {
+                    VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Set wireframe range",
+                        $"{WireframeRange}", InputField.InputType.Standard, false, "Submit",
+                        (s, k, t) =>
+                        {
+                            if (string.IsNullOrEmpty(s))
+                                return;
+
+                            if (!float.TryParse(s, out var range))
+                                return;
+
+                            WireframeRange.SetValue(range);
+                        }, null);
+                });
+
+            _hideOriginalObjectsToggle = menu.AddToggle("Hide Original", "Hide original meshes so only the wireframe shows",
+                    WireframeHideOriginalObjects.SetValue, WireframeHideOriginalObjects);
+
+                _wireframeIgnoreZToggle = menu.AddToggle("Ignore Z", "Enable/Disable Ignore Z (Visible through walls)",
                 WireframeIgnoreZ.SetValue, WireframeIgnoreZ);
-            _includePlayersToggle = subMenu.AddToggle("Include Players", "Include players in wireframe ESP",
+            _includePlayersToggle = menu.AddToggle("Include Players", "Include players in wireframe ESP",
                 WireframeIncludePlayers.SetValue, WireframeIncludePlayers);
-            _includeSelfToggle = subMenu.AddToggle("Include Self", "Include yourself in wireframe ESP",
+            _includeSelfToggle = menu.AddToggle("Include Self", "Include yourself in wireframe ESP",
                 WireframeIncludeSelf.SetValue, WireframeIncludeSelf);
-            _includeWorldToggle = subMenu.AddToggle("Include Default/World", "Include default layer stuff like the world in wireframe ESP",
+            _includeWorldToggle = menu.AddToggle("Include Default/World", "Include default layer stuff like the world in wireframe ESP",
                 WireframeIncludeDefault.SetValue, WireframeIncludeDefault);
-            _includePickupsToggle = subMenu.AddToggle("Include Pickups", "Include pickups in wireframe ESP",
+            _includePickupsToggle = menu.AddToggle("Include Pickups", "Include pickups in wireframe ESP",
                 WireframeIncludePickups.SetValue, WireframeIncludePickups);
+
         }
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
@@ -211,7 +333,31 @@ namespace ReModCE.Components
             yield return new WaitForSecondsRealtime(5f);
 
             _wireframeCamera.clearFlags = WireframeIgnoreZ ? CameraClearFlags.Depth : CameraClearFlags.Nothing;
+            _wireframeCamera.farClipPlane = WireframeRange;
             Object.DestroyImmediate(_wireframeCamera.GetComponent<PostProcessLayer>()); // make sure we don't double or PostProcessing
+
+            if (WireframeHideOriginalObjects)
+            {
+                if (WireframeIncludePlayers)
+                {
+                    _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+                }
+
+                if (WireframeIncludeSelf)
+                {
+                    _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                }
+
+                if (WireframeIncludeDefault)
+                {
+                    _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+                }
+
+                if (WireframeIncludePickups)
+                {
+                    _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+                }
+            }
         }
 
         private Camera CreateCamera()
@@ -227,18 +373,18 @@ namespace ReModCE.Components
                 }
             }
 
-            var referenceCamera = refCam.GetComponent<Camera>();
-            if (referenceCamera == null)
+            _originalCamera = refCam.GetComponent<Camera>();
+            if (_originalCamera == null)
                 return null;
 
             var cameraObject = new GameObject($"WireframeCamera");
-            cameraObject.transform.localScale = referenceCamera.transform.localScale;
-            cameraObject.transform.parent = referenceCamera.transform;
-            cameraObject.transform.rotation = referenceCamera.transform.rotation;
-            cameraObject.transform.position = referenceCamera.transform.position;
+            cameraObject.transform.localScale = _originalCamera.transform.localScale;
+            cameraObject.transform.parent = _originalCamera.transform;
+            cameraObject.transform.rotation = _originalCamera.transform.rotation;
+            cameraObject.transform.position = _originalCamera.transform.position;
 
             var camera = cameraObject.AddComponent<Camera>();
-            camera.fieldOfView = referenceCamera.fieldOfView;
+            camera.fieldOfView = _originalCamera.fieldOfView;
             camera.nearClipPlane /= 4f;
 
             return camera;
