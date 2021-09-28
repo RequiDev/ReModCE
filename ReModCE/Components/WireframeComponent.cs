@@ -28,6 +28,9 @@ namespace ReModCE.Components
         private ConfigValue<bool> WireframeEnabled;
         private ReQuickToggle _wireframeToggle;
 
+        private ConfigValue<bool> WireframeIncludeSelf;
+        private ReQuickToggle _includeSelfToggle;
+
         public WireframeComponent()
         {
             WireframeEnabled = new ConfigValue<bool>(nameof(WireframeEnabled), false);
@@ -35,13 +38,28 @@ namespace ReModCE.Components
             {
                 _wireframeToggle.Toggle(WireframeEnabled);
                 _wireframeCamera.enabled = WireframeEnabled;
+            };
 
-                RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
+            WireframeIncludeSelf = new ConfigValue<bool>(nameof(WireframeIncludeSelf), true);
+            WireframeIncludeSelf.OnValueChanged += () =>
+            {
+                _includeSelfToggle.Toggle(WireframeIncludeSelf);
+                if (WireframeIncludeSelf)
                 {
-                    _wireframeToggle.Interactable = allowed;
-                    if (!allowed)
-                        WireframeEnabled.SetValue(false);
-                };
+                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+                }
+                else
+                {
+                    _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                }
+                _wireframeCamera.enabled = WireframeEnabled;
+            };
+
+            RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
+            {
+                _wireframeToggle.Interactable = allowed;
+                if (!allowed)
+                    WireframeEnabled.SetValue(false);
             };
         }
 
@@ -57,10 +75,12 @@ namespace ReModCE.Components
             var menu = uiManager.MainMenu.GetSubMenu("Visuals");
             _wireframeToggle = menu.AddToggle("Wireframe", "Highlight players using wireframe.",
                 WireframeEnabled.SetValue, WireframeEnabled);
+            _includeSelfToggle = menu.AddToggle("Include Self (Wireframe)", "Include yourself in wireframe ESP",
+                WireframeIncludeSelf.SetValue, WireframeIncludeSelf);
         }
 
 
-        private static Camera CreateCamera()
+        private Camera CreateCamera()
         {
             var refCam = GameObject.Find("Camera (eye)");
             if (refCam == null)
@@ -87,6 +107,15 @@ namespace ReModCE.Components
             camera.fieldOfView = referenceCamera.fieldOfView;
             camera.clearFlags = CameraClearFlags.Nothing;
             camera.cullingMask = 1 << LayerMask.NameToLayer("Player");
+
+            if (WireframeIncludeSelf)
+            {
+                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+            }
+            else
+            {
+                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+            }
             camera.nearClipPlane /= 4f;
 
             return camera;
