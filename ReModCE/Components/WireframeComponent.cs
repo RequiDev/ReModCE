@@ -32,6 +32,9 @@ namespace ReModCE.Components
         private ConfigValue<bool> WireframeEnabled;
         private ReQuickToggle _wireframeToggle;
 
+        private ConfigValue<bool> WireframeIgnoreZ;
+        private ReQuickToggle _wireframeIgnoreZToggle;
+
         private ConfigValue<bool> WireframeIncludePlayers;
         private ReQuickToggle _includePlayersToggle;
 
@@ -51,7 +54,13 @@ namespace ReModCE.Components
             {
                 _wireframeToggle.Toggle(WireframeEnabled);
                 _wireframeCamera.enabled = WireframeEnabled;
-                _wireframeCamera.clearFlags = CameraClearFlags.Nothing;
+            };
+
+            WireframeIgnoreZ = new ConfigValue<bool>(nameof(WireframeIgnoreZ), true);
+            WireframeIgnoreZ.OnValueChanged += () =>
+            {
+                _wireframeIgnoreZToggle.Toggle(WireframeIgnoreZ);
+                _wireframeCamera.clearFlags = WireframeIgnoreZ ? CameraClearFlags.Depth : CameraClearFlags.Nothing;
             };
 
             WireframeIncludePlayers = new ConfigValue<bool>(nameof(WireframeIncludePlayers), true);
@@ -164,18 +173,20 @@ namespace ReModCE.Components
                 _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
             }
 
-            _wireframeCamera.clearFlags = CameraClearFlags.Nothing;
-
-            var menu = uiManager.MainMenu.GetSubMenu("Visuals");
-            _wireframeToggle = menu.AddToggle("Wireframe", "Highlight objects using wireframe.",
+            _wireframeCamera.clearFlags = WireframeIgnoreZ ? CameraClearFlags.Depth : CameraClearFlags.Nothing;
+            
+            var subMenu = uiManager.MainMenu.GetSubMenu("Visuals").AddSubMenu("Wireframe", "Access wireframe settings");
+            _wireframeToggle = subMenu.AddToggle("Enable", "Highlight objects using wireframe.",
                 WireframeEnabled.SetValue, WireframeEnabled);
-            _includePlayersToggle = menu.AddToggle("Include Players (Wireframe)", "Include players in wireframe ESP",
+            _wireframeIgnoreZToggle = subMenu.AddToggle("Ignore Z", "Enable/Disable Ignore Z (Visible through walls)",
+                WireframeIgnoreZ.SetValue, WireframeIgnoreZ);
+            _includePlayersToggle = subMenu.AddToggle("Include Players", "Include players in wireframe ESP",
                 WireframeIncludePlayers.SetValue, WireframeIncludePlayers);
-            _includeSelfToggle = menu.AddToggle("Include Self (Wireframe)", "Include yourself in wireframe ESP",
+            _includeSelfToggle = subMenu.AddToggle("Include Self", "Include yourself in wireframe ESP",
                 WireframeIncludeSelf.SetValue, WireframeIncludeSelf);
-            _includeWorldToggle = menu.AddToggle("Include Default/World (Wireframe)", "Include default layer stuff like the world in wireframe ESP",
+            _includeWorldToggle = subMenu.AddToggle("Include Default/World", "Include default layer stuff like the world in wireframe ESP",
                 WireframeIncludeDefault.SetValue, WireframeIncludeDefault);
-            _includePickupsToggle = menu.AddToggle("Include Pickups (Wireframe)", "Include pickups in wireframe ESP",
+            _includePickupsToggle = subMenu.AddToggle("Include Pickups", "Include pickups in wireframe ESP",
                 WireframeIncludePickups.SetValue, WireframeIncludePickups);
         }
 
@@ -199,7 +210,7 @@ namespace ReModCE.Components
         {
             yield return new WaitForSecondsRealtime(5f);
 
-            _wireframeCamera.clearFlags = CameraClearFlags.Nothing;
+            _wireframeCamera.clearFlags = WireframeIgnoreZ ? CameraClearFlags.Depth : CameraClearFlags.Nothing;
             Object.DestroyImmediate(_wireframeCamera.GetComponent<PostProcessLayer>()); // make sure we don't double or PostProcessing
         }
 
