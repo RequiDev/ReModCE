@@ -31,6 +31,12 @@ namespace ReModCE.Components
         private ConfigValue<bool> WireframeIncludeSelf;
         private ReQuickToggle _includeSelfToggle;
 
+        private ConfigValue<bool> WireframeIncludeDefault;
+        private ReQuickToggle _includeWorldToggle;
+
+        private ConfigValue<bool> WireframeIncludePickups;
+        private ReQuickToggle _includePickupsToggle;
+
         public WireframeComponent()
         {
             WireframeEnabled = new ConfigValue<bool>(nameof(WireframeEnabled), false);
@@ -51,6 +57,34 @@ namespace ReModCE.Components
                 else
                 {
                     _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                }
+            };
+
+            WireframeIncludeDefault = new ConfigValue<bool>(nameof(WireframeIncludeDefault), true);
+            WireframeIncludeDefault.OnValueChanged += () =>
+            {
+                _includeWorldToggle.Toggle(WireframeIncludeDefault);
+                if (WireframeIncludeDefault)
+                {
+                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+                }
+                else
+                {
+                    _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+                }
+            };
+
+            WireframeIncludePickups = new ConfigValue<bool>(nameof(WireframeIncludePickups), true);
+            WireframeIncludePickups.OnValueChanged += () =>
+            {
+                _includePickupsToggle.Toggle(WireframeIncludePickups);
+                if (WireframeIncludePickups)
+                {
+                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+                }
+                else
+                {
+                    _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
                 }
             };
 
@@ -76,6 +110,10 @@ namespace ReModCE.Components
                 WireframeEnabled.SetValue, WireframeEnabled);
             _includeSelfToggle = menu.AddToggle("Include Self (Wireframe)", "Include yourself in wireframe ESP",
                 WireframeIncludeSelf.SetValue, WireframeIncludeSelf);
+            _includeWorldToggle = menu.AddToggle("Include Default/World (Wireframe)", "Include default layer stuff like the world in wireframe ESP",
+                WireframeIncludeDefault.SetValue, WireframeIncludeDefault);
+            _includePickupsToggle = menu.AddToggle("Include Pickups (Wireframe)", "Include pickups in wireframe ESP",
+                WireframeIncludePickups.SetValue, WireframeIncludePickups);
         }
 
 
@@ -115,6 +153,25 @@ namespace ReModCE.Components
             {
                 camera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
             }
+
+            if (WireframeIncludeDefault)
+            {
+                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+            }
+            else
+            {
+                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+            }
+
+            if (WireframeIncludePickups)
+            {
+                _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+            }
+            else
+            {
+                _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+            }
+
             camera.nearClipPlane /= 4f;
 
             return camera;
