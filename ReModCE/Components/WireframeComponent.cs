@@ -66,28 +66,34 @@ namespace ReModCE.Components
 
                 if (!WireframeEnabled)
                 {
-                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
-                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
-                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
-                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+                    _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
+                    _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+                    _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+                    _originalCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
                 }
                 else
                 {
-                    if (!WireframeIncludePlayers)
+                    if (WireframeHideOriginalObjects)
                     {
-                        _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
-                    }
-                    if (!WireframeIncludeSelf)
-                    {
-                        _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
-                    }
-                    if (!WireframeIncludeDefault)
-                    {
-                        _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
-                    }
-                    if (!WireframeIncludePickups)
-                    {
-                        _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+                        if (WireframeIncludePlayers)
+                        {
+                            _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+                        }
+
+                        if (WireframeIncludeSelf)
+                        {
+                            _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                        }
+
+                        if (WireframeIncludeDefault)
+                        {
+                            _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+                        }
+
+                        if (WireframeIncludePickups)
+                        {
+                            _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+                        }
                     }
                 }
             };
