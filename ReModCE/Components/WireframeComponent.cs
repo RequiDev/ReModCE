@@ -63,6 +63,33 @@ namespace ReModCE.Components
             {
                 _wireframeToggle.Toggle(WireframeEnabled);
                 _wireframeCamera.enabled = WireframeEnabled;
+
+                if (!WireframeEnabled)
+                {
+                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
+                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
+                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
+                    _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
+                }
+                else
+                {
+                    if (!WireframeIncludePlayers)
+                    {
+                        _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+                    }
+                    if (!WireframeIncludeSelf)
+                    {
+                        _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
+                    }
+                    if (!WireframeIncludeDefault)
+                    {
+                        _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+                    }
+                    if (!WireframeIncludePickups)
+                    {
+                        _wireframeCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
+                    }
+                }
             };
 
             WireframeIgnoreZ = new ConfigValue<bool>(nameof(WireframeIgnoreZ), true);
