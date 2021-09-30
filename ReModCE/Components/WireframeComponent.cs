@@ -150,7 +150,7 @@ namespace ReModCE.Components
                 if (WireframeIncludePlayers)
                 {
                     _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Player");
-                    if (WireframeHideOriginalObjects)
+                    if (WireframeHideOriginalObjects && WireframeEnabled)
                     {
                         _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
                     }
@@ -172,7 +172,7 @@ namespace ReModCE.Components
                 if (WireframeIncludeSelf)
                 {
                     _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("PlayerLocal");
-                    if (WireframeHideOriginalObjects)
+                    if (WireframeHideOriginalObjects && WireframeEnabled)
                     {
                         _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerLocal"));
                     }
@@ -194,7 +194,7 @@ namespace ReModCE.Components
                 if (WireframeIncludeDefault)
                 {
                     _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Default");
-                    if (WireframeHideOriginalObjects)
+                    if (WireframeHideOriginalObjects && WireframeEnabled)
                     {
                         _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
                     }
@@ -216,7 +216,7 @@ namespace ReModCE.Components
                 if (WireframeIncludePickups)
                 {
                     _wireframeCamera.cullingMask |= 1 << LayerMask.NameToLayer("Pickup");
-                    if (WireframeHideOriginalObjects)
+                    if (WireframeHideOriginalObjects && WireframeEnabled)
                     {
                         _originalCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("Pickup"));
                     }
