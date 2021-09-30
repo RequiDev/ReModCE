@@ -388,7 +388,7 @@ namespace ReModCE.Components
             _httpClient.SendAsync(request).ContinueWith(t =>
             {
                 var loginResponse = t.Result;
-                if (loginResponse.StatusCode == HttpStatusCode.Forbidden)
+                if (!loginResponse.IsSuccessStatusCode)
                 {
                     loginResponse.Content.ReadAsStringAsync().ContinueWith(tsk =>
                     {
@@ -396,20 +396,29 @@ namespace ReModCE.Components
 
                         ReLogger.Error($"Could not login to ReMod CE API: \"{errorMessage}\"");
                         MelonCoroutines.Start(ShowAlertDelayed($"Could not login to ReMod CE API\nReason: \"{errorMessage}\""));
-                        File.Delete(PinPath);
-                        _pinCode = 0;
+
+                        switch (loginResponse.StatusCode)
+                        {
+                            case HttpStatusCode.Forbidden:
+                                File.Delete(PinPath);
+                                _pinCode = 0;
+                                break;
+                            default:
+                                break;
+                        }
                     });
-                    return;
                 }
-
-                if (_pinCode != 0 && _enterPinButton != null)
+                else
                 {
-                    _enterPinButton.Interactable = false;
+                    if (_pinCode != 0 && _enterPinButton != null)
+                    {
+                        _enterPinButton.Interactable = false;
+                    }
+
+                    _loginRetries = 0;
+
+                    onLogin();
                 }
-
-                _loginRetries = 0;
-
-                onLogin();
             });
         }
 
