@@ -357,7 +357,7 @@ namespace ReModCE.Components
             _wireframeCamera.farClipPlane = WireframeRange;
             Object.DestroyImmediate(_wireframeCamera.GetComponent<PostProcessLayer>()); // make sure we don't double or PostProcessing
 
-            if (WireframeHideOriginalObjects)
+            if (WireframeEnabled && WireframeHideOriginalObjects)
             {
                 if (WireframeIncludePlayers)
                 {
