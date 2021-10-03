@@ -401,6 +401,7 @@ namespace ReModCE.Components
             var camera = cameraObject.AddComponent<Camera>();
             camera.fieldOfView = _originalCamera.fieldOfView;
             camera.nearClipPlane /= 4f;
+            camera.cameraType = _originalCamera.cameraType;
 
             return camera;
         }
