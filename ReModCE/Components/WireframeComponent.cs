@@ -383,18 +383,12 @@ namespace ReModCE.Components
 
         private Camera CreateCamera()
         {
-            var refCam = GameObject.Find("Camera (eye)");
-            if (refCam == null)
-            {
-                refCam = GameObject.Find("CenterEyeAnchor");
+            var vrCamera = VRCVrCamera.field_Private_Static_VRCVrCamera_0;
+            if (!vrCamera)
+                return null;
 
-                if (refCam == null)
-                {
-                    return null;
-                }
-            }
+            _originalCamera = vrCamera.field_Public_Camera_0;
 
-            _originalCamera = refCam.GetComponent<Camera>();
             if (_originalCamera == null)
                 return null;
 
