@@ -395,8 +395,8 @@ namespace ReModCE.Components
             var cameraObject = new GameObject($"WireframeCamera");
             cameraObject.transform.localScale = _originalCamera.transform.localScale;
             cameraObject.transform.parent = _originalCamera.transform;
-            cameraObject.transform.rotation = _originalCamera.transform.rotation;
-            cameraObject.transform.position = _originalCamera.transform.position;
+            cameraObject.transform.localRotation = Quaternion.identity;
+            cameraObject.transform.localPosition = Vector3.zero;
 
             var camera = cameraObject.AddComponent<Camera>();
             camera.fieldOfView = _originalCamera.fieldOfView;
