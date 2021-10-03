@@ -331,6 +331,9 @@ namespace ReModCE.Components
 
         private void ChangeAvatarChecked()
         {
+            if (!AvatarFavoritesEnabled)
+                return;
+
             var currentAvatar = _favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0;
             if (!HasAvatarFavorited(currentAvatar.id)) // this isn't in our list. we don't care about it
             {
