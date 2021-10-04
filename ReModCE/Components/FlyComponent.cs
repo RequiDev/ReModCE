@@ -111,7 +111,6 @@ namespace ReModCE.Components
             {
                 if (_blacklistedComponents.Any(comp => collider.GetComponent(comp) != null))
                 {
-                    collider.enabled = true;
                     continue;
                 }
 
