@@ -163,13 +163,11 @@ namespace ReModCE.Components
                 _favoriteAvatarList.GameObject.SetActive(AvatarFavoritesEnabled);
             };
 
-            var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent;
-            if (AvatarFavoritesEnabled)
-            {
-                _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f),
-                    () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
-                    parent);
-            }
+            var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent; 
+            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f),
+                () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
+                parent);
+            _favoriteButton.GameObject.SetActive(AvatarFavoritesEnabled);
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
             if (changeButton != null)
