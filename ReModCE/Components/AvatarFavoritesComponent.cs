@@ -49,7 +49,6 @@ namespace ReModCE.Components
 
         private List<ReAvatar> _savedAvatars;
         private readonly AvatarList _searchedAvatars;
-        private readonly List<ReAvatar> _localAvatars;
 
         private GameObject _avatarScreen;
         private UiInputField _searchBox;
@@ -86,11 +85,6 @@ namespace ReModCE.Components
                 {
                     ReLogger.Warning($"Couldn't read pin file from \"{PinPath}\". File might be corrupted.");
                 }
-            }
-
-            if (File.Exists("UserData/ReModCE/avatars.bin"))
-            {
-                _localAvatars = BinaryGZipSerializer.Deserialize("UserData/ReModCE/avatars.bin") as List<ReAvatar>;
             }
         }
 
@@ -170,8 +164,12 @@ namespace ReModCE.Components
             };
 
             var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent;
-            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f), () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
-                parent);
+            if (AvatarFavoritesEnabled)
+            {
+                _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f),
+                    () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
+                    parent);
+            }
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
             if (changeButton != null)
@@ -195,21 +193,6 @@ namespace ReModCE.Components
 
             _avatarScreen = GameObject.Find("UserInterface/MenuContent/Screens/Avatar");
             _searchBox = GameObject.Find("UserInterface/MenuContent/Backdrop/Header/Tabs/ViewPort/Content/Search/InputField").GetComponent<UiInputField>();
-
-            if (_localAvatars != null && _localAvatars.Count > 0)
-            {
-                var button = new ReUiButton($"Transfer {_localAvatars.Count}", new Vector2(165f, 375f), new Vector2(0.5f, 1f), () =>
-                {
-                    foreach (var avi in _localAvatars)
-                    {
-                        FavoriteAvatar(avi.AsApiAvatar());
-                    }
-
-                    File.Move("UserData/ReModCE/avatars.bin", "UserData/ReModCE/avatars_old.bin");
-
-                    FetchAvatars();
-                }, parent);
-            }
 
             MelonCoroutines.Start(LoginToAPICoroutine());
         }
@@ -320,7 +303,7 @@ namespace ReModCE.Components
             yield return new WaitForEndOfFrame();
 
             _searchedAvatars.Clear();
-            foreach (var avi in results.Select(x => x.AsApiAvatar()).ToList())
+            foreach (var avi in results.Select(x => x.AsApiAvatar()))
             {
                 _searchedAvatars.Add(avi);
             }
