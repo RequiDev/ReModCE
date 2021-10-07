@@ -103,8 +103,17 @@ namespace ReModCE.Components
                 CreateUiForButton(button.gameObject, text.text);
             }
 
-            CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", allowDisable: false, allowSize: false); // 
-            CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, allowDisable: false, allowSize: false);
+            if (ExtendedQuickMenu.UserIconCameraButton != null)
+            {
+                CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button",
+                    allowDisable: false, allowSize: false);
+            }
+
+            if (ExtendedQuickMenu.VRCPlusPet == null)
+            {
+                CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, allowDisable: false,
+                    allowSize: false);
+            }
 
             if (!File.Exists("UserData/ReModCE/adjusted_buttons.json"))
             {
