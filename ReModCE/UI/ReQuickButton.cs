@@ -30,7 +30,7 @@ namespace ReModCE.UI
             set => _buttonComponent.interactable = value;
         }
 
-        public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(ExtendedQuickMenu.ReportWorldButton.gameObject, parent, pos, $"{text}Button")
+        public ReQuickButton(Vector2 pos, string text, string tooltip, Action onClick, Transform parent = null) : base(ExtendedQuickMenu.QuickButtonPrefab.gameObject, parent, pos, $"{text}Button")
         {
             Object.DestroyImmediate(RectTransform.Find("CLIcon").gameObject);
 

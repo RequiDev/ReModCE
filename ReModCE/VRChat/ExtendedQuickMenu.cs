@@ -25,6 +25,8 @@ namespace ReModCE.VRChat
 
         private static FieldInfo _fiCurrentPage;
 
+        private static Transform _quickButtonPrefab;
+
         public static Transform ShortcutMenu
         {
             get
@@ -95,6 +97,20 @@ namespace ReModCE.VRChat
                 return _reportWorldButton;
             }
         }
+
+        public static Transform QuickButtonPrefab
+        {
+            get
+            {
+                if (_quickButtonPrefab == null)
+                {
+                    _quickButtonPrefab = Object.Instantiate(ReportWorldButton.gameObject).transform;
+                }
+
+                return _quickButtonPrefab;
+            }
+        }
+
         public static Transform VRCPlusPet
         {
             get
@@ -106,6 +122,7 @@ namespace ReModCE.VRChat
                 return _vrcPlusPet;
             }
         }
+
         public static Transform UserIconCameraButton
         {
             get

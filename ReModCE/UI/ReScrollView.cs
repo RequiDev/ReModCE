@@ -13,7 +13,7 @@ namespace ReModCE.UI
         private readonly RectTransform _textTransform;
         private readonly RectTransform _contentTransform;
 
-        public ReScrollView(string name, Vector2 pos, Transform parent) : base(ExtendedQuickMenu.ReportWorldButton.gameObject, parent, pos, $"ScrollView{name}")
+        public ReScrollView(string name, Vector2 pos, Transform parent) : base(ExtendedQuickMenu.QuickButtonPrefab.gameObject, parent, pos, $"ScrollView{name}")
         {
             Object.DestroyImmediate(GameObject.GetComponentsInChildren<Image>(true).First(a => a.transform != GameObject.transform));
             Object.DestroyImmediate(GameObject.GetComponent<UiTooltip>());
