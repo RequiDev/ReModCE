@@ -109,7 +109,7 @@ namespace ReModCE.Components
                     allowDisable: false, allowSize: false);
             }
 
-            if (ExtendedQuickMenu.VRCPlusPet == null)
+            if (ExtendedQuickMenu.VRCPlusPet != null)
             {
                 CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, allowDisable: false,
                     allowSize: false);
