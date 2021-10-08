@@ -90,28 +90,36 @@ namespace ReModCE.Components
                 if (name == "DevToolsButton") continue;
                 if (name.StartsWith("SingleButton")) continue;
 
-                var texts = button.gameObject.GetComponentsInDirectChildren<Text>();
-                if (texts == null || texts.Length == 0)
+                var uiToggleButton = button.gameObject.GetComponentInChildren<UiToggleButton>();
+                if (uiToggleButton != null)
                 {
-                    continue;
+                    var text = uiToggleButton.gameObject.name.Replace("Toggle_States_", "").Replace("_", " ");
+                    CreateUiForButton(button.gameObject, text, button);
                 }
+                else
+                {
+                    var texts = button.gameObject.GetComponentsInDirectChildren<Text>();
+                    if (texts == null || texts.Length == 0)
+                    {
+                        continue;
+                    }
 
-                var text = texts[0];
-                if (text.text.Length == 0)
-                    continue;
+                    var text = texts[0];
+                    if (text.text.Length == 0)
+                        continue;
 
-                CreateUiForButton(button.gameObject, text.text);
+                    CreateUiForButton(button.gameObject, text.text, button);
+                }
             }
-
+            
             if (ExtendedQuickMenu.UserIconCameraButton != null)
             {
-                CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button",
-                    allowDisable: false, allowSize: false);
+                CreateUiForButton(ExtendedQuickMenu.UserIconCameraButton.gameObject, "Camera Icon Button", ExtendedQuickMenu.UserIconCameraButton.GetComponent<Button>(), allowSize: false);
             }
 
             if (ExtendedQuickMenu.VRCPlusPet != null)
             {
-                CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet", false, allowDisable: false,
+                CreateUiForButton(ExtendedQuickMenu.VRCPlusPet.gameObject, "VRC+ Pet",
                     allowSize: false);
             }
 
@@ -147,7 +155,7 @@ namespace ReModCE.Components
             }
         }
 
-        private void CreateUiForButton(GameObject gameObject, string name, bool hasButton = true, bool allowDisable = true, bool allowMove = true, bool allowSize = true)
+        private void CreateUiForButton(GameObject gameObject, string name, Button button = null, bool allowDisable = true, bool allowMove = true, bool allowSize = true)
         {
             AdjustedButton adjustedButton;
             if (_adjustButtonConfig.ContainsKey(gameObject.name))
@@ -176,13 +184,13 @@ namespace ReModCE.Components
                     b =>
                     {
                         adjustedButton.Active = b;
-                        gameObject.SetActive(b);
+                        gameObject.transform.localScale = adjustedButton.Active ? Vector3.one : Vector3.zero;
                         SaveButtonAdjustments();
                     }, adjustedButton.Active);
 
                 if (adjustedButton.Active != gameObject.gameObject.activeSelf)
                 {
-                    gameObject.SetActive(adjustedButton.Active);
+                    gameObject.transform.localScale = adjustedButton.Active ? Vector3.one : Vector3.zero;
                 }
             }
 
@@ -193,10 +201,11 @@ namespace ReModCE.Components
                     if (!_canMoveButtons) return;
                     if (_movingButton) return;
 
+                    var hasButton = button != null;
                     if (hasButton)
                     {
-                        _originalButtonClickedEvent = gameObject.GetComponent<Button>().onClick;
-                        gameObject.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+                        _originalButtonClickedEvent = button.onClick;
+                        button.onClick = new Button.ButtonClickedEvent();
                     }
 
                     _movingButton = true;
@@ -207,7 +216,7 @@ namespace ReModCE.Components
                     {
                         if (hasButton)
                         {
-                            gameObject.GetComponent<Button>().onClick = _originalButtonClickedEvent;
+                            button.onClick = _originalButtonClickedEvent;
                         }
 
                         adjustedButton.Position = gameObject.transform.localPosition;
