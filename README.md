@@ -29,8 +29,6 @@ In case you want to update you can always grab the latest and even previous vers
 * ESP/Player Highlighting (Not usable in Game/Club worlds)
 * Wireframe ESP (Players, Pickups, World) (Not usable in Game/Club worlds)
 * Third Person (Not usable in Game/Club worlds)
-* Button Adjustment Component. Disable, Move or Resize any button in your quickmenu.
-* Ingame Log that will show you anything that ReMod CE will log. At the moment it's a bit unstable (a lot of text will break it) and only supports ReMod CE. More options to come!
 * Small UI adjustments like adding a "Paste" button to input popups.
 * FBT Calibration Saver as already seen at [RequiDev/FBTSaver](https://github.com/RequiDev/FBTSaver)
 
