@@ -30,6 +30,8 @@ namespace ReModCE.UI
             }
         }
 
+        private static int SiblingIndex => ExtendedQuickMenu.Instance.container.Find("Window/QMParent/Modal_AddMessage").GetSiblingIndex();
+
         private readonly List<ReMenuPage> _subMenus = new List<ReMenuPage>();
 
         public event Action OnOpen;
@@ -41,6 +43,8 @@ namespace ReModCE.UI
         public ReMenuPage(string name, string text, bool isRoot = false) : base(MenuPrefab, MenuPrefab.transform.parent, $"Menu_{name}", false)
         {
             Object.DestroyImmediate(GameObject.GetComponent<DevMenu>());
+
+            RectTransform.SetSiblingIndex(SiblingIndex);
 
             _menuName = name;
             _isRoot = isRoot;
