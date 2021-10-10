@@ -103,14 +103,59 @@ namespace ReModCE.Components
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/{vrHeadset}.{Application.version} (Windows NT 10.0; Win64; x64)");
         }
 
+        public override void OnUiManagerInitEarly()
+        {
+            _searchedAvatarList = new ReAvatarList("ReModCE Search", this);
+
+            _favoriteAvatarList = new ReAvatarList("ReModCE Favorites", this, false);
+            _favoriteAvatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
+            _favoriteAvatarList.OnEnable += () =>
+            {
+                // make sure it stays off if it should be off.
+                _favoriteAvatarList.GameObject.SetActive(AvatarFavoritesEnabled);
+            };
+
+            var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent;
+            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f),
+                () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
+                parent);
+            _favoriteButton.GameObject.SetActive(AvatarFavoritesEnabled);
+
+            var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
+            if (changeButton != null)
+            {
+                var button = changeButton.GetComponent<Button>();
+                _changeButtonEvent = button.onClick;
+
+                button.onClick = new Button.ButtonClickedEvent();
+                button.onClick.AddListener(new Action(ChangeAvatarChecked));
+            }
+
+
+            _searchAvatarsAction = DelegateSupport.ConvertDelegate<UnityAction<string>>(
+                (Action<string>)SearchAvatars);
+            _overrideSearchAvatarsAction = DelegateSupport.ConvertDelegate<UnityAction<string>>(
+                (Action<string>)PromptChooseSearch);
+
+            _avatarScreen = GameObject.Find("UserInterface/MenuContent/Screens/Avatar");
+            _searchBox = GameObject.Find("UserInterface/MenuContent/Backdrop/Header/Tabs/ViewPort/Content/Search/InputField").GetComponent<UiInputField>();
+
+            MelonCoroutines.Start(LoginToAPICoroutine());
+        }
+
         public override void OnUiManagerInit(UiManager uiManager)
         {
             base.OnUiManagerInit(uiManager);
 
+            if (uiManager.IsRemodLoaded || uiManager.IsRubyLoaded)
+            {
+                _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
+            }
+
             var menu = uiManager.MainMenu.GetSubMenu("Avatars");
-            _enabledToggle = menu.AddToggle("Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)",
+            _enabledToggle = menu.AddToggle("AvatarFavorites", "Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)",
                 AvatarFavoritesEnabled.SetValue, AvatarFavoritesEnabled);
-            _maxAvatarsPerPageButton = menu.AddButton("", $"Max Avatars Per Page: {MaxAvatarsPerPage}",
+            _maxAvatarsPerPageButton = menu.AddButton("MaxAvatars", $"Max Avatars Per Page: {MaxAvatarsPerPage}",
                 "Set the maximum amount of avatars shown per page",
                 () =>
                 {
@@ -131,7 +176,7 @@ namespace ReModCE.Components
 
             if (_pinCode == 0)
             {
-                _enterPinButton = menu.AddButton("", "Set/Enter Pin", "Set or enter your pin for the ReMod CE API", () =>
+                _enterPinButton = menu.AddButton("EnterPin", "Set/Enter Pin", "Set or enter your pin for the ReMod CE API", () =>
                 {
                     VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Enter pin",
                         "", InputField.InputType.Standard, true, "Submit",
@@ -152,47 +197,6 @@ namespace ReModCE.Components
                         }, null);
                 });
             }
-
-            _searchedAvatarList = new ReAvatarList("ReModCE Search", this);
-
-            _favoriteAvatarList = new ReAvatarList("ReModCE Favorites", this, false);
-            _favoriteAvatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
-            _favoriteAvatarList.OnEnable += () =>
-            {
-                // make sure it stays off if it should be off.
-                _favoriteAvatarList.GameObject.SetActive(AvatarFavoritesEnabled);
-            };
-
-            var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent; 
-            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f),
-                () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
-                parent);
-            _favoriteButton.GameObject.SetActive(AvatarFavoritesEnabled);
-
-            var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
-            if (changeButton != null)
-            {
-                var button = changeButton.GetComponent<Button>();
-                _changeButtonEvent = button.onClick;
-
-                button.onClick = new Button.ButtonClickedEvent();
-                button.onClick.AddListener(new Action(ChangeAvatarChecked));
-            }
-
-            if (uiManager.IsRemodLoaded || uiManager.IsRubyLoaded)
-            {
-                _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
-            }
-            
-            _searchAvatarsAction = DelegateSupport.ConvertDelegate<UnityAction<string>>(
-                (Action<string>)SearchAvatars);
-            _overrideSearchAvatarsAction = DelegateSupport.ConvertDelegate<UnityAction<string>>(
-                (Action<string>)PromptChooseSearch);
-
-            _avatarScreen = GameObject.Find("UserInterface/MenuContent/Screens/Avatar");
-            _searchBox = GameObject.Find("UserInterface/MenuContent/Backdrop/Header/Tabs/ViewPort/Content/Search/InputField").GetComponent<UiInputField>();
-
-            MelonCoroutines.Start(LoginToAPICoroutine());
         }
 
         public override void OnUpdate()

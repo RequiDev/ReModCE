@@ -5,6 +5,7 @@ using ReModCE.VRChat;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VRC.UI.Core.Styles;
 using Object = UnityEngine.Object;
 
 namespace ReModCE.UI
@@ -48,8 +49,15 @@ namespace ReModCE.UI
             _text = GameObject.GetComponentInChildren<TextMeshProUGUI>();
             _text.text = text;
             _text.richText = true;
-            _text.fontSize = 40;
+            _text.fontSize = 38;
+            _text.autoSizeTextContainer = true;
+            _text.color = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
+            _text.m_fontColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
+            _text.m_htmlColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
             _text.transform.localPosition = new Vector3(_text.transform.localPosition.x, -30f);
+
+            var styleElement = _text.GetComponent<StyleElement>();
+            styleElement.classes = "H1";
 
             Object.DestroyImmediate(RectTransform.Find("Icon").gameObject);
             Object.DestroyImmediate(RectTransform.Find("Icon_Secondary").gameObject);

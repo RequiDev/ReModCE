@@ -48,8 +48,15 @@ namespace ReModCE.Components
 
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
-                _flyToggle.Interactable = allowed;
-                _noclipToggle.Interactable = allowed;
+                if (_flyToggle != null)
+                {
+                    _flyToggle.Interactable = allowed;
+                }
+                if (_noclipToggle != null)
+                {
+                    _noclipToggle.Interactable = allowed;
+                }
+
                 if (!allowed)
                 {
                     ToggleNoclip(false);
@@ -62,16 +69,16 @@ namespace ReModCE.Components
             var movementMenu = uiManager.MainMenu.GetSubMenu("Movement");
             var hotkeyMenu = uiManager.MainMenu.GetSubMenu("Hotkeys");
 
-            _flyToggle = movementMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
-            _noclipToggle = movementMenu.AddToggle("Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
-            _hotkeyToggle = hotkeyMenu.AddToggle("Enable Fly Hotkey", "Enable/Disable fly hotkey",
+            _flyToggle = movementMenu.AddToggle("Fly", "Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
+            _noclipToggle = movementMenu.AddToggle("Noclip", "Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
+            _hotkeyToggle = hotkeyMenu.AddToggle("FlyHotkey", "Enable Fly Hotkey", "Enable/Disable fly hotkey",
                 EnableFlyHotkey.SetValue, EnableFlyHotkey);
 
-            _suppressFlyAnimationToggle = movementMenu.AddToggle("Suppress Fly Animations",
+            _suppressFlyAnimationToggle = movementMenu.AddToggle("SuppressFlyAnimation", "Suppress Fly Animations",
                 "Stay still in the air when flying instead of having dangling legs.",
                 SuppressFlyAnimation.SetValue, SuppressFlyAnimation);
 
-            _flySpeedButton = movementMenu.AddButton("", $"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
+            _flySpeedButton = movementMenu.AddButton("FlySpeed", $"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
             {
                 VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Set fly speed", FlySpeed.ToString(), InputField.InputType.Standard, false, "Submit",
                     (s, k, t) =>

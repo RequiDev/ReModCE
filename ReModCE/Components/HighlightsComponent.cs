@@ -36,38 +36,44 @@ namespace ReModCE.Components
 
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
-                _espToggle.Interactable = allowed;
+                if (_espToggle != null)
+                {
+                    _espToggle.Interactable = allowed;
+                }
                 if (!allowed)
                     ESPEnabled.SetValue(false);
             };
         }
 
-        public override void OnUiManagerInit(UiManager uiManager)
+        public override void OnUiManagerInitEarly()
         {
-            base.OnUiManagerInit(uiManager);
-
             var highlightsFx = HighlightsFX.field_Private_Static_HighlightsFX_0;
 
             _friendsHighlights = highlightsFx.gameObject.AddComponent<HighlightsFXStandalone>();
             _friendsHighlights.highlightColor = FriendsColor;
             _othersHighlights = highlightsFx.gameObject.AddComponent<HighlightsFXStandalone>();
             _othersHighlights.highlightColor = OthersColor;
+        }
+
+        public override void OnUiManagerInit(UiManager uiManager)
+        {
+            base.OnUiManagerInit(uiManager);
 
             var menu = uiManager.MainMenu.GetSubMenu("Visuals");
-            _espToggle = menu.AddToggle("ESP/Highlights", "Enable ESP (Highlight players through walls)", b =>
+            _espToggle = menu.AddToggle("ESP", "ESP/Highlights", "Enable ESP (Highlight players through walls)", b =>
             {
                 ESPEnabled.SetValue(b);
                 ToggleESP(b);
             }, ESPEnabled);
 
-            _friendsColorButton = menu.AddButton("", $"<color=#{FriendsColor.Value.ToHex()}>Friends</color> Color",
+            _friendsColorButton = menu.AddButton("FriendsColor", $"<color=#{FriendsColor.Value.ToHex()}>Friends</color> Color",
                 $"Set your <color=#{FriendsColor.Value.ToHex()}>friends</color> highlight color",
                 () =>
                 {
                     PopupColorInput(_friendsColorButton, "Friends", FriendsColor);
                 });
 
-            _othersColorButton = menu.AddButton("", $"<color=#{OthersColor.Value.ToHex()}>Others</color> Color",
+            _othersColorButton = menu.AddButton("OthersColor", $"<color=#{OthersColor.Value.ToHex()}>Others</color> Color",
                 $"Set <color=#{OthersColor.Value.ToHex()}>other</color> peoples highlight color",
                 () =>
                 {

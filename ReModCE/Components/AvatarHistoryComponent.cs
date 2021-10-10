@@ -32,7 +32,7 @@ namespace ReModCE.Components
             AvatarHistoryEnabled = new ConfigValue<bool>(nameof(AvatarHistoryEnabled), true);
             AvatarHistoryEnabled.OnValueChanged += () =>
             {
-                _enabledToggle.Toggle(AvatarHistoryEnabled);
+                _enabledToggle?.Toggle(AvatarHistoryEnabled);
                 _avatarList.GameObject.SetActive(AvatarHistoryEnabled);
             };
 
@@ -62,18 +62,12 @@ namespace ReModCE.Components
             }
         }
 
-        public override void OnUiManagerInit(UiManager uiManager)
+        public override void OnUiManagerInitEarly()
         {
-            var menu = uiManager.MainMenu.GetSubMenu("Avatars");
-            _enabledToggle = menu.AddToggle("Avatar History", "Enable/Disable avatar history",
-                AvatarHistoryEnabled.SetValue, AvatarHistoryEnabled);
-            _excludeOwnToggle = menu.AddToggle("Exclude own avatars", "Exclude own avatars for avatar history",
-                AvatarHistoryExcludeOwn.SetValue, AvatarHistoryExcludeOwn);
-
             _avatarList = new ReAvatarList("Recently Used", this, true, false);
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
-            
+
             if (changeButton != null)
             {
                 var button = changeButton.GetComponent<Button>();
@@ -113,6 +107,15 @@ namespace ReModCE.Components
                     }));
                 }));
             }
+        }
+
+        public override void OnUiManagerInit(UiManager uiManager)
+        {
+            var menu = uiManager.MainMenu.GetSubMenu("Avatars");
+            _enabledToggle = menu.AddToggle("AvatarHistory", "Avatar History", "Enable/Disable avatar history",
+                AvatarHistoryEnabled.SetValue, AvatarHistoryEnabled);
+            _excludeOwnToggle = menu.AddToggle("ExcludeOwnAvatars", "Exclude own avatars", "Exclude own avatars for avatar history",
+                AvatarHistoryExcludeOwn.SetValue, AvatarHistoryExcludeOwn);
         }
 
         public override void OnAvatarIsReady(VRCPlayer vrcPlayer)

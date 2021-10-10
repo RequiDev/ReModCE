@@ -48,10 +48,10 @@ namespace ReModCE.UI
             set => _toggleComponent.interactable = value;
         }
 
-        public ReMenuToggle(string name, string text, string tooltip, Action<bool> onToggle, Transform parent) : base(TogglePrefab, parent, $"Button_Toggle{name}")
+        public ReMenuToggle(string name, string text, string tooltip, Action<bool> onToggle, Transform parent, bool defaultValue = false) : base(TogglePrefab, parent, $"Button_Toggle{name}")
         {
             var iconOn = RectTransform.Find("Icon_On").GetComponent<Image>();
-            var iconOff = RectTransform.Find("Icon_Off");
+            iconOn.sprite = OnIconSprite;
 
             var toggleIcon = GameObject.GetComponent<ToggleIcon>();
 
@@ -63,12 +63,16 @@ namespace ReModCE.UI
             var tmp = GameObject.GetComponentInChildren<TextMeshProUGUI>();
             tmp.text = text;
             tmp.richText = true;
+            tmp.color = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
+            tmp.m_fontColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
+            tmp.m_htmlColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
 
             var uiTooltip = GameObject.GetComponent<VRC.UI.Elements.Tooltips.UiToggleTooltip>();
             uiTooltip.text = tooltip;
             uiTooltip.alternateText = tooltip;
 
-            iconOn.sprite = OnIconSprite;
+
+            Toggle(defaultValue);
         }
 
         public void Toggle(bool value)

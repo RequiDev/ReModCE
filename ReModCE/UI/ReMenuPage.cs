@@ -130,13 +130,12 @@ namespace ReModCE.UI
 
         public ReMenuButton AddButton(string name, string text, string tooltip, Action onClick)
         {
-            var button = new ReMenuButton(name, text, tooltip, onClick, _container);
-            return button;
+            return new ReMenuButton(name, text, tooltip, onClick, _container);
         }
 
-        public ReMenuToggle AddToggle(string text, string tooltip, Action<bool> onToggle, bool defaultValue = false)
+        public ReMenuToggle AddToggle(string name, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false)
         {
-            return null;
+            return new ReMenuToggle(name, text, tooltip, onToggle, _container, defaultValue);
             // var toggle = new ReQuickToggle(NextButtonPos, text, tooltip, onToggle, defaultValue, RectTransform);
             // return toggle;
         }

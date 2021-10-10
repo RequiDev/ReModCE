@@ -9,7 +9,7 @@ namespace ReModCE.Components
 {
     internal class PopupExComponent : ModComponent
     {
-        public override void OnUiManagerInit(UiManager uiManager)
+        public override void OnUiManagerInitEarly()
         {
             var inputPopup = GameObject.Find("UserInterface/MenuContent/Popups/InputPopup").transform;
             var pasteButton = Object.Instantiate(inputPopup.Find("ButtonRight").gameObject, inputPopup);

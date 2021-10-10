@@ -34,6 +34,7 @@ namespace ReModCE.Loader
     {
         private Action _onApplicationStart;
         private Action _onUiManagerInit;
+        private Action _onUiManagerInitEarly;
         private Action _onFixedUpdate;
         private Action _onUpdate;
         private Action _onGUI;
@@ -152,6 +153,9 @@ namespace ReModCE.Loader
                     case nameof(OnUiManagerInit) when parameters.Length == 0:
                         _onUiManagerInit = (Action)Delegate.CreateDelegate(typeof(Action), m);
                         break;
+                    case nameof(OnUiManagerInitEarly) when parameters.Length == 0:
+                        _onUiManagerInitEarly = (Action)Delegate.CreateDelegate(typeof(Action), m);
+                        break;
                     case nameof(OnGUI) when parameters.Length == 0:
                         _onGUI = (Action)Delegate.CreateDelegate(typeof(Action), m);
                         break;
@@ -177,6 +181,11 @@ namespace ReModCE.Loader
         public void OnUiManagerInit()
         {
             _onUiManagerInit();
+        }
+
+        public void OnUiManagerInitEarly()
+        {
+            _onUiManagerInitEarly();
         }
 
         public override void OnFixedUpdate()
@@ -226,6 +235,9 @@ namespace ReModCE.Loader
 
         private IEnumerator WaitForUiManager()
         {
+            while (VRCUiManager.field_Private_Static_VRCUiManager_0 == null) yield return null;
+            OnUiManagerInitEarly();
+
             while (UIManager.Instance == null) yield return null;
             while (Object.FindObjectOfType<VRC.UI.Elements.QuickMenu>() == null) yield return null;
 

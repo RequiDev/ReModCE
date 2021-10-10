@@ -25,8 +25,10 @@ namespace ReModCE.Core
         public virtual void OnUiManagerInit(UiManager uiManager)
         {
             UiManager = uiManager;
-
         }
+
+        public virtual void OnUiManagerInitEarly() { }
+
         public virtual void OnFixedUpdate() { }
         public virtual void OnUpdate() { }
         public virtual void OnLateUpdate() { }

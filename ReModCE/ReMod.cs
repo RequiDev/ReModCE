@@ -90,8 +90,7 @@ namespace ReModCE
             InitializeNetworkManager();
 
             _uiManager = new UiManager("ReMod <color=#00ff00>CE</color>");
-
-            return;
+            
             foreach (var m in Components)
             {
                 try
@@ -101,6 +100,21 @@ namespace ReModCE
                 catch (Exception e)
                 {
                     ReLogger.Error($"{m.GetType().Name} had an error during UI initialization:\n{e}");
+                }
+            }
+        }
+        public static void OnUiManagerInitEarly()
+        {
+            ReLogger.Msg("Initializing early UI...");
+            foreach (var m in Components)
+            {
+                try
+                {
+                    m.OnUiManagerInitEarly();
+                }
+                catch (Exception e)
+                {
+                    ReLogger.Error($"{m.GetType().Name} had an error during early UI initialization:\n{e}");
                 }
             }
         }
