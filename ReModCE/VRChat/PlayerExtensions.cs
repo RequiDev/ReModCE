@@ -5,6 +5,7 @@ using UnityEngine;
 using VRC;
 using VRC.Core;
 using VRC.SDKBase;
+using FeaturePermissionManager = MonoBehaviourPublicISafetyObDi2InObStDi21ObUnique;
 
 namespace ReModCE.VRChat
 {

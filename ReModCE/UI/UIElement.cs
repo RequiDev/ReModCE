@@ -6,9 +6,9 @@ namespace ReModCE.UI
 {
     internal class UIElement
     {
-        protected string Name { get; }
+        public string Name { get; }
         public GameObject GameObject { get; }
-        protected RectTransform RectTransform { get; }
+        public RectTransform RectTransform { get; }
 
         public Vector3 Position
         {
@@ -30,7 +30,7 @@ namespace ReModCE.UI
         public UIElement(GameObject original, Transform parent, string name, bool defaultState = true)
         {
             GameObject = Object.Instantiate(original, parent);
-            GameObject.name = string.Concat(name.Where(char.IsLetter));
+            GameObject.name = name;
             Name = GameObject.name;
 
             GameObject.SetActive(defaultState);

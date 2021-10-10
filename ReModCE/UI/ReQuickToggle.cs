@@ -18,7 +18,7 @@ namespace ReModCE.UI
             set => _buttonComponent.interactable = value;
         }
 
-        public ReQuickToggle(Vector2 pos, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false, Transform parent = null) : base(ExtendedQuickMenu.BlockButton.gameObject, parent, pos, $"{text}Toggle")
+        public ReQuickToggle(Vector2 pos, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false, Transform parent = null) : base(null, parent, pos, $"{text}Toggle")
         {
             var textComponent = GameObject.GetComponentInChildren<Text>();
             textComponent.text = text;

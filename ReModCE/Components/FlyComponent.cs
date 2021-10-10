@@ -31,7 +31,7 @@ namespace ReModCE.Components
         private ConfigValue<bool> EnableFlyHotkey;
 
         private ReQuickToggle _suppressFlyAnimationToggle;
-        private ReQuickButton _flySpeedButton;
+        private ReMenuButton _flySpeedButton;
 
         private ReQuickToggle _flyToggle;
         private ReQuickToggle _noclipToggle;
@@ -71,7 +71,7 @@ namespace ReModCE.Components
                 "Stay still in the air when flying instead of having dangling legs.",
                 SuppressFlyAnimation.SetValue, SuppressFlyAnimation);
 
-            _flySpeedButton = movementMenu.AddButton($"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
+            _flySpeedButton = movementMenu.AddButton("", $"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
             {
                 VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Set fly speed", FlySpeed.ToString(), InputField.InputType.Standard, false, "Submit",
                     (s, k, t) =>

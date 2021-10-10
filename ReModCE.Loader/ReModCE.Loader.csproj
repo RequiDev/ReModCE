@@ -36,6 +36,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\Il2Cppmscorlib.dll</HintPath>
+    </Reference>
     <Reference Include="MelonLoader, Version=0.4.3.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
@@ -43,6 +46,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="UnhollowerBaseLib">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\UnhollowerBaseLib.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
@@ -52,6 +58,22 @@
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="VRC.UI.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="VRC.UI.Elements, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Elements.dll</HintPath>
+    </Reference>
+    <Reference Include="VRC.UI.Shared, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="VRC.Utility, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.Utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

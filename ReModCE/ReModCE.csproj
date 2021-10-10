@@ -44,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="DataModel">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\DataModel.dll</HintPath>
+    </Reference>
     <Reference Include="Il2Cppmscorlib, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
@@ -78,8 +81,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\UnhollowerBaseLib.dll</HintPath>
     </Reference>
+    <Reference Include="UniTask.TextMeshPro">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\UniTask.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>..\Dependencies\Managed\Unity.Postprocessing.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <Private>false</Private>
@@ -165,6 +174,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\UnityEngine.XRModule.dll</HintPath>
     </Reference>
+    <Reference Include="VRC.UI.Core">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="VRC.UI.Elements">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Elements.dll</HintPath>
+    </Reference>
+    <Reference Include="VRC.UI.Shared">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="VRC.Utility">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.Utility.dll</HintPath>
+    </Reference>
     <Reference Include="VRCCore-Standalone, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
@@ -195,7 +216,6 @@
     <Compile Include="Components\AvatarFavoritesComponent.cs" />
     <Compile Include="Components\CalibrationSavingComponent.cs" />
     <Compile Include="Components\ComfyQuickMenuComponent.cs" />
-    <Compile Include="Components\ButtonAdjustmentsComponent.cs" />
     <Compile Include="Components\DynamicBonesComponent.cs" />
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\HighlightsComponent.cs" />
@@ -210,7 +230,6 @@
     <Compile Include="Core\EnableDisableListener.cs" />
     <Compile Include="Core\ModComponent.cs" />
     <Compile Include="Core\ConfigValue.cs" />
-    <Compile Include="Components\IngameLogComponent.cs" />
     <Compile Include="Core\ReAvatar.cs" />
     <Compile Include="Core\TaskExtensions.cs" />
     <Compile Include="Core\ColorExtensions.cs" />
@@ -219,12 +238,13 @@
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ReAvatarList.cs" />
-    <Compile Include="UI\ReScrollView.cs" />
+    <Compile Include="UI\ReMenuCategory.cs" />
     <Compile Include="UI\ReUiButton.cs" />
     <Compile Include="UI\ReUiText.cs" />
+    <Compile Include="UI\ReWingButton.cs" />
     <Compile Include="UI\UIElement.cs" />
-    <Compile Include="UI\ReQuickButton.cs" />
-    <Compile Include="UI\ReQuickMenu.cs" />
+    <Compile Include="UI\ReMenuButton.cs" />
+    <Compile Include="UI\ReMenuPage.cs" />
     <Compile Include="UI\ReQuickToggle.cs" />
     <Compile Include="Managers\UiManager.cs" />
     <Compile Include="VRChat\ExtendedCursor.cs" />

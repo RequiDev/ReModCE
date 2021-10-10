@@ -20,7 +20,7 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var qolMenu = uiManager.MainMenu.AddSubMenu("QoL", "Access Quality of Life adjustments.");
+            var qolMenu = uiManager.MainMenu.AddSubMenu("", "QoL", "Access Quality of Life adjustments.");
             _comfyQMToggle = qolMenu.AddToggle("Comfy QuickMenu", "Always force the one handed QuickMenu.",
                 ComfyQuickMenuEnabled.SetValue, ComfyQuickMenuEnabled);
         }

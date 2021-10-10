@@ -8,6 +8,9 @@ using System.Net;
 using System.Text;
 using System.Reflection;
 using System.Security.Cryptography;
+using UnityEngine;
+using VRC.UI.Core;
+using Object = UnityEngine.Object;
 
 namespace ReModCE.Loader
 {
@@ -223,8 +226,8 @@ namespace ReModCE.Loader
 
         private IEnumerator WaitForUiManager()
         {
-            while (VRCUiManager.field_Private_Static_VRCUiManager_0 == null) yield return null;
-            while (QuickMenu.prop_QuickMenu_0 == null) yield return null;
+            while (UIManager.Instance == null) yield return null;
+            while (Object.FindObjectOfType<VRC.UI.Elements.QuickMenu>() == null) yield return null;
 
             OnUiManagerInit();
         }

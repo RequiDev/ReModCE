@@ -23,8 +23,8 @@ namespace ReModCE.Components
         private ConfigValue<Color> OthersColor;
         private ConfigValue<bool> ESPEnabled;
         private ReQuickToggle _espToggle;
-        private ReQuickButton _friendsColorButton;
-        private ReQuickButton _othersColorButton;
+        private ReMenuButton _friendsColorButton;
+        private ReMenuButton _othersColorButton;
 
         public HighlightsComponent()
         {
@@ -60,14 +60,14 @@ namespace ReModCE.Components
                 ToggleESP(b);
             }, ESPEnabled);
 
-            _friendsColorButton = menu.AddButton($"<color=#{FriendsColor.Value.ToHex()}>Friends</color> Color",
+            _friendsColorButton = menu.AddButton("", $"<color=#{FriendsColor.Value.ToHex()}>Friends</color> Color",
                 $"Set your <color=#{FriendsColor.Value.ToHex()}>friends</color> highlight color",
                 () =>
                 {
                     PopupColorInput(_friendsColorButton, "Friends", FriendsColor);
                 });
 
-            _othersColorButton = menu.AddButton($"<color=#{OthersColor.Value.ToHex()}>Others</color> Color",
+            _othersColorButton = menu.AddButton("", $"<color=#{OthersColor.Value.ToHex()}>Others</color> Color",
                 $"Set <color=#{OthersColor.Value.ToHex()}>other</color> peoples highlight color",
                 () =>
                 {
@@ -75,7 +75,7 @@ namespace ReModCE.Components
                 });
         }
 
-        private void PopupColorInput(ReQuickButton button, string who, ConfigValue<Color> configValue)
+        private void PopupColorInput(ReMenuButton button, string who, ConfigValue<Color> configValue)
         {
             VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Input hex color code",
                 $"#{configValue.Value.ToHex()}", InputField.InputType.Standard, false, "Submit",

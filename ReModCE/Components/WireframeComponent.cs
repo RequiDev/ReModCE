@@ -51,7 +51,7 @@ namespace ReModCE.Components
         private ReQuickToggle _includePickupsToggle;
 
         private ConfigValue<float> WireframeRange;
-        private ReQuickButton _rangeButton;
+        private ReMenuButton _rangeButton;
 
         private ConfigValue<bool> WireframeHideOriginalObjects;
         private ReQuickToggle _hideOriginalObjectsToggle;
@@ -295,11 +295,11 @@ namespace ReModCE.Components
             _wireframeCamera.clearFlags = WireframeIgnoreZ ? CameraClearFlags.Depth : CameraClearFlags.Nothing;
             _wireframeCamera.farClipPlane = WireframeRange;
 
-            var menu = uiManager.MainMenu.GetSubMenu("Visuals").AddSubMenu("Wireframe", "Access wireframe settings");
+            var menu = uiManager.MainMenu.GetSubMenu("Visuals").AddSubMenu("", "Wireframe", "Access wireframe settings");
             _wireframeToggle = menu.AddToggle("Enable", "Highlight objects using wireframe.",
                 WireframeEnabled.SetValue, WireframeEnabled);
 
-            _rangeButton = menu.AddButton($"Range: {WireframeRange}",
+            _rangeButton = menu.AddButton("", $"Range: {WireframeRange}",
                 "Set the range on when wireframe starts rendering",
                 () =>
                 {

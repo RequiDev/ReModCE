@@ -89,8 +89,9 @@ namespace ReModCE
 
             InitializeNetworkManager();
 
-            _uiManager = new UiManager("ReModCE");
+            _uiManager = new UiManager("ReMod <color=#00ff00>CE</color>");
 
+            return;
             foreach (var m in Components)
             {
                 try

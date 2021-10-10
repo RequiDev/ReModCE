@@ -40,12 +40,12 @@ namespace ReModCE.Components
 
         private const string PinPath = "UserData/ReModCE/pin";
         private int _pinCode;
-        private ReQuickButton _enterPinButton;
+        private ReMenuButton _enterPinButton;
 
         private ConfigValue<bool> AvatarFavoritesEnabled;
         private ReQuickToggle _enabledToggle;
         private ConfigValue<int> MaxAvatarsPerPage;
-        private ReQuickButton _maxAvatarsPerPageButton;
+        private ReMenuButton _maxAvatarsPerPageButton;
 
         private List<ReAvatar> _savedAvatars;
         private readonly AvatarList _searchedAvatars;
@@ -110,7 +110,7 @@ namespace ReModCE.Components
             var menu = uiManager.MainMenu.GetSubMenu("Avatars");
             _enabledToggle = menu.AddToggle("Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)",
                 AvatarFavoritesEnabled.SetValue, AvatarFavoritesEnabled);
-            _maxAvatarsPerPageButton = menu.AddButton($"Max Avatars Per Page: {MaxAvatarsPerPage}",
+            _maxAvatarsPerPageButton = menu.AddButton("", $"Max Avatars Per Page: {MaxAvatarsPerPage}",
                 "Set the maximum amount of avatars shown per page",
                 () =>
                 {
@@ -131,7 +131,7 @@ namespace ReModCE.Components
 
             if (_pinCode == 0)
             {
-                _enterPinButton = menu.AddButton("Set/Enter Pin", "Set or enter your pin for the ReMod CE API", () =>
+                _enterPinButton = menu.AddButton("", "Set/Enter Pin", "Set or enter your pin for the ReMod CE API", () =>
                 {
                     VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Enter pin",
                         "", InputField.InputType.Standard, true, "Submit",
