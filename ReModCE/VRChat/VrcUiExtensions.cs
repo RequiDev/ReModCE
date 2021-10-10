@@ -20,13 +20,5 @@ namespace ReModCE.VRChat
             }
             instance.Method_Protected_Void_List_1_T_Int32_Boolean_VRCUiContentButton_0(avaterList, offset, endOfPickers, contentHeaderElement);
         }
-
-        public static Transform GetContent(this UIPage page)
-        {
-            var scrollrectTransform = page.transform.Find("ScrollRect");
-            if (scrollrectTransform == null)
-                scrollrectTransform = page.transform.Find("Scrollrect");
-            return scrollrectTransform.GetComponent<ScrollRect>().content;
-        }
     }
 }

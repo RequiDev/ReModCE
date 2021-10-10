@@ -9,7 +9,7 @@ namespace ReModCE.Components
     internal class ComfyQuickMenuComponent : ModComponent
     {
         private static ConfigValue<bool> ComfyQuickMenuEnabled;
-        private static ReQuickToggle _comfyQMToggle;
+        private static ReMenuToggle _comfyQMToggle;
 
         public ComfyQuickMenuComponent()
         {

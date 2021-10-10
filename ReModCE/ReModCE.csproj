@@ -245,7 +245,7 @@
     <Compile Include="UI\UIElement.cs" />
     <Compile Include="UI\ReMenuButton.cs" />
     <Compile Include="UI\ReMenuPage.cs" />
-    <Compile Include="UI\ReQuickToggle.cs" />
+    <Compile Include="UI\ReMenuToggle.cs" />
     <Compile Include="Managers\UiManager.cs" />
     <Compile Include="VRChat\ExtendedCursor.cs" />
     <Compile Include="VRChat\ExtendedQuickMenu.cs" />

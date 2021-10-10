@@ -134,7 +134,7 @@ namespace ReModCE.UI
             return button;
         }
 
-        public ReQuickToggle AddToggle(string text, string tooltip, Action<bool> onToggle, bool defaultValue = false)
+        public ReMenuToggle AddToggle(string text, string tooltip, Action<bool> onToggle, bool defaultValue = false)
         {
             return null;
             // var toggle = new ReQuickToggle(NextButtonPos, text, tooltip, onToggle, defaultValue, RectTransform);

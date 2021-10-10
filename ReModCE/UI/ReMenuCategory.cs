@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReModCE.Loader;
 using ReModCE.VRChat;
 using TMPro;
 using UnityEngine;
@@ -83,6 +84,12 @@ namespace ReModCE.UI
         {
             var button = new ReMenuButton(name, text, tooltip, onClick, _buttonContainer.RectTransform);
             return button;
+        }
+
+        public ReMenuToggle AddToggle(string name, string text, string tooltip)
+        {
+            var toggle = new ReMenuToggle(name, text, tooltip, (b) => {ReLogger.Msg($"Toggle is {b}");},_buttonContainer.RectTransform);
+            return toggle;
         }
 
         public ReMenuPage AddSubMenu(string name, string text, string tooltip = "")

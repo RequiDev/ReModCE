@@ -270,7 +270,7 @@ namespace ReModCE.Components
 
         private ReMenuButton _maxRadiusButton;
 
-        private ReQuickToggle _whitelistToggle;
+        private ReMenuToggle _whitelistToggle;
         private ReMenuButton _ownColliderOptionButton;
         private ReMenuButton _whitelistedColliderOptionButton;
         private ReMenuButton _friendsColliderOptionButton;

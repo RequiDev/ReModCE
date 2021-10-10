@@ -22,7 +22,7 @@ namespace ReModCE.Components
         private ThirdPersonMode _cameraSetup;
 
         private ConfigValue<bool> EnableThirdpersonHotkey;
-        private ReQuickToggle _hotkeyToggle;
+        private ReMenuToggle _hotkeyToggle;
 
         public ThirdPersonComponent()
         {

@@ -14,7 +14,7 @@ namespace ReModCE.Components
     internal class InfoLogsComponent : ModComponent
     {
         private ConfigValue<bool> JoinLeaveLogsEnabled;
-        private ReQuickToggle _joinLeaveLogsToggle;
+        private ReMenuToggle _joinLeaveLogsToggle;
 
         public InfoLogsComponent()
         {

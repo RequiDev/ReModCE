@@ -31,7 +31,7 @@ namespace ReModCE.Managers
             IsRubyLoaded = File.Exists("hid.dll");
             
             var dashboard = ExtendedQuickMenu.Instance.container.Find("Window/QMParent/Menu_Dashboard").GetComponent<UIPage>();
-            dashboard.GetContent().Find("Carousel_Banners").gameObject.SetActive(false);
+            dashboard.GetComponentInChildren<ScrollRect>().content.Find("Carousel_Banners").gameObject.SetActive(false);
 
             MainMenu = new ReMenuCategory("ReModCE", menuName);
             var menu = MainMenu.AddSubMenu("ReModCE", menuName);
@@ -39,6 +39,8 @@ namespace ReModCE.Managers
             {
                 menu.AddButton($"Button{i}", $"Button {i}", "", () => { });
             }
+
+            MainMenu.AddToggle("Test", "Toggle Test", "Wheeee");
 
             ReWingButton.Create(menuName, menu.Open, ReWingButton.WingSide.Both, false);
             return;

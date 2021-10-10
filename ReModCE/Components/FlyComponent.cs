@@ -30,12 +30,12 @@ namespace ReModCE.Components
         private Vector3 _originalGravity;
         private ConfigValue<bool> EnableFlyHotkey;
 
-        private ReQuickToggle _suppressFlyAnimationToggle;
+        private ReMenuToggle _suppressFlyAnimationToggle;
         private ReMenuButton _flySpeedButton;
 
-        private ReQuickToggle _flyToggle;
-        private ReQuickToggle _noclipToggle;
-        private ReQuickToggle _hotkeyToggle;
+        private ReMenuToggle _flyToggle;
+        private ReMenuToggle _noclipToggle;
+        private ReMenuToggle _hotkeyToggle;
 
         public FlyComponent()
         {

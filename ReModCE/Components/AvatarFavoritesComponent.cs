@@ -43,7 +43,7 @@ namespace ReModCE.Components
         private ReMenuButton _enterPinButton;
 
         private ConfigValue<bool> AvatarFavoritesEnabled;
-        private ReQuickToggle _enabledToggle;
+        private ReMenuToggle _enabledToggle;
         private ConfigValue<int> MaxAvatarsPerPage;
         private ReMenuButton _maxAvatarsPerPageButton;
 

@@ -24,8 +24,8 @@ namespace ReModCE.Components
 
         private ConfigValue<bool> AvatarHistoryEnabled;
         private ConfigValue<bool> AvatarHistoryExcludeOwn;
-        private ReQuickToggle _enabledToggle;
-        private ReQuickToggle _excludeOwnToggle;
+        private ReMenuToggle _enabledToggle;
+        private ReMenuToggle _excludeOwnToggle;
 
         public AvatarHistoryComponent()
         {

@@ -22,7 +22,7 @@ namespace ReModCE.Components
         private ConfigValue<Color> FriendsColor;
         private ConfigValue<Color> OthersColor;
         private ConfigValue<bool> ESPEnabled;
-        private ReQuickToggle _espToggle;
+        private ReMenuToggle _espToggle;
         private ReMenuButton _friendsColorButton;
         private ReMenuButton _othersColorButton;
 

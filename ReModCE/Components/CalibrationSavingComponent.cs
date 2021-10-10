@@ -26,7 +26,7 @@ namespace ReModCE.Components
 
         private static Dictionary<string, FbtCalibration> _savedCalibrations;
         private static ConfigValue<bool> CalibrationSaverEnabled;
-        private ReQuickToggle _enableToggle;
+        private ReMenuToggle _enableToggle;
 
         public CalibrationSavingComponent()
         {

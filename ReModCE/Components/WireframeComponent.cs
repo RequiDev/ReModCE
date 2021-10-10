@@ -33,28 +33,28 @@ namespace ReModCE.Components
         private Camera _originalCamera;
 
         private ConfigValue<bool> WireframeEnabled;
-        private ReQuickToggle _wireframeToggle;
+        private ReMenuToggle _wireframeToggle;
 
         private ConfigValue<bool> WireframeIgnoreZ;
-        private ReQuickToggle _wireframeIgnoreZToggle;
+        private ReMenuToggle _wireframeIgnoreZToggle;
 
         private ConfigValue<bool> WireframeIncludePlayers;
-        private ReQuickToggle _includePlayersToggle;
+        private ReMenuToggle _includePlayersToggle;
 
         private ConfigValue<bool> WireframeIncludeSelf;
-        private ReQuickToggle _includeSelfToggle;
+        private ReMenuToggle _includeSelfToggle;
 
         private ConfigValue<bool> WireframeIncludeDefault;
-        private ReQuickToggle _includeWorldToggle;
+        private ReMenuToggle _includeWorldToggle;
 
         private ConfigValue<bool> WireframeIncludePickups;
-        private ReQuickToggle _includePickupsToggle;
+        private ReMenuToggle _includePickupsToggle;
 
         private ConfigValue<float> WireframeRange;
         private ReMenuButton _rangeButton;
 
         private ConfigValue<bool> WireframeHideOriginalObjects;
-        private ReQuickToggle _hideOriginalObjectsToggle;
+        private ReMenuToggle _hideOriginalObjectsToggle;
 
         public WireframeComponent()
         {
