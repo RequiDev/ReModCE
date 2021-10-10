@@ -24,7 +24,7 @@ namespace ReModCE.UI
             {
                 if (_menuPrefab == null)
                 {
-                    _menuPrefab = ExtendedQuickMenu.Instance.container.transform.Find("Window/QMParent/Menu_DevTools").gameObject;
+                    _menuPrefab = ExtendedQuickMenu.Instance.container.Find("Window/QMParent/Menu_DevTools").gameObject;
                 }
                 return _menuPrefab;
             }

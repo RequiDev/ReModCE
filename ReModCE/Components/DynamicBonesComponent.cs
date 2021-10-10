@@ -295,38 +295,53 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            // _whitelistToggle = uiManager.TargetMenu.AddToggle("Whitelist Global Dynamic Bones",
-            //     "Enables dynamic bones for this person.",
-            //     _ =>
-            //     {
-            //         var interactMenu = ExtendedQuickMenu.UserInteractMenu;
-            //         var activeUser = interactMenu.field_Public_MenuController_0.activeUser;
-            //         if (activeUser == null)
-            //             return;
-            // 
-            //         WhitelistUser(activeUser.id);
-            //     });
+            _whitelistToggle = uiManager.TargetMenu.AddToggle("Whitelist", "Whitelist Global Dynamic Bones",
+                "Enables dynamic bones for this person.",
+                _ =>
+                {
+                    var uiContext = ExtendedQuickMenu.Instance._selectedUserMenuLocal._uiContext;
+                    if (uiContext == null)
+                        return;
+                    var userData = uiContext.UserData;
+                    var userDataCasted = userData.TryCast<VRC.DataModel.Core.DataModel<APIUser>>();
 
-            // uiManager.TargetMenu.AddButton("Reload Avatars", "Reload this users avatar", () =>
-            // {
-            //     var interactMenu = ExtendedQuickMenu.UserInteractMenu;
-            //     var activeUser = interactMenu.field_Public_MenuController_0.activeUser;
-            //     if (activeUser == null)
-            //         return;
-            // 
-            //     var player = PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(activeUser.id);
-            //     player?.GetVRCPlayer()?.ReloadAvatar();
-            // });
+                    var selectedUser = userDataCasted?._obj;
+                    if (selectedUser == null)
+                        return;
 
-            // uiManager.TargetMenu.OnOpen += () =>
-            // {
-            //     var interactMenu = ExtendedQuickMenu.UserInteractMenu;
-            //     var activeUser = interactMenu.field_Public_MenuController_0.activeUser;
-            //     if (activeUser == null)
-            //         return;
-            // 
-            //     _whitelistToggle.Toggle(_settings.IsWhitelisted(activeUser.id));
-            // };
+                    WhitelistUser(selectedUser.id);
+                });
+
+            uiManager.TargetMenu.AddButton("ReloadAvatar", "Reload Avatar", "Reload this users avatar", () =>
+            {
+                var uiContext = ExtendedQuickMenu.Instance._selectedUserMenuLocal._uiContext;
+                if (uiContext == null)
+                    return;
+                var userData = uiContext.UserData;
+                var userDataCasted = userData.TryCast<VRC.DataModel.Core.DataModel<APIUser>>();
+
+                var selectedUser = userDataCasted?._obj;
+                if (selectedUser == null)
+                    return;
+
+                var player = PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(selectedUser.id);
+                player?.GetVRCPlayer()?.ReloadAvatar();
+            });
+
+            uiManager.TargetMenu.OnOpen += () =>
+            {
+                var uiContext = ExtendedQuickMenu.Instance._selectedUserMenuLocal._uiContext;
+                if (uiContext == null)
+                    return;
+                var userData = uiContext.UserData;
+                var userDataCasted = userData.TryCast<VRC.DataModel.Core.DataModel<APIUser>>();
+
+                var selectedUser = userDataCasted?._obj;
+                if (selectedUser == null)
+                    return;
+            
+                _whitelistToggle.Toggle(_settings.IsWhitelisted(selectedUser.id));
+            };
 
             var menu = uiManager.MainMenu.GetSubMenu("DynamicBones");
             menu.AddToggle("Enabled", "Enabled", "Enable/Disable global dynamic bones", ToggleDynamicBones,

@@ -18,7 +18,7 @@ namespace ReModCE.Managers
         public const float ButtonSize = 420f;
         
         public ReMenuPage MainMenu { get; }
-        public ReMenuPage TargetMenuPage { get; }
+        public ReMenuPage TargetMenu { get; }
 
         public bool IsRemodLoaded { get; }
         public bool IsRubyLoaded { get; }
@@ -33,7 +33,6 @@ namespace ReModCE.Managers
             var dashboard = ExtendedQuickMenu.Instance.container.Find("Window/QMParent/Menu_Dashboard").GetComponent<UIPage>();
             dashboard.GetComponentInChildren<ScrollRect>().content.Find("Carousel_Banners").gameObject.SetActive(false);
 
-
             var category = new ReMenuCategory("ReModCE", menuName);
             MainMenu = category.AddSubMenu("ReModCE", menuName, $"Open {menuName}");
             ReWingButton.Create(menuName, MainMenu.Open, ReWingButton.WingSide.Both, false);
@@ -44,12 +43,12 @@ namespace ReModCE.Managers
             MainMenu.AddSubMenu("Hotkeys", "Hotkeys", "Access hotkey related settings");
             MainMenu.AddSubMenu("Avatars", "Avatars", "Access avatar related settings");
             MainMenu.AddSubMenu("Logging", "Logging", "Access logging related settings");
-            // 
-            // TargetMenu = new ReQuickMenu("TargetReModCE", "UserInteractMenu", QuickMenuContext.UserSelected);
-            // ReMenuButton.Create(new Vector2(intialButtonPos.x + (Convert.ToInt32(IsRemodLoaded) * ButtonSize), intialButtonPos.y - (ButtonSize * 2f)),
-            //     "ReMod <color=#00ff00>CE</color> Target Options", "More options for this target",
-            //     () => TargetMenu.Open(QuickMenuContext.UserSelected),
-            //     ExtendedQuickMenu.UserInteractMenu.transform);
+
+            TargetMenu = new ReMenuPage("TargetMenu", "Target Menu");
+            var targetMenuButton = new ReMenuButton("TargetMenu", "ReMod <color=#00ff00>CE</color> Target Options",
+                "More options for this target", TargetMenu.Open,
+                ExtendedQuickMenu.Instance.container.Find("Window/QMParent/Menu_SelectedUser_Local")
+                    .GetComponentInChildren<ScrollRect>().content.Find("Buttons_UserActions"));
         }
     }
 }
