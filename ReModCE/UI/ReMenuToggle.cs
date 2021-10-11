@@ -75,6 +75,7 @@ namespace ReModCE.UI
             uiTooltip.text = tooltip;
             uiTooltip.alternateText = tooltip;
 
+            _valueHolder = defaultValue;
             var edl = GameObject.AddComponent<EnableDisableListener>();
             edl.OnEnableEvent += UpdateToggleIfNeeded;
         }
