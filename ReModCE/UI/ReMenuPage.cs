@@ -148,7 +148,7 @@ namespace ReModCE.UI
         public ReMenuPage AddSubMenu(string name, string text, string tooltip)
         {
             var menu = new ReMenuPage(name, text);
-            AddButton(name, text, tooltip, menu.Open);
+            AddButton($"{name}Menu", text, tooltip, menu.Open);
             _subMenus.Add(menu);
             return menu;
         }
