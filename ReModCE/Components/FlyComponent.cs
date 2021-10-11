@@ -25,12 +25,10 @@ namespace ReModCE.Components
         private bool _noclipEnabled;
         private readonly List<int> _disabledColliders = new List<int>();
         private bool _flyEnabled;
-        private ConfigValue<bool> SuppressFlyAnimation;
         private ConfigValue<float> FlySpeed;
         private Vector3 _originalGravity;
         private ConfigValue<bool> EnableFlyHotkey;
-
-        private ReMenuToggle _suppressFlyAnimationToggle;
+        
         private ReMenuButton _flySpeedButton;
 
         private ReMenuToggle _flyToggle;
@@ -39,8 +37,6 @@ namespace ReModCE.Components
 
         public FlyComponent()
         {
-            SuppressFlyAnimation = new ConfigValue<bool>(nameof(SuppressFlyAnimation), true);
-            SuppressFlyAnimation.OnValueChanged += () => _suppressFlyAnimationToggle.Toggle(SuppressFlyAnimation);
             FlySpeed = new ConfigValue<float>(nameof(FlySpeed), 4);
             FlySpeed.OnValueChanged += () => _flySpeedButton.Text = $"Fly Speed: {FlySpeed}";
             EnableFlyHotkey = new ConfigValue<bool>(nameof(EnableFlyHotkey), true);
@@ -73,10 +69,6 @@ namespace ReModCE.Components
             _noclipToggle = movementMenu.AddToggle("Noclip", "Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
             _hotkeyToggle = hotkeyMenu.AddToggle("FlyHotkey", "Enable Fly Hotkey", "Enable/Disable fly hotkey",
                 EnableFlyHotkey.SetValue, EnableFlyHotkey);
-
-            _suppressFlyAnimationToggle = movementMenu.AddToggle("SuppressFlyAnimation", "Suppress Fly Animations",
-                "Stay still in the air when flying instead of having dangling legs.",
-                SuppressFlyAnimation.SetValue, SuppressFlyAnimation);
 
             _flySpeedButton = movementMenu.AddButton("FlySpeed", $"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
             {
@@ -234,11 +226,8 @@ namespace ReModCE.Components
                     playerTransform.position += new Vector3(0f, Time.deltaTime * speed, 0f);
                 }
             }
-
-            if (SuppressFlyAnimation)
-            {
-                _motionState?.Reset();
-            }
+            
+            _motionState?.Reset();
         }
     }
 }
