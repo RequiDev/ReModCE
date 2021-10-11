@@ -301,7 +301,7 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var menu = uiManager.MainMenu.GetSubMenu("Visuals").AddSubMenu("", "Wireframe", "Access wireframe settings");
+            var menu = uiManager.MainMenu.GetSubMenu("Visuals").AddSubMenu("Wireframe", "Wireframe", "Access wireframe settings");
             _wireframeToggle = menu.AddToggle("Enable", "Enable", "Highlight objects using wireframe.",
                 WireframeEnabled.SetValue, WireframeEnabled);
 
