@@ -43,6 +43,7 @@ namespace ReModCE.UI
         }
 
         private readonly Toggle _toggleComponent;
+        private readonly ToggleIcon _toggleIcon;
 
         public bool Interactable
         {
@@ -57,11 +58,11 @@ namespace ReModCE.UI
             var iconOn = RectTransform.Find("Icon_On").GetComponent<Image>();
             iconOn.sprite = OnIconSprite;
 
-            var toggleIcon = GameObject.GetComponent<ToggleIcon>();
+            _toggleIcon = GameObject.GetComponent<ToggleIcon>();
 
             _toggleComponent = GameObject.GetComponent<Toggle>();
             _toggleComponent.onValueChanged = new Toggle.ToggleEvent();
-            _toggleComponent.onValueChanged.AddListener(new Action<bool>(toggleIcon.OnValueChanged));
+            _toggleComponent.onValueChanged.AddListener(new Action<bool>(_toggleIcon.OnValueChanged));
             _toggleComponent.onValueChanged.AddListener(new Action<bool>(onToggle));
 
             var tmp = GameObject.GetComponentInChildren<TextMeshProUGUI>();
@@ -74,30 +75,23 @@ namespace ReModCE.UI
             var uiTooltip = GameObject.GetComponent<VRC.UI.Elements.Tooltips.UiToggleTooltip>();
             uiTooltip.text = tooltip;
             uiTooltip.alternateText = tooltip;
+            
+            Toggle(defaultValue);
 
-            _valueHolder = defaultValue;
             var edl = GameObject.AddComponent<EnableDisableListener>();
             edl.OnEnableEvent += UpdateToggleIfNeeded;
         }
 
-        public void Toggle(bool value)
+
+        public void Toggle(bool value, bool callback = true)
         {
             _valueHolder = value;
-            if (GameObject.activeInHierarchy)
-            {
-                if (value != _toggleComponent.isOn)
-                {
-                    _toggleComponent.InternalToggle();
-                }
-            }
+            _toggleComponent.Set(value, callback);
         }
 
         private void UpdateToggleIfNeeded()
         {
-            if (_valueHolder != _toggleComponent.isOn)
-            {
-                _toggleComponent.InternalToggle();
-            }
+            _toggleIcon.OnValueChanged(_valueHolder);
         }
     }
 }
