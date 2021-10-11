@@ -50,6 +50,8 @@ namespace ReModCE.UI
             set => _toggleComponent.interactable = value;
         }
 
+        private bool _valueHolder;
+
         public ReMenuToggle(string name, string text, string tooltip, Action<bool> onToggle, Transform parent, bool defaultValue = false) : base(TogglePrefab, parent, $"Button_Toggle{name}")
         {
             var iconOn = RectTransform.Find("Icon_On").GetComponent<Image>();
@@ -74,21 +76,27 @@ namespace ReModCE.UI
             uiTooltip.alternateText = tooltip;
 
             var edl = GameObject.AddComponent<EnableDisableListener>();
-            edl.OnEnableEvent += () => SetDefaultValue(defaultValue);
+            edl.OnEnableEvent += UpdateToggleIfNeeded;
         }
 
         public void Toggle(bool value)
         {
-            if (value != _toggleComponent.isOn)
+            _valueHolder = value;
+            if (GameObject.activeInHierarchy)
             {
-                _toggleComponent.InternalToggle();
+                if (value != _toggleComponent.isOn)
+                {
+                    _toggleComponent.InternalToggle();
+                }
             }
         }
 
-        private void SetDefaultValue(bool defaultValue)
+        private void UpdateToggleIfNeeded()
         {
-            Toggle(defaultValue);
-            Object.DestroyImmediate(GameObject.GetComponent<EnableDisableListener>());
+            if (_valueHolder != _toggleComponent.isOn)
+            {
+                _toggleComponent.InternalToggle();
+            }
         }
     }
 }
