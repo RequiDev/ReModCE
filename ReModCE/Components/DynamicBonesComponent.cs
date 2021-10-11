@@ -295,8 +295,8 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            _whitelistToggle = uiManager.TargetMenu.AddToggle("Whitelist", "Whitelist Global Dynamic Bones",
-                "Enables dynamic bones for this person.",
+            _whitelistToggle = uiManager.TargetMenu.AddToggle("Whitelist", "Whitelist GDB",
+                "Enables global dynamic bones for this person.",
                 _ =>
                 {
                     var uiContext = ExtendedQuickMenu.Instance._selectedUserMenuLocal._uiContext;
