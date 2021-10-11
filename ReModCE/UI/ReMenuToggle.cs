@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using ReModCE.Core;
 using ReModCE.VRChat;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.UI.Elements.Controls;
+using Object = UnityEngine.Object;
 
 namespace ReModCE.UI
 {
@@ -16,7 +19,6 @@ namespace ReModCE.UI
             {
                 if (_togglePrefab == null)
                 {
-                    // UserInterface/Canvas_QuickMenu(Clone)/Container/Window/QMParent/Menu_Settings/Panel_QM_ScrollRect/Viewport/VerticalLayoutGroup/Buttons_UI_Elements_Row_1/Button_ToggleQMInfo
                     _togglePrefab = ExtendedQuickMenu.Instance.container
                         .Find("Window/QMParent/Menu_Settings/Panel_QM_ScrollRect").GetComponent<ScrollRect>().content
                         .Find("Buttons_UI_Elements_Row_1/Button_ToggleQMInfo").gameObject;
@@ -71,8 +73,8 @@ namespace ReModCE.UI
             uiTooltip.text = tooltip;
             uiTooltip.alternateText = tooltip;
 
-
-            Toggle(defaultValue);
+            var edl = GameObject.AddComponent<EnableDisableListener>();
+            edl.OnEnableEvent += () => SetDefaultValue(defaultValue);
         }
 
         public void Toggle(bool value)
@@ -81,6 +83,12 @@ namespace ReModCE.UI
             {
                 _toggleComponent.InternalToggle();
             }
+        }
+
+        private void SetDefaultValue(bool defaultValue)
+        {
+            Toggle(defaultValue);
+            Object.DestroyImmediate(GameObject.GetComponent<EnableDisableListener>());
         }
     }
 }
