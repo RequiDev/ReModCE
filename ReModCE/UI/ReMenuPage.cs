@@ -40,6 +40,8 @@ namespace ReModCE.UI
 
         private readonly Transform _container;
 
+        public UIPage UiPage { get; }
+
         public ReMenuPage(string name, string text, bool isRoot = false) : base(MenuPrefab, MenuPrefab.transform.parent, $"Menu_{name}", false)
         {
             Object.DestroyImmediate(GameObject.GetComponent<DevMenu>());
@@ -53,8 +55,11 @@ namespace ReModCE.UI
             titleText.text = text;
             titleText.richText = true;
 
-            var backButton = headerTransform.GetComponentInChildren<Button>(true);
-            backButton.gameObject.SetActive(true);
+            if (!_isRoot)
+            {
+                var backButton = headerTransform.GetComponentInChildren<Button>(true);
+                backButton.gameObject.SetActive(true);
+            }
 
             var buttonContainer = RectTransform.Find("Scrollrect/Viewport/VerticalLayoutGroup/Buttons");
             foreach (var obj in buttonContainer)
@@ -68,12 +73,12 @@ namespace ReModCE.UI
             }
 
             // Set up UIPage
-            var uiPage = GameObject.AddComponent<UIPage>();
-            uiPage.Name = $"QuickMenu{name}";
-            uiPage._inited = true;
-            uiPage._menuStateController = ExtendedQuickMenu.MenuStateCtrl;
-            uiPage._pageStack = new Il2CppSystem.Collections.Generic.List<UIPage>();
-            uiPage._pageStack.Add(uiPage);
+            UiPage = GameObject.AddComponent<UIPage>();
+            UiPage.Name = $"QuickMenu{name}";
+            UiPage._inited = true;
+            UiPage._menuStateController = ExtendedQuickMenu.MenuStateCtrl;
+            UiPage._pageStack = new Il2CppSystem.Collections.Generic.List<UIPage>();
+            UiPage._pageStack.Add(UiPage);
 
             // Get scroll stuff
             var scrollRect = RectTransform.Find("Scrollrect").GetComponent<ScrollRect>();
@@ -107,12 +112,12 @@ namespace ReModCE.UI
             scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
             scrollRect.viewport.GetComponent<RectMask2D>().enabled = true;
 
-            ExtendedQuickMenu.MenuStateCtrl._uiPages.Add(uiPage.Name, uiPage);
+            ExtendedQuickMenu.MenuStateCtrl._uiPages.Add(UiPage.Name, UiPage);
 
             if (isRoot)
             {
                 var rootPages = ExtendedQuickMenu.MenuStateCtrl.menuRootPages.ToList();
-                rootPages.Add(uiPage);
+                rootPages.Add(UiPage);
                 ExtendedQuickMenu.MenuStateCtrl.menuRootPages = rootPages.ToArray();
             }
         }

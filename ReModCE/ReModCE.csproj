@@ -238,6 +238,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ReAvatarList.cs" />
     <Compile Include="UI\ReMenuCategory.cs" />
+    <Compile Include="UI\ReTabButton.cs" />
     <Compile Include="UI\ReUiButton.cs" />
     <Compile Include="UI\ReUiText.cs" />
     <Compile Include="UI\ReWingMenu.cs" />

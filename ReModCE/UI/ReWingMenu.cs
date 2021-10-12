@@ -92,15 +92,15 @@ namespace ReModCE.UI
             _wing.menuController.PushPage(_menuName);
         }
 
-        public ReWingButton AddButton(string name, string text, Action onClick, bool arrow = true, bool background = true, bool seperator = false)
+        public ReWingButton AddButton(string name, string text, string tooltip, Action onClick, bool arrow = true, bool background = true, bool seperator = false)
         {
-            return new ReWingButton(name, text, onClick, _container, arrow, background, seperator);
+            return new ReWingButton(name, text, tooltip, onClick, _container, arrow, background, seperator);
         }
 
-        public ReWingMenu AddSubMenu(string name, string text)
+        public ReWingMenu AddSubMenu(string name, string text, string tooltip)
         {
             var menu = new ReWingMenu(name, text, _wing.wingType == Wing.WingPanel.Left);
-            AddButton(name, text, menu.Open);
+            AddButton(name, text, tooltip, menu.Open);
             return menu;
         }
     }
@@ -120,7 +120,7 @@ namespace ReModCE.UI
             }
         }
 
-        public ReWingButton(string name, string text, Action onClick, bool left = true, bool arrow = true, bool background = true,
+        public ReWingButton(string name, string text, string tooltip, Action onClick, bool left = true, bool arrow = true, bool background = true,
             bool seperator = false) : base(WingButtonPrefab, (left ? ExtendedQuickMenu.LeftWing : ExtendedQuickMenu.RightWing).innerContainer.Find("WingMenu/ScrollRect/Viewport/VerticalLayoutGroup"), $"Button_{name}")
         {
             var container = RectTransform.Find("Container").transform;
@@ -136,9 +136,13 @@ namespace ReModCE.UI
             var button = GameObject.GetComponent<Button>();
             button.onClick = new Button.ButtonClickedEvent();
             button.onClick.AddListener(new Action(onClick));
+
+            var uiTooltip = GameObject.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>();
+            uiTooltip.text = tooltip;
+            uiTooltip.alternateText = tooltip;
         }
 
-        public ReWingButton(string name, string text, Action onClick, Transform parent, bool arrow = true, bool background = true,
+        public ReWingButton(string name, string text, string tooltip, Action onClick, Transform parent, bool arrow = true, bool background = true,
             bool seperator = false) : base(WingButtonPrefab, parent, $"Button_{name}")
         {
             var container = RectTransform.Find("Container").transform;
@@ -154,6 +158,10 @@ namespace ReModCE.UI
             var button = GameObject.GetComponent<Button>();
             button.onClick = new Button.ButtonClickedEvent();
             button.onClick.AddListener(new Action(onClick));
+
+            var uiTooltip = GameObject.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>();
+            uiTooltip.text = tooltip;
+            uiTooltip.alternateText = tooltip;
         }
     }
 }
