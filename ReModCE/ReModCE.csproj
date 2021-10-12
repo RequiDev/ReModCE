@@ -240,7 +240,7 @@
     <Compile Include="UI\ReMenuCategory.cs" />
     <Compile Include="UI\ReUiButton.cs" />
     <Compile Include="UI\ReUiText.cs" />
-    <Compile Include="UI\ReWingButton.cs" />
+    <Compile Include="UI\ReWingMenu.cs" />
     <Compile Include="UI\UIElement.cs" />
     <Compile Include="UI\ReMenuButton.cs" />
     <Compile Include="UI\ReMenuPage.cs" />

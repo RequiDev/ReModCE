@@ -35,7 +35,19 @@ namespace ReModCE.Managers
 
             var category = new ReMenuCategory("ReModCE", menuName);
             MainMenu = category.AddSubMenu("ReModCE", menuName, $"Open {menuName}");
-            ReWingButton.Create(menuName, MainMenu.Open, ReWingButton.WingSide.Both, false);
+
+            var wingMenu = new ReWingMenu("ReModCE", menuName, false);
+            var wingButton = new ReWingButton("ReModCE", menuName, wingMenu.Open, false);
+
+            for (var i = 0; i < 16; ++i)
+            {
+                var menu = wingMenu.AddSubMenu($"SubMenu{i}", $"Sub Menu {i}");
+                for (var j = 0; j < 16; ++j)
+                {
+                    var gay = i * j;
+                    menu.AddButton($"Button{j}", $"Button {j}", () => ReLogger.Msg($"Poggers {gay}"));
+                }
+            }
 
             MainMenu.AddSubMenu("Movement", "Movement", "Access movement related settings");
             MainMenu.AddSubMenu("Visuals", "Visuals", "Access anything that will affect your game visually");
