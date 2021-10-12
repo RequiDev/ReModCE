@@ -343,7 +343,7 @@ namespace ReModCE.Components
                 _whitelistToggle.Toggle(_settings.IsWhitelisted(selectedUser.id));
             };
 
-            var menu = uiManager.MainMenu.GetSubMenu("DynamicBones");
+            var menu = uiManager.MainMenu.GetMenuPage("DynamicBones");
             menu.AddToggle("Enabled", "Enabled", "Enable/Disable global dynamic bones", ToggleDynamicBones,
                 _settings.Enabled);
             _maxRadiusButton = menu.AddButton("MaxColliderRadius", $"Max Collider Radius: {_settings.MaxRadius}", "Ignore any colliders that are bigger than this", PromptMaxRadiusInput);
@@ -360,7 +360,7 @@ namespace ReModCE.Components
             "Reload every users avatar. Necessary to apply changed dynamic bones settings.",
             () => VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars());
 
-            var ownMenu = menu.AddSubMenu("SelfOptions", "Self Options", "Adjust how your colliders affect others");
+            var ownMenu = menu.AddMenuPage("SelfOptions", "Self Options", "Adjust how your colliders affect others");
             _ownColliderOptionButton = ownMenu.AddButton("ColliderOption", $"Colliders: {_settings.OwnColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.OwnColliderOption;
@@ -444,7 +444,7 @@ namespace ReModCE.Components
             }, (_settings.OwnCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
 
-            var whitelistedMenu = menu.AddSubMenu("WhitelistedOptions", "Whitelisted Options", "Adjust how whitelisted users colliders affect others and you");
+            var whitelistedMenu = menu.AddMenuPage("WhitelistedOptions", "Whitelisted Options", "Adjust how whitelisted users colliders affect others and you");
             _whitelistedColliderOptionButton = whitelistedMenu.AddButton("ColliderOption", $"Colliders: {_settings.WhitelistColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.WhitelistColliderOption;
@@ -527,7 +527,7 @@ namespace ReModCE.Components
                 }
             }, (_settings.WhitelistCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
-            var friendsMenu = menu.AddSubMenu("FriendsOptions", "Friends Options", "Adjust how friends colliders affect others and you");
+            var friendsMenu = menu.AddMenuPage("FriendsOptions", "Friends Options", "Adjust how friends colliders affect others and you");
             _friendsColliderOptionButton = friendsMenu.AddButton("ColliderOption", $"Colliders: {_settings.FriendsColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.FriendsColliderOption;
@@ -611,7 +611,7 @@ namespace ReModCE.Components
             }, (_settings.FriendsCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
 
-            var othersMenu = menu.AddSubMenu("OthersOptions", "Others Options", "Adjust how others colliders affect others and you");
+            var othersMenu = menu.AddMenuPage("OthersOptions", "Others Options", "Adjust how others colliders affect others and you");
             _othersColliderOptionButton = othersMenu.AddButton("ColliderOption", $"Colliders: {_settings.OthersColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.OthersColliderOption;

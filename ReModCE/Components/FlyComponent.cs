@@ -62,8 +62,8 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var movementMenu = uiManager.MainMenu.GetSubMenu("Movement");
-            var hotkeyMenu = uiManager.MainMenu.GetSubMenu("Hotkeys");
+            var movementMenu = uiManager.MainMenu.GetMenuPage("Movement");
+            var hotkeyMenu = uiManager.MainMenu.GetMenuPage("Hotkeys");
 
             _flyToggle = movementMenu.AddToggle("Fly", "Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
             _noclipToggle = movementMenu.AddToggle("Noclip", "Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);

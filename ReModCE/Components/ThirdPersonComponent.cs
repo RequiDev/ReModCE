@@ -39,7 +39,7 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var hotkeyMenu = uiManager.MainMenu.GetSubMenu("Hotkeys");
+            var hotkeyMenu = uiManager.MainMenu.GetMenuPage("Hotkeys");
             _hotkeyToggle = hotkeyMenu.AddToggle("ThirdpersonHotkey", "Enable Thirdperson Hotkey", "Enable/Disable thirdperson hotkey", EnableThirdpersonHotkey.SetValue, EnableThirdpersonHotkey);
 
             var cameraObject = GameObject.Find("Camera (eye)");

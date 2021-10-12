@@ -88,7 +88,7 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var menu = uiManager.MainMenu.AddSubMenu("FBTSaver", "FBT", "Access full body tracking related settings");
+            var menu = uiManager.MainMenu.AddMenuPage("FBTSaver", "FBT", "Access full body tracking related settings");
             _enableToggle = menu.AddToggle("FBTSaver", "FBT Calibration Saver", "Enable/Disable the calibration saver",
                 CalibrationSaverEnabled.SetValue, CalibrationSaverEnabled);
             menu.AddButton("Clear", "Clear Saved Calibrations", "Clear your saved calibrations from your disk.", () =>

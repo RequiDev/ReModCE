@@ -59,7 +59,7 @@ namespace ReModCE.Components
         {
             base.OnUiManagerInit(uiManager);
 
-            var menu = uiManager.MainMenu.GetSubMenu("Visuals");
+            var menu = uiManager.MainMenu.GetMenuPage("Visuals");
             _espToggle = menu.AddToggle("ESP", "ESP/Highlights", "Enable ESP (Highlight players through walls)", b =>
             {
                 ESPEnabled.SetValue(b);

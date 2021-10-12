@@ -152,10 +152,10 @@ namespace ReModCE.Components
                 _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
             }
 
-            var menu = uiManager.MainMenu.GetSubMenu("Avatars");
+            var menu = uiManager.MainMenu.GetMenuPage("Avatars");
             _enabledToggle = menu.AddToggle("AvatarFavorites", "Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)",
                 AvatarFavoritesEnabled.SetValue, AvatarFavoritesEnabled);
-            _maxAvatarsPerPageButton = menu.AddButton("MaxAvatars", $"Max Avatars Per Page: {MaxAvatarsPerPage}",
+            _maxAvatarsPerPageButton = menu.AddButton("MaxAvatars", $"Avatars Per Page: {MaxAvatarsPerPage}",
                 "Set the maximum amount of avatars shown per page",
                 () =>
                 {

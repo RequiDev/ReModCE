@@ -72,10 +72,14 @@ namespace ReModCE.UI
         public ReMenuHeader Header;
         private readonly ReMenuButtonContainer _buttonContainer;
 
-        private readonly List<ReMenuPage> _menus = new List<ReMenuPage>();
+        private readonly List<ReMenuPage> _subMenuPages = new List<ReMenuPage>();
+        private readonly List<ReCategoryPage> _subCategoryPages = new List<ReCategoryPage>();
+        
+        public string Name { get; }
         
         public ReMenuCategory(string name, string title, Transform parent = null)
         {
+            Name = name;
             Header = new ReMenuHeader(name, title, parent);
             _buttonContainer = new ReMenuButtonContainer(name, parent);
         }
@@ -92,17 +96,30 @@ namespace ReModCE.UI
             return toggle;
         }
 
-        public ReMenuPage AddSubMenu(string name, string text, string tooltip = "")
+        public ReMenuPage AddMenuPage(string name, string text, string tooltip = "")
         {
             var menu = new ReMenuPage(name, text);
             AddButton(name, text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open);
-            _menus.Add(menu);
+            _subMenuPages.Add(menu);
             return menu;
         }
 
-        public ReMenuPage GetSubMenu(string name)
+        public ReCategoryPage AddCategoryPage(string name, string text, string tooltip = "")
         {
-            return _menus.FirstOrDefault(m => m.Name == $"Menu_{name}");
+            var menu = new ReCategoryPage(name, text);
+            AddButton(name, text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open);
+            _subCategoryPages.Add(menu);
+            return menu;
+        }
+
+        public ReMenuPage GetMenuPage(string name)
+        {
+            return _subMenuPages.FirstOrDefault(m => m.Name == $"Menu_{name}");
+        }
+
+        public ReCategoryPage GetCategoryPage(string name)
+        {
+            return _subCategoryPages.FirstOrDefault(m => m.Name == $"Menu_{name}");
         }
     }
 }

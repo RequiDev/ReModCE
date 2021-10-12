@@ -25,10 +25,10 @@ namespace ReModCE.UI
             }
         }
 
-        public ReTabButton(string name, string tooltip, ReMenuPage page) : base(TabButtonPrefab, TabButtonPrefab.transform.parent, $"Page_{name}")
+        public ReTabButton(string name, string tooltip, string pageName) : base(TabButtonPrefab, TabButtonPrefab.transform.parent, $"Page_{name}")
         {
             var menuTab = RectTransform.GetComponent<MenuTab>();
-            menuTab.pageName = page.UiPage.Name;
+            menuTab.pageName = pageName;
             menuTab._menuStateController = ExtendedQuickMenu.MenuStateCtrl;
 
             var button = GameObject.GetComponent<Button>();

@@ -111,7 +111,7 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var menu = uiManager.MainMenu.GetSubMenu("Avatars");
+            var menu = uiManager.MainMenu.GetMenuPage("Avatars");
             _enabledToggle = menu.AddToggle("AvatarHistory", "Avatar History", "Enable/Disable avatar history",
                 AvatarHistoryEnabled.SetValue, AvatarHistoryEnabled);
             _excludeOwnToggle = menu.AddToggle("ExcludeOwnAvatars", "Exclude own avatars", "Exclude own avatars for avatar history",
