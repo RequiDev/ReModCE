@@ -49,8 +49,8 @@ namespace ReModCE.UI
             _text = GameObject.GetComponentInChildren<TextMeshProUGUI>();
             _text.text = text;
             _text.richText = true;
-            _text.fontSize = 38;
-            _text.autoSizeTextContainer = true;
+            _text.fontSize = 35;
+            _text.enableAutoSizing = true;
             _text.color = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
             _text.m_fontColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
             _text.m_htmlColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
@@ -63,6 +63,13 @@ namespace ReModCE.UI
             Object.DestroyImmediate(RectTransform.Find("Icon_Secondary").gameObject);
             Object.DestroyImmediate(RectTransform.Find("Badge_Close").gameObject);
             Object.DestroyImmediate(RectTransform.Find("Badge_MMJump").gameObject);
+
+            var layoutElement = RectTransform.Find("Background").gameObject.AddComponent<LayoutElement>();
+            layoutElement.ignoreLayout = true;
+
+            var horizontalLayout = GameObject.AddComponent<HorizontalLayoutGroup>();
+            horizontalLayout.padding.right = 10;
+            horizontalLayout.padding.left = 10;
 
             var uiTooltip = GameObject.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>();
             uiTooltip.text = tooltip;
