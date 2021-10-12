@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ReModCE.Loader;
+using ReModCE.Managers;
 using ReModCE.VRChat;
 using TMPro;
 using UnityEngine;
@@ -43,33 +44,39 @@ namespace ReModCE.UI
             set => _button.interactable = value;
         }
 
-        public ReMenuButton(string name, string text, string tooltip, Action onClick, Transform parent) : base(ButtonPrefab, parent,
+        public ReMenuButton(string name, string text, string tooltip, Action onClick, Transform parent, Sprite sprite = null) : base(ButtonPrefab, parent,
             $"Button_{name}")
         {
             _text = GameObject.GetComponentInChildren<TextMeshProUGUI>();
             _text.text = text;
             _text.richText = true;
-            _text.fontSize = 35;
-            _text.enableAutoSizing = true;
-            _text.color = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
-            _text.m_fontColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
-            _text.m_htmlColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
-            _text.transform.localPosition = new Vector3(_text.transform.localPosition.x, -30f);
+            if (sprite == null)
+            {
+                _text.fontSize = 35;
+                _text.enableAutoSizing = true;
+                _text.color = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
+                _text.m_fontColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
+                _text.m_htmlColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
+                _text.transform.localPosition = new Vector3(_text.transform.localPosition.x, -30f);
 
-            var styleElement = _text.GetComponent<StyleElement>();
-            styleElement.classes = "H1";
+                var layoutElement = RectTransform.Find("Background").gameObject.AddComponent<LayoutElement>();
+                layoutElement.ignoreLayout = true;
 
-            Object.DestroyImmediate(RectTransform.Find("Icon").gameObject);
+                var horizontalLayout = GameObject.AddComponent<HorizontalLayoutGroup>();
+                horizontalLayout.padding.right = 10;
+                horizontalLayout.padding.left = 10;
+                Object.DestroyImmediate(RectTransform.Find("Icon").gameObject);
+            }
+            else
+            {
+                var iconImage = RectTransform.Find("Icon").GetComponent<Image>();
+                iconImage.sprite = sprite;
+                iconImage.overrideSprite = sprite;
+            }
+
             Object.DestroyImmediate(RectTransform.Find("Icon_Secondary").gameObject);
             Object.DestroyImmediate(RectTransform.Find("Badge_Close").gameObject);
             Object.DestroyImmediate(RectTransform.Find("Badge_MMJump").gameObject);
-
-            var layoutElement = RectTransform.Find("Background").gameObject.AddComponent<LayoutElement>();
-            layoutElement.ignoreLayout = true;
-
-            var horizontalLayout = GameObject.AddComponent<HorizontalLayoutGroup>();
-            horizontalLayout.padding.right = 10;
-            horizontalLayout.padding.left = 10;
 
             var uiTooltip = GameObject.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>();
             uiTooltip.text = tooltip;

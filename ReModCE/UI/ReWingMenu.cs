@@ -120,14 +120,23 @@ namespace ReModCE.UI
             }
         }
 
-        public ReWingButton(string name, string text, string tooltip, Action onClick, bool left = true, bool arrow = true, bool background = true,
+        public ReWingButton(string name, string text, string tooltip, Action onClick, Sprite sprite = null, bool left = true, bool arrow = true, bool background = true,
             bool seperator = false) : base(WingButtonPrefab, (left ? ExtendedQuickMenu.LeftWing : ExtendedQuickMenu.RightWing).innerContainer.Find("WingMenu/ScrollRect/Viewport/VerticalLayoutGroup"), $"Button_{name}")
         {
             var container = RectTransform.Find("Container").transform;
             container.Find("Background").gameObject.SetActive(background);
             container.Find("Icon_Arrow").gameObject.SetActive(arrow);
             RectTransform.Find("Separator").gameObject.SetActive(seperator);
-            container.Find("Icon").gameObject.SetActive(false);
+            var iconImage = container.Find("Icon").GetComponent<Image>();
+            if (sprite != null)
+            {
+                iconImage.sprite = sprite;
+                iconImage.overrideSprite = sprite;
+            }
+            else
+            {
+                iconImage.gameObject.SetActive(false);
+            }
 
             var tmp = container.GetComponentInChildren<TextMeshProUGUI>();
             tmp.text = text;

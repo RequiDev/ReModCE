@@ -25,10 +25,10 @@ namespace ReModCE.UI
             }
         }
 
-        public ReTabButton(string name, string tooltip, string pageName) : base(TabButtonPrefab, TabButtonPrefab.transform.parent, $"Page_{name}")
+        public ReTabButton(string name, string tooltip, string pageName, Sprite sprite) : base(TabButtonPrefab, TabButtonPrefab.transform.parent, $"Page_{name}")
         {
             var menuTab = RectTransform.GetComponent<MenuTab>();
-            menuTab.pageName = pageName;
+            menuTab.pageName = $"QuickMenu{pageName}";
             menuTab._menuStateController = ExtendedQuickMenu.MenuStateCtrl;
 
             var button = GameObject.GetComponent<Button>();
@@ -38,6 +38,10 @@ namespace ReModCE.UI
             var uiTooltip = GameObject.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>();
             uiTooltip.text = tooltip;
             uiTooltip.alternateText = tooltip;
+
+            var iconImage = RectTransform.Find("Icon").GetComponent<Image>();
+            iconImage.sprite = sprite;
+            iconImage.overrideSprite = sprite;
         }
     }
 }

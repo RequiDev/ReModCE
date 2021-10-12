@@ -90,9 +90,9 @@ namespace ReModCE.UI
             _buttonContainer = new ReMenuButtonContainer(name, parent);
         }
 
-        public ReMenuButton AddButton(string name, string text, string tooltip, Action onClick)
+        public ReMenuButton AddButton(string name, string text, string tooltip, Action onClick, Sprite sprite = null)
         {
-            var button = new ReMenuButton(name, text, tooltip, onClick, _buttonContainer.RectTransform);
+            var button = new ReMenuButton(name, text, tooltip, onClick, _buttonContainer.RectTransform, sprite);
             return button;
         }
 
@@ -102,10 +102,10 @@ namespace ReModCE.UI
             return toggle;
         }
 
-        public ReMenuPage AddMenuPage(string name, string text, string tooltip = "")
+        public ReMenuPage AddMenuPage(string name, string text, string tooltip = "", Sprite sprite = null)
         {
             var menu = new ReMenuPage(name, text);
-            AddButton(name, text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open);
+            AddButton(name, text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open, sprite);
             _subMenuPages.Add(menu);
             return menu;
         }

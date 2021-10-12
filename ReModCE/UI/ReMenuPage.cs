@@ -140,9 +140,9 @@ namespace ReModCE.UI
             OnOpen?.Invoke();
         }
 
-        public ReMenuButton AddButton(string name, string text, string tooltip, Action onClick)
+        public ReMenuButton AddButton(string name, string text, string tooltip, Action onClick, Sprite sprite = null)
         {
-            return new ReMenuButton(name, text, tooltip, onClick, _container);
+            return new ReMenuButton(name, text, tooltip, onClick, _container, sprite);
         }
 
         public ReMenuToggle AddToggle(string name, string text, string tooltip, Action<bool> onToggle, bool defaultValue = false)
@@ -150,10 +150,10 @@ namespace ReModCE.UI
             return new ReMenuToggle(name, text, tooltip, onToggle, _container, defaultValue);
         }
         
-        public ReMenuPage AddMenuPage(string name, string text, string tooltip = "")
+        public ReMenuPage AddMenuPage(string name, string text, string tooltip = "", Sprite sprite = null)
         {
             var menu = new ReMenuPage(name, text);
-            AddButton($"{name}Menu", text, tooltip, menu.Open);
+            AddButton($"{name}Menu", text, tooltip, menu.Open, sprite);
             _subMenuPages.Add(menu);
             return menu;
         }

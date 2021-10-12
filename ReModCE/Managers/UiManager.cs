@@ -44,14 +44,17 @@ namespace ReModCE.Managers
             dashboardScrollrect.viewport.GetComponent<RectMask2D>().enabled = true;
 
             var category = new ReMenuCategory("ReModCE", menuName);
-            MainMenu = category.AddMenuPage("ReModCE", menuName, $"Open {menuName}");
+            MainMenu = category.AddMenuPage("ReModCE", menuName, $"Open {menuName}", ResourceManager.GetSprite("remod"));
 
             var wingMenu = new ReWingMenu("ReModCE", menuName, false);
-            var wingButton = new ReWingButton("ReModCE", menuName, "", wingMenu.Open, false);
+            var wingButton = new ReWingButton("ReModCE", menuName, "", wingMenu.Open, ResourceManager.GetSprite("remod"), false);
 
-            MainMenu.AddMenuPage("Movement", "Movement", "Access movement related settings");
+            var tabButton = new ReTabButton("ReModCE", $"Open the {menuName} menu.", "ReModCE",
+                ResourceManager.GetSprite("remod"));
+
+            MainMenu.AddMenuPage("Movement", "Movement", "Access movement related settings", ResourceManager.GetSprite("running"));
             MainMenu.AddMenuPage("Visuals", "Visuals", "Access anything that will affect your game visually");
-            MainMenu.AddMenuPage("DynamicBones", "Dynamic Bones", "Access your global dynamic bone settings");
+            MainMenu.AddMenuPage("DynamicBones", "Dynamic Bones", "Access your global dynamic bone settings", ResourceManager.GetSprite("bone"));
             MainMenu.AddMenuPage("Hotkeys", "Hotkeys", "Access hotkey related settings");
             MainMenu.AddMenuPage("Avatars", "Avatars", "Access avatar related settings");
             MainMenu.AddMenuPage("Logging", "Logging", "Access logging related settings");

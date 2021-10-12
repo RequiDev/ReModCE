@@ -120,6 +120,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Managed\UnityEngine.IMGUIModule.dll</HintPath>
@@ -230,6 +233,7 @@
     <Compile Include="Core\ModComponent.cs" />
     <Compile Include="Core\ConfigValue.cs" />
     <Compile Include="Core\ReAvatar.cs" />
+    <Compile Include="Managers\ResourceManager.cs" />
     <Compile Include="Core\TaskExtensions.cs" />
     <Compile Include="Core\ColorExtensions.cs" />
     <Compile Include="Core\XrefUtils.cs" />
@@ -260,6 +264,14 @@
       <Project>{6e5e0e59-73d9-4d74-b734-d040d26710c4}</Project>
       <Name>ReModCE.Loader</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\bone.png" />
+    <EmbeddedResource Include="Resources\remod.png" />
+    <EmbeddedResource Include="Resources\running.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\remod.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
