@@ -96,9 +96,10 @@ namespace ReModCE.UI
             glp.constraintCount = gridLayoutGroup.constraintCount;
             glp.startAxis = gridLayoutGroup.startAxis;
             glp.startCorner = gridLayoutGroup.startCorner;
-            glp.childAlignment = gridLayoutGroup.childAlignment;
+            glp.childAlignment = TextAnchor.UpperLeft;
             glp.padding = gridLayoutGroup.padding;
             glp.padding.top = 8;
+            glp.padding.left = 64;
 
             // delete components we're not using
             Object.DestroyImmediate(_container.Find("Buttons").gameObject);

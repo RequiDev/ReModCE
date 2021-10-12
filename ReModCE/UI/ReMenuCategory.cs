@@ -64,6 +64,12 @@ namespace ReModCE.UI
                 }
                 Object.Destroy(control.gameObject);
             }
+
+            var gridLayout = GameObject.GetComponent<GridLayoutGroup>();
+
+            gridLayout.childAlignment = TextAnchor.UpperLeft;
+            gridLayout.padding.top = 8;
+            gridLayout.padding.left = 64;
         }
     }
 

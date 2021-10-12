@@ -50,7 +50,7 @@ namespace ReModCE.Managers
             for (var i = 0; i < 4; ++i)
             {
                 var cat = categoryPage.AddCategory($"Category{i}", $"Category {i}");
-                for (var j = 0; j < 4; ++j)
+                for (var j = 0; j < 3; ++j)
                 {
                     cat.AddButton($"Button{i}{j}", $"Button {i}{j}", "", () => { });
                 }
