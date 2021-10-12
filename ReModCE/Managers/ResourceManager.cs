@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using ReModCE.Loader;
 using UnityEngine;
 
 namespace ReModCE.Managers
@@ -11,6 +12,13 @@ namespace ReModCE.Managers
         private static readonly Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
         private static readonly Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>();
 
+        private static readonly Assembly Assembly;
+
+        static ResourceManager()
+        {
+            Assembly = Assembly.GetExecutingAssembly();
+        }
+
         public static Texture2D GetTexture(string resourceName)
         {
             if (Textures.ContainsKey(resourceName))
@@ -18,10 +26,11 @@ namespace ReModCE.Managers
                 return Textures[resourceName];
             }
 
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"ReModCE.Resources.{resourceName}.png");
+            var resourcePath = $"{Assembly.GetName().Name}.Resources.{resourceName}.png";
+            var stream = Assembly.GetManifestResourceStream(resourcePath);
             if (stream == null)
             {
-                throw new ArgumentException("Resource doesn't exist", resourceName);
+                throw new ArgumentException($"Resource \"{resourcePath}\" doesn't exist", nameof(resourceName));
             }
 
             using var ms = new MemoryStream();
