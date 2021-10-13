@@ -137,8 +137,6 @@ namespace ReModCE.UI
                 ExtendedQuickMenu.MenuStateCtrl.PushPage($"QuickMenu{_menuName}");
             }
 
-
-            // Active = true;
             OnOpen?.Invoke();
         }
 
@@ -155,7 +153,7 @@ namespace ReModCE.UI
         public ReMenuPage AddMenuPage(string name, string text, string tooltip = "", Sprite sprite = null)
         {
             var menu = new ReMenuPage(name, text);
-            AddButton($"{name}Menu", text, tooltip, menu.Open, sprite);
+            AddButton($"{name}Menu", text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open, sprite);
             _subMenuPages.Add(menu);
             return menu;
         }
@@ -163,7 +161,7 @@ namespace ReModCE.UI
         public ReCategoryPage AddCategoryMenu(string name, string text, string tooltip = "")
         {
             var menu = new ReCategoryPage(name, text);
-            AddButton(name, text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open);
+            AddButton($"{name}Menu", text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open);
             _subCategoryPages.Add(menu);
             return menu;
         }

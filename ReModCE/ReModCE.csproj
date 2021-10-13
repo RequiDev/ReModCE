@@ -270,9 +270,7 @@
     <EmbeddedResource Include="Resources\remod.png" />
     <EmbeddedResource Include="Resources\running.png" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\remod.png" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y $(TargetFileName) S:\Games\steamapps\common\VRChat\$(TargetFileName)
