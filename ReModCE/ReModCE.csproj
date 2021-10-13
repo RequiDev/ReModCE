@@ -266,9 +266,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\bone.png" />
-    <EmbeddedResource Include="Resources\remod.png" />
-    <EmbeddedResource Include="Resources\running.png" />
+    <EmbeddedResource Include="Resources\*.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
