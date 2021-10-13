@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using MelonLoader;
@@ -31,17 +32,7 @@ namespace ReModCE.Managers
             IsEmmVRCLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "emmVRCLoader");
             IsRubyLoaded = File.Exists("hid.dll");
 
-            var dashboard = ExtendedQuickMenu.Instance.container.Find("Window/QMParent/Menu_Dashboard").GetComponent<UIPage>();
-            var dashboardScrollrect = dashboard.GetComponentInChildren<ScrollRect>();
-            var dashboardScrollbar = dashboardScrollrect.transform.Find("Scrollbar").GetComponent<Scrollbar>();
-
-            var dashboardContent = dashboardScrollrect.content;
-            dashboardContent.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
-            dashboardContent.Find("Carousel_Banners").gameObject.SetActive(false);
-
-            dashboardScrollrect.enabled = true;
-            dashboardScrollrect.verticalScrollbar = dashboardScrollbar;
-            dashboardScrollrect.viewport.GetComponent<RectMask2D>().enabled = true;
+            FixLaunchpadScrolling();
 
             var category = new ReMenuCategory("ReModCE", menuName);
             MainMenu = category.AddMenuPage("ReModCE", menuName, $"Open {menuName}", ResourceManager.GetSprite("remod"));
@@ -60,9 +51,25 @@ namespace ReModCE.Managers
             MainMenu.AddMenuPage("Logging", "Logging", "Access logging related settings");
 
             TargetMenu = new ReMenuPage("TargetMenu", "Target Menu");
-            var targetMenuButton = new ReMenuButton("TargetMenu", "ReMod <color=#00ff00>CE</color> Target Options",
+            var targetMenuButton = new ReMenuButton("TargetMenu", "Target Options",
                 "More options for this target", TargetMenu.Open,
-                ExtendedQuickMenu.Instance._selectedUserMenuLocal.GetComponentInChildren<ScrollRect>().content.Find("Buttons_UserActions"));
+                ExtendedQuickMenu.Instance._selectedUserMenuLocal.GetComponentInChildren<ScrollRect>().content.Find("Buttons_UserActions"),
+                ResourceManager.GetSprite("remod"));
+        }
+
+        private void FixLaunchpadScrolling()
+        {
+            var dashboard = ExtendedQuickMenu.Instance.container.Find("Window/QMParent/Menu_Dashboard").GetComponent<UIPage>();
+            var scrollRect = dashboard.GetComponentInChildren<ScrollRect>();
+            var dashboardScrollbar = scrollRect.transform.Find("Scrollbar").GetComponent<Scrollbar>();
+
+            var dashboardContent = scrollRect.content;
+            dashboardContent.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
+            dashboardContent.Find("Carousel_Banners").gameObject.SetActive(false);
+
+            scrollRect.enabled = true;
+            scrollRect.verticalScrollbar = dashboardScrollbar;
+            scrollRect.viewport.GetComponent<RectMask2D>().enabled = true;
         }
     }
 }

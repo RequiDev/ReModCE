@@ -62,6 +62,8 @@ namespace ReModCE.UI
                 backButton.gameObject.SetActive(true);
             }
 
+            headerTransform.name = $"Header_{name}";
+
             var buttonContainer = RectTransform.Find("Scrollrect/Viewport/VerticalLayoutGroup/Buttons");
             foreach (var obj in buttonContainer)
             {
@@ -149,7 +151,7 @@ namespace ReModCE.UI
         {
             return new ReMenuToggle(name, text, tooltip, onToggle, _container, defaultValue);
         }
-        
+
         public ReMenuPage AddMenuPage(string name, string text, string tooltip = "", Sprite sprite = null)
         {
             var menu = new ReMenuPage(name, text);

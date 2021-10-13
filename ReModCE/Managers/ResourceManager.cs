@@ -39,6 +39,7 @@ namespace ReModCE.Managers
             var texture = new Texture2D(1, 1);
             ImageConversion.LoadImage(texture, ms.ToArray());
             texture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            texture.wrapMode = TextureWrapMode.Clamp;
 
             Textures.Add(resourceName, texture);
 
@@ -59,7 +60,7 @@ namespace ReModCE.Managers
             var border = Vector4.zero;
             var sprite = Sprite.CreateSprite_Injected(texture, ref rect, ref pivot, 100.0f, 0, SpriteMeshType.Tight, ref border, false);
             sprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-
+            
             Sprites.Add(resourceName, sprite);
 
             return sprite;
