@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VRC;
 using VRC.Core;
-
+using VRC.UI.Elements.Menus;
 using DynamicBoneColliderBound = DynamicBoneCollider.EnumNPublicSealedvaOuIn3vUnique;
 
 namespace ReModCE.Components
@@ -299,17 +299,11 @@ namespace ReModCE.Components
                 "Enables global dynamic bones for this person.",
                 _ =>
                 {
-                    var uiContext = ExtendedQuickMenu.Instance._selectedUserMenuLocal._uiContext;
-                    if (uiContext == null)
-                        return;
-                    var userData = uiContext.UserData;
-                    var userDataCasted = userData.TryCast<VRC.DataModel.Core.DataModel<APIUser>>();
-
-                    var selectedUser = userDataCasted?._obj;
+                    var selectedUser = ExtendedQuickMenu.Instance._selectedUserMenuLocal.Cast<SelectedUserMenuQM>()._user;
                     if (selectedUser == null)
                         return;
 
-                    WhitelistUser(selectedUser.id);
+                    WhitelistUser(selectedUser.ID);
                 });
 
             uiManager.TargetMenu.AddButton("ReloadAvatar", "Reload Avatar", "Reload this users avatar", () =>

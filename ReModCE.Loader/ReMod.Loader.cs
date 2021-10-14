@@ -8,7 +8,6 @@ using System.Net;
 using System.Text;
 using System.Reflection;
 using System.Security.Cryptography;
-using UnityEngine;
 using VRC.UI.Core;
 using Object = UnityEngine.Object;
 

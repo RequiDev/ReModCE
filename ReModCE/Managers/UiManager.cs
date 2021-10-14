@@ -1,17 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using MelonLoader;
-using ReModCE.Core;
-using ReModCE.Loader;
 using ReModCE.UI;
 using ReModCE.VRChat;
-using UnityEngine;
 using UnityEngine.UI;
 using VRC.UI.Elements;
-using Object = UnityEngine.Object;
-using QuickMenuContext = QuickMenuContextualDisplay.EnumNPublicSealedvaUnNoToUs7vUsNoUnique;
 
 namespace ReModCE.Managers
 {

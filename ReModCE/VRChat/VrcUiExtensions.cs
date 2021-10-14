@@ -1,8 +1,6 @@
 ﻿using Il2CppSystem.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using VRC.Core;
-using VRC.UI.Elements;
 
 namespace ReModCE.VRChat
 {

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using ReModCE.Core;
 using ReModCE.VRChat;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.UI.Elements.Controls;
-using Object = UnityEngine.Object;
 
 namespace ReModCE.UI
 {

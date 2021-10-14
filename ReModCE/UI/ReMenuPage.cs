@@ -5,8 +5,6 @@ using ReModCE.VRChat;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VRC.DataModel.Core;
-using VRC.UI.Core;
 using VRC.UI.Elements;
 using VRC.UI.Elements.Menus;
 using Object = UnityEngine.Object;

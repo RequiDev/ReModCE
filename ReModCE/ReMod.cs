@@ -10,7 +10,6 @@ using ReModCE.Components;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
-using ReModCE.VRChat;
 using UnhollowerRuntimeLib;
 using VRC;
 

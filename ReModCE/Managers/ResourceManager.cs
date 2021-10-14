@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using ReModCE.Loader;
 using UnityEngine;
 
 namespace ReModCE.Managers
