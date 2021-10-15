@@ -156,7 +156,7 @@ namespace ReModCE.UI
             return menu;
         }
 
-        public ReCategoryPage AddCategoryMenu(string name, string text, string tooltip = "")
+        public ReCategoryPage AddCategoryPage(string name, string text, string tooltip = "")
         {
             var menu = new ReCategoryPage(name, text);
             AddButton($"{name}Menu", text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open);

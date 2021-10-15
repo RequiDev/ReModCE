@@ -101,8 +101,6 @@ namespace ReModCE.UI
                 ExtendedQuickMenu.MenuStateCtrl.PushPage($"QuickMenu{_menuName}");
             }
 
-
-            // Active = true;
             OnOpen?.Invoke();
         }
 

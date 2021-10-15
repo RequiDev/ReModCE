@@ -241,7 +241,7 @@
     <Compile Include="ReMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ReAvatarList.cs" />
-    <Compile Include="UI\ReCategoryMenu.cs" />
+    <Compile Include="UI\ReCategoryPage.cs" />
     <Compile Include="UI\ReMenuCategory.cs" />
     <Compile Include="UI\ReTabButton.cs" />
     <Compile Include="UI\ReUiButton.cs" />

@@ -3,6 +3,7 @@ using System.Linq;
 using MelonLoader;
 using ReModCE.UI;
 using ReModCE.VRChat;
+using UnityEngine;
 using UnityEngine.UI;
 using VRC.UI.Elements;
 
@@ -27,14 +28,17 @@ namespace ReModCE.Managers
 
             FixLaunchpadScrolling();
 
-            var category = new ReMenuCategory("ReModCE", menuName);
-            MainMenu = category.AddMenuPage("ReModCE", menuName, $"Open {menuName}", ResourceManager.GetSprite("remod"));
+
+            MainMenu = new ReMenuPage("ReModCE", menuName, true);
+            var mainTab = new ReTabButton("ReModCE", $"Open {menuName}", "ReModCE", ResourceManager.GetSprite("remod"));
+
+            var categoryPage = MainMenu.AddCategoryPage("MediaMenu", "Media", "Media Menu");
+            var videoCat = categoryPage.AddCategory("VideoOptions", "Video Options");
+
+            videoCat.AddButton("PlayVideo", "Play\nVideo", "Play Video on Videoplayer", () => { });
 
             var wingMenu = new ReWingMenu("ReModCE", menuName, false);
             var wingButton = new ReWingButton("ReModCE", menuName, "", wingMenu.Open, ResourceManager.GetSprite("remod"), false);
-
-            var tabButton = new ReTabButton("ReModCE", $"Open the {menuName} menu.", "ReModCE",
-                ResourceManager.GetSprite("remod"));
 
             MainMenu.AddMenuPage("Movement", "Movement", "Access movement related settings", ResourceManager.GetSprite("running"));
             MainMenu.AddMenuPage("Visuals", "Visuals", "Access anything that will affect your game visually");
