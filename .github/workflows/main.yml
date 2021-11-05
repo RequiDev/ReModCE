@@ -18,7 +18,7 @@ jobs:
       with:
         repository: ${{ secrets.LibsRepository }}
         token: ${{ secrets.LibsRepositoryToken }}
-        path: Dependencies
+        path: 3rdparty/ml
         
     - name: Setup .NET
       uses: actions/setup-dotnet@v1

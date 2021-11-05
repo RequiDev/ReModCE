@@ -1,5 +1,8 @@
 <Project>
     <PropertyGroup>
-        <OutputPath>$(MsBuildThisFileDirectory)\Build\$(Configuration)\</OutputPath>
+		<PlatformTarget>x64</PlatformTarget>
+		<OutputPath>..\.build\$(Configuration) ($(PlatformTarget))\Modules\$(ProjectName)\</OutputPath>
+		<BaseIntermediateOutputPath>..\.build</BaseIntermediateOutputPath>
+		<IntermediateOutputPath>$(BaseIntermediateOutputPath)\tmp\$(Configuration) ($(PlatformTarget))\$(ProjectName)\</IntermediateOutputPath>
     </PropertyGroup>
 </Project>

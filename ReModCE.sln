@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReModCE", "ReModCE\ReModCE.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReModCE.Loader", "ReModCE.Loader\ReModCE.Loader.csproj", "{6E5E0E59-73D9-4D74-B734-D040D26710C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReMod.Core", "F:\source\repos\ReModCE\ReMod.Core\ReMod.Core.csproj", "{C87FE758-ACB9-4FA2-AF6F-10AA9AA0023C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6E5E0E59-73D9-4D74-B734-D040D26710C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E5E0E59-73D9-4D74-B734-D040D26710C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E5E0E59-73D9-4D74-B734-D040D26710C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C87FE758-ACB9-4FA2-AF6F-10AA9AA0023C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C87FE758-ACB9-4FA2-AF6F-10AA9AA0023C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C87FE758-ACB9-4FA2-AF6F-10AA9AA0023C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C87FE758-ACB9-4FA2-AF6F-10AA9AA0023C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

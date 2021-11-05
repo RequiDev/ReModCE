@@ -1,7 +1,9 @@
-﻿using ReModCE.Core;
+﻿using ReMod.Core;
+using ReMod.Core.Managers;
+using ReMod.Core.UI;
+using ReMod.Core.VRChat;
+using ReModCE.Core;
 using ReModCE.Managers;
-using ReModCE.UI;
-using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC;
@@ -55,25 +57,25 @@ namespace ReModCE.Components
             base.OnUiManagerInit(uiManager);
 
             var menu = uiManager.MainMenu.GetMenuPage("Visuals");
-            _espToggle = menu.AddToggle("ESP", "ESP/Highlights", "Enable ESP (Highlight players through walls)", b =>
+            _espToggle = menu.AddToggle("ESP/Highlights", "Enable ESP (Highlight players through walls)", b =>
             {
                 ESPEnabled.SetValue(b);
                 ToggleESP(b);
             }, ESPEnabled);
 
-            _friendsColorButton = menu.AddButton("FriendsColor", $"<color=#{FriendsColor.Value.ToHex()}>Friends</color> Color",
+            _friendsColorButton = menu.AddButton($"<color=#{FriendsColor.Value.ToHex()}>Friends</color> Color",
                 $"Set your <color=#{FriendsColor.Value.ToHex()}>friends</color> highlight color",
                 () =>
                 {
                     PopupColorInput(_friendsColorButton, "Friends", FriendsColor);
-                });
+                }, ResourceManager.Instance.GetSprite("palette"));
 
-            _othersColorButton = menu.AddButton("OthersColor", $"<color=#{OthersColor.Value.ToHex()}>Others</color> Color",
+            _othersColorButton = menu.AddButton($"<color=#{OthersColor.Value.ToHex()}>Others</color> Color",
                 $"Set <color=#{OthersColor.Value.ToHex()}>other</color> peoples highlight color",
                 () =>
                 {
                     PopupColorInput(_othersColorButton, "Others", OthersColor);
-                });
+                }, ResourceManager.Instance.GetSprite("palette"));
         }
 
         private void PopupColorInput(ReMenuButton button, string who, ConfigValue<Color> configValue)

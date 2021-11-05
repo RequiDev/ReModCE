@@ -34,46 +34,52 @@
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\Il2Cppmscorlib.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MelonLoader, Version=0.4.3.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\MelonLoader.dll</HintPath>
+      <HintPath>..\3rdparty\ml\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnhollowerBaseLib">
-      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\UnhollowerBaseLib.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\UnhollowerBaseLib.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="VRC.UI.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Core.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\VRC.UI.Core.dll</HintPath>
     </Reference>
     <Reference Include="VRC.UI.Elements, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Elements.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\VRC.UI.Elements.dll</HintPath>
     </Reference>
     <Reference Include="VRC.UI.Shared, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.UI.Shared.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\VRC.UI.Shared.dll</HintPath>
     </Reference>
     <Reference Include="VRC.Utility, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\source\repos\ReModCE\Dependencies\Managed\VRC.Utility.dll</HintPath>
+      <HintPath>..\3rdparty\ml\Managed\VRC.Utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

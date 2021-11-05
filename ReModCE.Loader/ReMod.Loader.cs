@@ -237,7 +237,7 @@ namespace ReModCE.Loader
             while (VRCUiManager.field_Private_Static_VRCUiManager_0 == null) yield return null;
             OnUiManagerInitEarly();
 
-            while (UIManager.Instance == null) yield return null;
+            while (UIManager.field_Private_Static_UIManager_0 == null) yield return null;
             while (Object.FindObjectOfType<VRC.UI.Elements.QuickMenu>() == null) yield return null;
 
             OnUiManagerInit();

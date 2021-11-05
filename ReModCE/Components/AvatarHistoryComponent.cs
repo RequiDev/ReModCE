@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MelonLoader.ICSharpCode.SharpZipLib.GZip;
+using ReMod.Core;
+using ReMod.Core.Managers;
+using ReMod.Core.UI;
+using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
-using ReModCE.UI;
-using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.Core;
@@ -112,9 +114,9 @@ namespace ReModCE.Components
         public override void OnUiManagerInit(UiManager uiManager)
         {
             var menu = uiManager.MainMenu.GetMenuPage("Avatars");
-            _enabledToggle = menu.AddToggle("AvatarHistory", "Avatar History", "Enable/Disable avatar history",
+            _enabledToggle = menu.AddToggle("Avatar History", "Enable/Disable avatar history",
                 AvatarHistoryEnabled.SetValue, AvatarHistoryEnabled);
-            _excludeOwnToggle = menu.AddToggle("ExcludeOwnAvatars", "Exclude own avatars", "Exclude own avatars for avatar history",
+            _excludeOwnToggle = menu.AddToggle("Exclude own avatars", "Exclude own avatars for avatar history",
                 AvatarHistoryExcludeOwn.SetValue, AvatarHistoryExcludeOwn);
         }
 

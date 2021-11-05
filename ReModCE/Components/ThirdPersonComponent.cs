@@ -1,7 +1,9 @@
 ﻿using System;
+using ReMod.Core;
+using ReMod.Core.Managers;
+using ReMod.Core.UI;
 using ReModCE.Core;
 using ReModCE.Managers;
-using ReModCE.UI;
 using UnityEngine;
 
 namespace ReModCE.Components
@@ -40,7 +42,7 @@ namespace ReModCE.Components
         public override void OnUiManagerInit(UiManager uiManager)
         {
             var hotkeyMenu = uiManager.MainMenu.GetMenuPage("Hotkeys");
-            _hotkeyToggle = hotkeyMenu.AddToggle("ThirdpersonHotkey", "Enable Thirdperson Hotkey", "Enable/Disable thirdperson hotkey", EnableThirdpersonHotkey.SetValue, EnableThirdpersonHotkey);
+            _hotkeyToggle = hotkeyMenu.AddToggle("Thirdperson Hotkey", "Enable/Disable thirdperson hotkey", EnableThirdpersonHotkey.SetValue, EnableThirdpersonHotkey);
 
             var cameraObject = GameObject.Find("Camera (eye)");
 

@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ReMod.Core;
+using ReMod.Core.Managers;
+using ReMod.Core.UI;
+using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Managers;
-using ReModCE.UI;
-using ReModCE.VRChat;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using VRC.Animation;
 using VRC.SDK3.Components;
+using VRC.UI.Elements;
 using VRCSDK2;
 using VRC_AvatarPedestal = VRC.SDKBase.VRC_AvatarPedestal;
 using VRC_Pickup = VRC.SDKBase.VRC_Pickup;
@@ -64,12 +67,12 @@ namespace ReModCE.Components
             var movementMenu = uiManager.MainMenu.GetMenuPage("Movement");
             var hotkeyMenu = uiManager.MainMenu.GetMenuPage("Hotkeys");
 
-            _flyToggle = movementMenu.AddToggle("Fly", "Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
-            _noclipToggle = movementMenu.AddToggle("Noclip", "Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
-            _hotkeyToggle = hotkeyMenu.AddToggle("FlyHotkey", "Enable Fly Hotkey", "Enable/Disable fly hotkey",
+            _flyToggle = movementMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
+            _noclipToggle = movementMenu.AddToggle("Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
+            _hotkeyToggle = hotkeyMenu.AddToggle("Fly Hotkey", "Enable/Disable fly hotkey",
                 EnableFlyHotkey.SetValue, EnableFlyHotkey);
 
-            _flySpeedButton = movementMenu.AddButton("FlySpeed", $"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
+            _flySpeedButton = movementMenu.AddButton($"Fly Speed: {FlySpeed}", "Adjust your speed when flying", () =>
             {
                 VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Set fly speed", FlySpeed.ToString(), InputField.InputType.Standard, false, "Submit",
                     (s, k, t) =>
@@ -82,7 +85,7 @@ namespace ReModCE.Components
 
                         FlySpeed.SetValue(flySpeed);
                     }, null);
-            });
+            }, ResourceManager.Instance.GetSprite("speed"));
         }
 
         private readonly List<Il2CppSystem.Type> _blacklistedComponents = new List<Il2CppSystem.Type>

@@ -8,11 +8,13 @@ using System.Net.Http;
 using System.Text;
 using MelonLoader;
 using Newtonsoft.Json;
+using ReMod.Core;
+using ReMod.Core.Managers;
+using ReMod.Core.UI;
+using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
-using ReModCE.UI;
-using ReModCE.VRChat;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;
@@ -146,15 +148,14 @@ namespace ReModCE.Components
         {
             base.OnUiManagerInit(uiManager);
 
-            if (uiManager.IsRemodLoaded || uiManager.IsRubyLoaded)
+            if (ReModCE.IsRubyLoaded)
             {
-                _favoriteButton.Position += new Vector3(UiManager.ButtonSize, 0f);
+                _favoriteButton.Position += new Vector3(420f, 0f);
             }
 
             var menu = uiManager.MainMenu.GetMenuPage("Avatars");
-            _enabledToggle = menu.AddToggle("AvatarFavorites", "Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)",
-                AvatarFavoritesEnabled.SetValue, AvatarFavoritesEnabled);
-            _maxAvatarsPerPageButton = menu.AddButton("MaxAvatars", $"Avatars Per Page: {MaxAvatarsPerPage}",
+            _enabledToggle = menu.AddToggle("Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)", AvatarFavoritesEnabled);
+            _maxAvatarsPerPageButton = menu.AddButton($"Avatars Per Page: {MaxAvatarsPerPage}",
                 "Set the maximum amount of avatars shown per page",
                 () =>
                 {
@@ -171,11 +172,11 @@ namespace ReModCE.Components
                             MaxAvatarsPerPage.SetValue(maxAvatarsPerPage);
                             _maxAvatarsPerPageButton.Text = $"Max Avatars Per Page: {MaxAvatarsPerPage}";
                         }, null);
-                });
+                }, ResourceManager.Instance.GetSprite("max"));
 
             if (_pinCode == 0)
             {
-                _enterPinButton = menu.AddButton("EnterPin", "Set/Enter Pin", "Set or enter your pin for the ReMod CE API", () =>
+                _enterPinButton = menu.AddButton("Set/Enter Pin", "Set or enter your pin for the ReMod CE API", () =>
                 {
                     VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Enter pin",
                         "", InputField.InputType.Standard, true, "Submit",
@@ -194,7 +195,7 @@ namespace ReModCE.Components
 
                             LoginToAPI(APIUser.CurrentUser, FetchAvatars);
                         }, null);
-                });
+                }, ResourceManager.Instance.GetSprite("padlock"));
             }
         }
 
@@ -210,12 +211,12 @@ namespace ReModCE.Components
 
             if (!_searchBox.field_Public_Button_0.interactable)
             {
-                if (!UiManager.IsEmmVRCLoaded || _updatesWithoutSearch >= 10)
+                if (!ReModCE.IsEmmVRCLoaded || _updatesWithoutSearch >= 10)
                 {
                     _searchBox.field_Public_Button_0.interactable = true;
                     _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
                 }
-                else if (UiManager.IsEmmVRCLoaded)
+                else if (ReModCE.IsEmmVRCLoaded)
                 {
                     ++_updatesWithoutSearch;
                 }
@@ -223,7 +224,7 @@ namespace ReModCE.Components
             }
             else
             {
-                if (UiManager.IsEmmVRCLoaded && _updatesWithoutSearch < 10)
+                if (ReModCE.IsEmmVRCLoaded && _updatesWithoutSearch < 10)
                 {
                     if (_searchBox.field_Public_UnityAction_1_String_0 == null)
                         return;

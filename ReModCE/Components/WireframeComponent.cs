@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using MelonLoader;
+using ReMod.Core;
+using ReMod.Core.Managers;
+using ReMod.Core.UI;
+using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Managers;
-using ReModCE.UI;
-using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
@@ -301,11 +303,11 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var menu = uiManager.MainMenu.GetMenuPage("Visuals").AddMenuPage("Wireframe", "Wireframe", "Access wireframe settings");
-            _wireframeToggle = menu.AddToggle("Enable", "Enable", "Highlight objects using wireframe.",
-                WireframeEnabled.SetValue, WireframeEnabled);
+            var menu = uiManager.MainMenu.GetMenuPage("Visuals").AddMenuPage("Wireframe", "Access wireframe settings", ResourceManager.Instance.GetSprite("wireframe"));
+            _wireframeToggle = menu.AddToggle("Enable", "Highlight objects using wireframe.",
+                WireframeEnabled);
 
-            _rangeButton = menu.AddButton("WireframeRange", $"Range: {WireframeRange}",
+            _rangeButton = menu.AddButton($"Range: {WireframeRange}",
                 "Set the range on when wireframe starts rendering",
                 () =>
                 {
@@ -321,20 +323,20 @@ namespace ReModCE.Components
 
                             WireframeRange.SetValue(range);
                         }, null);
-                });
+                }, ResourceManager.Instance.GetSprite("binoculars"));
 
-            _hideOriginalObjectsToggle = menu.AddToggle("HideOriginal", "Hide Original", "Hide original meshes so only the wireframe shows",
+            _hideOriginalObjectsToggle = menu.AddToggle("Hide Original", "Hide original meshes so only the wireframe shows",
                     WireframeHideOriginalObjects.SetValue, WireframeHideOriginalObjects);
 
-            _wireframeIgnoreZToggle = menu.AddToggle("IgnoreZ", "Ignore Z", "Enable/Disable Ignore Z (Visible through walls)",
+            _wireframeIgnoreZToggle = menu.AddToggle("Ignore Z", "Enable/Disable Ignore Z (Visible through walls)",
                 WireframeIgnoreZ.SetValue, WireframeIgnoreZ);
-            _includePlayersToggle = menu.AddToggle("IncludePlayers", "Include Players", "Include players in wireframe ESP",
+            _includePlayersToggle = menu.AddToggle("Include Players", "Include players in wireframe ESP",
                 WireframeIncludePlayers.SetValue, WireframeIncludePlayers);
-            _includeSelfToggle = menu.AddToggle("IncludeSelf", "Include Self", "Include yourself in wireframe ESP",
+            _includeSelfToggle = menu.AddToggle("Include Self", "Include yourself in wireframe ESP",
                 WireframeIncludeSelf.SetValue, WireframeIncludeSelf);
-            _includeWorldToggle = menu.AddToggle("IncludeWorld", "Include Default/World", "Include default layer stuff like the world in wireframe ESP",
+            _includeWorldToggle = menu.AddToggle("Include Default/World", "Include default layer stuff like the world in wireframe ESP",
                 WireframeIncludeDefault.SetValue, WireframeIncludeDefault);
-            _includePickupsToggle = menu.AddToggle("IncludePickups", "Include Pickups", "Include pickups in wireframe ESP",
+            _includePickupsToggle = menu.AddToggle("Include Pickups", "Include pickups in wireframe ESP",
                 WireframeIncludePickups.SetValue, WireframeIncludePickups);
 
         }

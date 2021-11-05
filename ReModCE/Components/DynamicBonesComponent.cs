@@ -4,14 +4,17 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using ReMod.Core;
+using ReMod.Core.Managers;
+using ReMod.Core.UI;
+using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Managers;
-using ReModCE.UI;
-using ReModCE.VRChat;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC;
 using VRC.Core;
+using VRC.DataModel;
 using VRC.UI.Elements.Menus;
 using DynamicBoneColliderBound = DynamicBoneCollider.EnumNPublicSealedvaOuIn3vUnique;
 
@@ -293,55 +296,42 @@ namespace ReModCE.Components
             _settings = Settings.FromFile();
         }
 
+        public override void OnSelectUser(IUser user, bool isRemote)
+        {
+            if (isRemote)
+                return;
+
+            _whitelistToggle.Toggle(_settings.IsWhitelisted(user.prop_String_0), false, true);
+        }
+
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            _whitelistToggle = uiManager.TargetMenu.AddToggle("Whitelist", "Whitelist GDB",
+            _whitelistToggle = uiManager.TargetMenu.AddToggle("Whitelist GDB",
                 "Enables global dynamic bones for this person.",
                 _ =>
                 {
-                    var selectedUser = ExtendedQuickMenu.Instance._selectedUserMenuLocal.Cast<SelectedUserMenuQM>()._user;
+                    var selectedUser = QuickMenuEx.Instance.field_Private_UIPage_1.Cast<SelectedUserMenuQM>().field_Private_IUser_0;
                     if (selectedUser == null)
                         return;
 
-                    WhitelistUser(selectedUser.ID);
+                    WhitelistUser(selectedUser.prop_String_0);
                 });
 
-            uiManager.TargetMenu.AddButton("ReloadAvatar", "Reload Avatar", "Reload this users avatar", () =>
+            uiManager.TargetMenu.AddButton("Reload Avatar", "Reload this users avatar", () =>
             {
-                var uiContext = ExtendedQuickMenu.Instance._selectedUserMenuLocal._uiContext;
-                if (uiContext == null)
-                    return;
-                var userData = uiContext.UserData;
-                var userDataCasted = userData.TryCast<VRC.DataModel.Core.DataModel<APIUser>>();
-
-                var selectedUser = userDataCasted?._obj;
+                var selectedUser = QuickMenuEx.Instance.field_Private_UIPage_1.Cast<SelectedUserMenuQM>().field_Private_IUser_0;
                 if (selectedUser == null)
                     return;
 
-                var player = PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(selectedUser.id);
+                var player = PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(selectedUser.prop_String_0);
                 player?.GetVRCPlayer()?.ReloadAvatar();
-            });
-
-            uiManager.TargetMenu.OnOpen += () =>
-            {
-                var uiContext = ExtendedQuickMenu.Instance._selectedUserMenuLocal._uiContext;
-                if (uiContext == null)
-                    return;
-                var userData = uiContext.UserData;
-                var userDataCasted = userData.TryCast<VRC.DataModel.Core.DataModel<APIUser>>();
-
-                var selectedUser = userDataCasted?._obj;
-                if (selectedUser == null)
-                    return;
-            
-                _whitelistToggle.Toggle(_settings.IsWhitelisted(selectedUser.id));
-            };
+            }, ResourceManager.Instance.GetSprite("reload"));
 
             var menu = uiManager.MainMenu.GetMenuPage("DynamicBones");
-            menu.AddToggle("Enabled", "Enabled", "Enable/Disable global dynamic bones", ToggleDynamicBones,
+            menu.AddToggle("Enabled", "Enable/Disable global dynamic bones", ToggleDynamicBones,
                 _settings.Enabled);
-            _maxRadiusButton = menu.AddButton("MaxColliderRadius", $"Max Collider Radius: {_settings.MaxRadius}", "Ignore any colliders that are bigger than this", PromptMaxRadiusInput);
-            menu.AddToggle("AutoReloadAvatars", "Auto Reload Avatars", "Automatically reload all avatars when changing settings",
+            _maxRadiusButton = menu.AddButton($"Max Collider Radius: {_settings.MaxRadius}", "Ignore any colliders that are bigger than this", PromptMaxRadiusInput, ResourceManager.Instance.GetSprite("radius"));
+            menu.AddToggle("Auto Reload Avatars", "Automatically reload all avatars when changing settings",
                 b =>
                 {
                     _settings.AutoReloadAvatars = b;
@@ -350,12 +340,11 @@ namespace ReModCE.Components
                         VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                     }
                 }, _settings.AutoReloadAvatars);
-            menu.AddButton("ReloadAllAvatars", "Reload All Avatars",
-            "Reload every users avatar. Necessary to apply changed dynamic bones settings.",
-            () => VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars());
+            menu.AddButton("Reload All Avatars", "Reload every users avatar. Necessary to apply changed dynamic bones settings.",
+            () => VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars(), ResourceManager.Instance.GetSprite("reload"));
 
-            var ownMenu = menu.AddMenuPage("SelfOptions", "Self Options", "Adjust how your colliders affect others");
-            _ownColliderOptionButton = ownMenu.AddButton("ColliderOption", $"Colliders: {_settings.OwnColliderOption}", "Choose which colliders are applied", () =>
+            var ownMenu = menu.AddMenuPage("Self Options", "Adjust how your colliders affect others", ResourceManager.Instance.GetSprite("cogwheel"));
+            _ownColliderOptionButton = ownMenu.AddButton($"Colliders: {_settings.OwnColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.OwnColliderOption;
                 CycleColliderOption(_ownColliderOptionButton, ref o);
@@ -367,7 +356,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             });
-            ownMenu.AddToggle("AlwaysIncludeHead", "Always Include Head", "Always include head collider",
+            ownMenu.AddToggle("Always Include Head", "Always include head collider",
                 b =>
                 {
                     _settings.AlwaysIncludeOwnHead = b;
@@ -376,7 +365,7 @@ namespace ReModCE.Components
                         VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                     }
                 }, _settings.AlwaysIncludeOwnHead);
-            ownMenu.AddToggle("ToSelf", "To Self", "Add colliders to self", toggled =>
+            ownMenu.AddToggle("To Self", "Add colliders to self", toggled =>
             {
                 if (toggled)
                 {
@@ -391,7 +380,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.OwnCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self);
-            ownMenu.AddToggle("ToWhitelisted", "To Whitelisted", "Add colliders to whitelisted users", toggled =>
+            ownMenu.AddToggle("To Whitelisted", "Add colliders to whitelisted users", toggled =>
             {
                 if (toggled)
                 {
@@ -406,7 +395,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.OwnCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist);
-            ownMenu.AddToggle("ToFriends", "To Friends", "Add colliders to friends", toggled =>
+            ownMenu.AddToggle("To Friends", "Add colliders to friends", toggled =>
             {
                 if (toggled)
                 {
@@ -421,7 +410,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.OwnCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends);
-            ownMenu.AddToggle("ToOthers", "To Others", "Add colliders to others", toggled =>
+            ownMenu.AddToggle("To Others", "Add colliders to others", toggled =>
             {
                 if (toggled)
                 {
@@ -438,8 +427,8 @@ namespace ReModCE.Components
             }, (_settings.OwnCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
 
-            var whitelistedMenu = menu.AddMenuPage("WhitelistedOptions", "Whitelisted Options", "Adjust how whitelisted users colliders affect others and you");
-            _whitelistedColliderOptionButton = whitelistedMenu.AddButton("ColliderOption", $"Colliders: {_settings.WhitelistColliderOption}", "Choose which colliders are applied", () =>
+            var whitelistedMenu = menu.AddMenuPage("Whitelisted Options", "Adjust how whitelisted users colliders affect others and you", ResourceManager.Instance.GetSprite("cogwheel"));
+            _whitelistedColliderOptionButton = whitelistedMenu.AddButton($"Colliders: {_settings.WhitelistColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.WhitelistColliderOption;
                 CycleColliderOption(_whitelistedColliderOptionButton, ref o);
@@ -451,7 +440,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             });
-            whitelistedMenu.AddToggle("AlwaysIncludeHead", "Always Include Head", "Always include head collider",
+            whitelistedMenu.AddToggle("Always Include Head", "Always include head collider",
                 b =>
                 {
                     _settings.AlwaysIncludeWhitelistedHead = b;
@@ -460,7 +449,7 @@ namespace ReModCE.Components
                         VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                     }
                 }, _settings.AlwaysIncludeWhitelistedHead);
-            whitelistedMenu.AddToggle("ToSelf", "To Self", "Add colliders to self", toggled =>
+            whitelistedMenu.AddToggle("To Self", "Add colliders to self", toggled =>
             {
                 if (toggled)
                 {
@@ -475,7 +464,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.WhitelistCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self);
-            whitelistedMenu.AddToggle("ToWhitelisted", "To Whitelisted", "Add colliders to whitelisted users", toggled =>
+            whitelistedMenu.AddToggle("To Whitelisted", "Add colliders to whitelisted users", toggled =>
             {
                 if (toggled)
                 {
@@ -490,7 +479,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.WhitelistCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist);
-            whitelistedMenu.AddToggle("ToFriends", "To Friends", "Add colliders to friends", toggled =>
+            whitelistedMenu.AddToggle("To Friends", "Add colliders to friends", toggled =>
             {
                 if (toggled)
                 {
@@ -505,7 +494,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.WhitelistCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends);
-            whitelistedMenu.AddToggle("ToOthers", "To Others", "Add colliders to others", toggled =>
+            whitelistedMenu.AddToggle("To Others", "Add colliders to others", toggled =>
             {
                 if (toggled)
                 {
@@ -521,8 +510,8 @@ namespace ReModCE.Components
                 }
             }, (_settings.WhitelistCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
-            var friendsMenu = menu.AddMenuPage("FriendsOptions", "Friends Options", "Adjust how friends colliders affect others and you");
-            _friendsColliderOptionButton = friendsMenu.AddButton("ColliderOption", $"Colliders: {_settings.FriendsColliderOption}", "Choose which colliders are applied", () =>
+            var friendsMenu = menu.AddMenuPage("Friends Options", "Adjust how friends colliders affect others and you", ResourceManager.Instance.GetSprite("cogwheel"));
+            _friendsColliderOptionButton = friendsMenu.AddButton($"Colliders: {_settings.FriendsColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.FriendsColliderOption;
                 CycleColliderOption(_friendsColliderOptionButton, ref o);
@@ -534,7 +523,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             });
-            friendsMenu.AddToggle("AlwaysIncludeHead", "Always Include Head", "Always include head collider",
+            friendsMenu.AddToggle("Always Include Head", "Always include head collider",
                 b =>
                 {
                     _settings.AlwaysIncludeFriendsHead = b;
@@ -543,7 +532,7 @@ namespace ReModCE.Components
                         VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                     }
                 }, _settings.AlwaysIncludeFriendsHead);
-            friendsMenu.AddToggle("ToSelf", "To Self", "Add colliders to self", toggled =>
+            friendsMenu.AddToggle("To Self", "Add colliders to self", toggled =>
             {
                 if (toggled)
                 {
@@ -558,7 +547,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.FriendsCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self);
-            friendsMenu.AddToggle("ToWhitelisted", "To Whitelisted", "Add colliders to whitelisted users", toggled =>
+            friendsMenu.AddToggle("To Whitelisted", "Add colliders to whitelisted users", toggled =>
             {
                 if (toggled)
                 {
@@ -573,7 +562,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.FriendsCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist);
-            friendsMenu.AddToggle("ToFriends", "To Friends", "Add colliders to friends", toggled =>
+            friendsMenu.AddToggle("To Friends", "Add colliders to friends", toggled =>
             {
                 if (toggled)
                 {
@@ -588,7 +577,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.FriendsCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends);
-            friendsMenu.AddToggle("ToOthers", "To Others", "Add colliders to others", toggled =>
+            friendsMenu.AddToggle("To Others", "Add colliders to others", toggled =>
             {
                 if (toggled)
                 {
@@ -605,8 +594,8 @@ namespace ReModCE.Components
             }, (_settings.FriendsCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
 
-            var othersMenu = menu.AddMenuPage("OthersOptions", "Others Options", "Adjust how others colliders affect others and you");
-            _othersColliderOptionButton = othersMenu.AddButton("ColliderOption", $"Colliders: {_settings.OthersColliderOption}", "Choose which colliders are applied", () =>
+            var othersMenu = menu.AddMenuPage("Others Options", "Adjust how others colliders affect others and you", ResourceManager.Instance.GetSprite("cogwheel"));
+            _othersColliderOptionButton = othersMenu.AddButton($"Colliders: {_settings.OthersColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.OthersColliderOption;
                 CycleColliderOption(_othersColliderOptionButton, ref o);
@@ -618,7 +607,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             });
-            othersMenu.AddToggle("AlwaysIncludeHead", "Always Include Head", "Always include head collider",
+            othersMenu.AddToggle("Always Include Head", "Always include head collider",
                 b =>
                 {
                     _settings.AlwaysIncludeOthersHead = b;
@@ -627,7 +616,7 @@ namespace ReModCE.Components
                         VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                     }
                 }, _settings.AlwaysIncludeOthersHead);
-            othersMenu.AddToggle("ToSelf", "To Self", "Add colliders to self", toggled =>
+            othersMenu.AddToggle("To Self", "Add colliders to self", toggled =>
             {
                 if (toggled)
                 {
@@ -642,7 +631,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.OwnCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self);
-            othersMenu.AddToggle("ToWhitelisted", "To Whitelisted", "Add colliders to whitelisted users", toggled =>
+            othersMenu.AddToggle("To Whitelisted", "Add colliders to whitelisted users", toggled =>
             {
                 if (toggled)
                 {
@@ -657,7 +646,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.OwnCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist);
-            othersMenu.AddToggle("ToFriends", "To Friends", "Add colliders to friends", toggled =>
+            othersMenu.AddToggle("To Friends", "Add colliders to friends", toggled =>
             {
                 if (toggled)
                 {
@@ -672,7 +661,7 @@ namespace ReModCE.Components
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
             }, (_settings.OwnCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends);
-            othersMenu.AddToggle("ToOthers", "To Others", "Add colliders to others", toggled =>
+            othersMenu.AddToggle("To Others", "Add colliders to others", toggled =>
             {
                 if (toggled)
                 {

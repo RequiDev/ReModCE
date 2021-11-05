@@ -6,12 +6,18 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using MelonLoader;
+using ReMod.Core;
+using ReMod.Core.Managers;
+using ReMod.Core.Unity;
 using ReModCE.Components;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
 using UnhollowerRuntimeLib;
+using UnhollowerRuntimeLib.XrefScans;
 using VRC;
+using VRC.DataModel;
+using VRC.UI.Elements.Menus;
 
 namespace ReModCE
 {
@@ -19,7 +25,10 @@ namespace ReModCE
     {
         private static readonly List<ModComponent> Components = new List<ModComponent>();
         private static UiManager _uiManager;
+        private static ResourceManager _resourceManager;
 
+        public static bool IsEmmVRCLoaded { get; private set; }
+        public static bool IsRubyLoaded { get; private set; }
         public static bool IsOculus { get; private set; }
 
         public static HarmonyLib.Harmony Harmony { get; private set; }
@@ -29,7 +38,13 @@ namespace ReModCE
             Harmony = MelonHandler.Mods.First(m => m.Info.Name == "ReModCE").HarmonyInstance;
             Directory.CreateDirectory("UserData/ReModCE");
             ReLogger.Msg("Initializing...");
-            
+
+            IsEmmVRCLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "emmVRCLoader");
+            IsRubyLoaded = File.Exists("hid.dll");
+
+            _resourceManager = new ResourceManager(Assembly.GetExecutingAssembly(), "ReModCE.Resources");
+
+
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
             ClassInjector.RegisterTypeInIl2Cpp<WireframeEnabler>();
 
@@ -65,6 +80,17 @@ namespace ReModCE
         private static void InitializePatches()
         {
             Harmony.Patch(typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake)), GetLocalPatch(nameof(VRCPlayerAwakePatch)));
+
+            foreach (var method in typeof(SelectedUserMenuQM).GetMethods())
+            {
+                if (!method.Name.StartsWith("Method_Private_Void_IUser_PDM_"))
+                    continue;
+
+                if (XrefScanner.XrefScan(method).Count() < 3)
+                    continue;
+
+                Harmony.Patch(method, postfix: GetLocalPatch(nameof(SetUserPatch)));
+            }
         }
 
         private static void InitializeNetworkManager()
@@ -88,8 +114,16 @@ namespace ReModCE
 
             InitializeNetworkManager();
 
-            _uiManager = new UiManager("ReMod <color=#00ff00>CE</color>");
-            
+            _uiManager = new UiManager("ReMod <color=#00ff00>CE</color>", _resourceManager.GetSprite("remod"));
+
+
+            _uiManager.MainMenu.AddMenuPage("Movement", "Access movement related settings", _resourceManager.GetSprite("running"));
+            _uiManager.MainMenu.AddMenuPage("Visuals", "Access anything that will affect your game visually", _resourceManager.GetSprite("eye"));
+            _uiManager.MainMenu.AddMenuPage("Dynamic Bones", "Access your global dynamic bone settings", _resourceManager.GetSprite("bone"));
+            _uiManager.MainMenu.AddMenuPage("Avatars", "Access avatar related settings", _resourceManager.GetSprite("hanger"));
+            _uiManager.MainMenu.AddMenuPage("Logging", "Access logging related settings", _resourceManager.GetSprite("log"));
+            _uiManager.MainMenu.AddMenuPage("Hotkeys", "Access hotkey related settings", _resourceManager.GetSprite("keyboard"));
+
             foreach (var m in Components)
             {
                 try
@@ -278,14 +312,24 @@ namespace ReModCE
         private static void VRCPlayerAwakePatch(VRCPlayer __instance)
         {
             if (__instance == null) return;
-
-            __instance.Method_Public_add_Void_MulticastDelegateNPublicSealedVoUnique_0(new Action(() =>
+            
+            __instance.Method_Public_add_Void_OnAvatarIsReady_0(new Action(() =>
             {
                 foreach (var m in Components)
                 {
                     m.OnAvatarIsReady(__instance);
                 }
             }));
+        }
+        private static void SetUserPatch(SelectedUserMenuQM __instance, IUser __0)
+        {
+            if (__0 == null)
+                return;
+
+            foreach (var m in Components)
+            {
+                m.OnSelectUser(__0, __instance.field_Public_Boolean_0);
+            }
         }
     }
 }
