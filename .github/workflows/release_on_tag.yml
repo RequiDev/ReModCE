@@ -35,7 +35,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          Build/Release/ReModCE.dll
-          Build/Release/ReModCE.Loader.dll
+          .build/Release (x64)/Modules/ReModCE.dll
+          .build/Release (x64)/Modules/ReMod.Core.dll
+          .build/Release (x64)/Modules/ReModCE.Loader.dll
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
