@@ -26,6 +26,7 @@ namespace ReModCE
         private static readonly List<ModComponent> Components = new List<ModComponent>();
         private static UiManager _uiManager;
         private static ResourceManager _resourceManager;
+        private static ConfigManager _configManager;
 
         public static bool IsEmmVRCLoaded { get; private set; }
         public static bool IsRubyLoaded { get; private set; }
@@ -43,7 +44,7 @@ namespace ReModCE
             IsRubyLoaded = File.Exists("hid.dll");
 
             _resourceManager = new ResourceManager(Assembly.GetExecutingAssembly(), "ReModCE.Resources");
-
+            _configManager = new ConfigManager(nameof(ReModCE));
 
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
             ClassInjector.RegisterTypeInIl2Cpp<WireframeEnabler>();
