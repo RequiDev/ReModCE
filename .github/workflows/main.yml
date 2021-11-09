@@ -20,6 +20,12 @@ jobs:
         token: ${{ secrets.LibsRepositoryToken }}
         path: 3rdparty/ml
         
+    - name: Checkout ReMod.Core
+      uses: actions/checkout@v2
+      with:
+        repository: RequiDev/ReMod.Core
+        path: ReMod.Core
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
