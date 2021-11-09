@@ -16,7 +16,6 @@ using VRC;
 using VRC.Core;
 using VRC.DataModel;
 using VRC.UI.Elements.Menus;
-using DynamicBoneColliderBound = DynamicBoneCollider.EnumNPublicSealedvaOuIn3vUnique;
 
 namespace ReModCE.Components
 {
@@ -742,7 +741,7 @@ namespace ReModCE.Components
 
                 foreach (var collider in boneTransform.GetComponentsInChildren<DynamicBoneCollider>(true))
                 {
-                    if (collider.m_Bound == DynamicBoneColliderBound.Inside)
+                    if (collider.m_Bound == DynamicBoneCollider.DynamicBoneColliderBound.Inside)
                         continue;
 
                     var radius = collider.m_Radius * Math.Abs(collider.transform.lossyScale.y);
@@ -764,7 +763,7 @@ namespace ReModCE.Components
                     {
                         foreach (var collider in avatarObject.GetComponentsInChildren<DynamicBoneCollider>(true))
                         {
-                            if (collider.m_Bound == DynamicBoneColliderBound.Inside)
+                            if (collider.m_Bound == DynamicBoneCollider.DynamicBoneColliderBound.Inside)
                                 continue;
 
                             var radius = collider.m_Radius * Math.Abs(collider.transform.lossyScale.y);
