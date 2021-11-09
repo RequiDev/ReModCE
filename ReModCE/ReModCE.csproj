@@ -253,7 +253,7 @@
       <Name>ReModCE.Loader</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="F:\source\repos\ReModCE\ReMod.Core\ReMod.Core.csproj">
+    <ProjectReference Include="..\ReMod.Core\ReMod.Core.csproj">
       <Project>{c87fe758-acb9-4fa2-af6f-10aa9aa0023c}</Project>
       <Name>ReMod.Core</Name>
     </ProjectReference>
