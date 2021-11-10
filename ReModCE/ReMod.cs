@@ -45,9 +45,9 @@ namespace ReModCE
 
             _resourceManager = new ResourceManager(Assembly.GetExecutingAssembly(), "ReModCE.Resources");
             _configManager = new ConfigManager(nameof(ReModCE));
-
-            ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
-            ClassInjector.RegisterTypeInIl2Cpp<WireframeEnabler>();
+            
+            RegisterTypeInIl2Cpp<EnableDisableListener>();
+            RegisterTypeInIl2Cpp<WireframeEnabler>();
 
             SetIsOculus();
 
@@ -56,6 +56,18 @@ namespace ReModCE
             InitializePatches();
             InitializeModComponents();
             ReLogger.Msg("Done!");
+        }
+
+        private static void RegisterTypeInIl2Cpp<T>() where T : class
+        {
+            try
+            {
+                ClassInjector.RegisterTypeInIl2Cpp<T>();
+            }
+            catch (Exception e)
+            {
+                ReLogger.Msg(ConsoleColor.Yellow, $"{typeof(T).Name} has already been registered in Il2Cpp space.");
+            }
         }
 
         private static void SetIsOculus()
