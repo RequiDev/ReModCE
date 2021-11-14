@@ -125,10 +125,7 @@ namespace ReModCE
         {
             ReLogger.Msg("Initializing UI...");
 
-            InitializeNetworkManager();
-
             _uiManager = new UiManager("ReMod <color=#00ff00>CE</color>", _resourceManager.GetSprite("remod"));
-
 
             _uiManager.MainMenu.AddMenuPage("Movement", "Access movement related settings", _resourceManager.GetSprite("running"));
             _uiManager.MainMenu.AddMenuPage("Visuals", "Access anything that will affect your game visually", _resourceManager.GetSprite("eye"));
@@ -152,6 +149,9 @@ namespace ReModCE
         public static void OnUiManagerInitEarly()
         {
             ReLogger.Msg("Initializing early UI...");
+
+            InitializeNetworkManager();
+
             foreach (var m in Components)
             {
                 try
