@@ -86,7 +86,7 @@ namespace ReModCE.Components
 
                         FlySpeed.SetValue(flySpeed);
                     }, null);
-            }, ResourceManager.Instance.GetSprite("speed"));
+            }, ResourceManager.GetSprite("remodce.speed"));
         }
 
         private readonly List<Il2CppSystem.Type> _blacklistedComponents = new List<Il2CppSystem.Type>

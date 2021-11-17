@@ -89,14 +89,14 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var menu = uiManager.MainMenu.AddMenuPage("FBT", "Access full body tracking related settings", ResourceManager.Instance.GetSprite("arms-up"));
+            var menu = uiManager.MainMenu.AddMenuPage("FBT", "Access full body tracking related settings", ResourceManager.GetSprite("remodce.arms-up"));
             _enableToggle = menu.AddToggle("FBT Calibration Saver", "Enable/Disable the calibration saver",
                 CalibrationSaverEnabled.SetValue, CalibrationSaverEnabled);
             menu.AddButton("Clear Saved Calibrations", "Clear your saved calibrations from your disk.", () =>
             {
                 _savedCalibrations.Clear();
                 File.Delete("UserData/ReModCE/calibrations.json");
-            }, ResourceManager.Instance.GetSprite("dust"));
+            }, ResourceManager.GetSprite("remodce.dust"));
         }
 
         private static void PerformCalibration(ref VRCTrackingSteam __instance, Animator __0, bool __1, bool __2)

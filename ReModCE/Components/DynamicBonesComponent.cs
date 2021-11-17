@@ -325,12 +325,12 @@ namespace ReModCE.Components
 
                 var player = PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(selectedUser.prop_String_0);
                 player?.GetVRCPlayer()?.ReloadAvatar();
-            }, ResourceManager.Instance.GetSprite("reload"));
+            }, ResourceManager.GetSprite("remodce.reload"));
 
             var menu = uiManager.MainMenu.GetMenuPage("DynamicBones");
             menu.AddToggle("Enabled", "Enable/Disable global dynamic bones", ToggleDynamicBones,
                 _settings.Enabled);
-            _maxRadiusButton = menu.AddButton($"Max Collider Radius: {_settings.MaxRadius}", "Ignore any colliders that are bigger than this", PromptMaxRadiusInput, ResourceManager.Instance.GetSprite("radius"));
+            _maxRadiusButton = menu.AddButton($"Max Collider Radius: {_settings.MaxRadius}", "Ignore any colliders that are bigger than this", PromptMaxRadiusInput, ResourceManager.GetSprite("remodce.radius"));
             menu.AddToggle("Auto Reload Avatars", "Automatically reload all avatars when changing settings",
                 b =>
                 {
@@ -341,9 +341,9 @@ namespace ReModCE.Components
                     }
                 }, _settings.AutoReloadAvatars);
             menu.AddButton("Reload All Avatars", "Reload every users avatar. Necessary to apply changed dynamic bones settings.",
-            () => VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars(), ResourceManager.Instance.GetSprite("reload"));
+            () => VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars(), ResourceManager.GetSprite("remodce.reload"));
 
-            var ownMenu = menu.AddMenuPage("Self Options", "Adjust how your colliders affect others", ResourceManager.Instance.GetSprite("cogwheel"));
+            var ownMenu = menu.AddMenuPage("Self Options", "Adjust how your colliders affect others", ResourceManager.GetSprite("remodce.cogwheel"));
             _ownColliderOptionButton = ownMenu.AddButton($"Colliders: {_settings.OwnColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.OwnColliderOption;
@@ -427,7 +427,7 @@ namespace ReModCE.Components
             }, (_settings.OwnCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
 
-            var whitelistedMenu = menu.AddMenuPage("Whitelisted Options", "Adjust how whitelisted users colliders affect others and you", ResourceManager.Instance.GetSprite("cogwheel"));
+            var whitelistedMenu = menu.AddMenuPage("Whitelisted Options", "Adjust how whitelisted users colliders affect others and you", ResourceManager.GetSprite("remodce.cogwheel"));
             _whitelistedColliderOptionButton = whitelistedMenu.AddButton($"Colliders: {_settings.WhitelistColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.WhitelistColliderOption;
@@ -510,7 +510,7 @@ namespace ReModCE.Components
                 }
             }, (_settings.WhitelistCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
-            var friendsMenu = menu.AddMenuPage("Friends Options", "Adjust how friends colliders affect others and you", ResourceManager.Instance.GetSprite("cogwheel"));
+            var friendsMenu = menu.AddMenuPage("Friends Options", "Adjust how friends colliders affect others and you", ResourceManager.GetSprite("remodce.cogwheel"));
             _friendsColliderOptionButton = friendsMenu.AddButton($"Colliders: {_settings.FriendsColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.FriendsColliderOption;
@@ -594,7 +594,7 @@ namespace ReModCE.Components
             }, (_settings.FriendsCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
 
 
-            var othersMenu = menu.AddMenuPage("Others Options", "Adjust how others colliders affect others and you", ResourceManager.Instance.GetSprite("cogwheel"));
+            var othersMenu = menu.AddMenuPage("Others Options", "Adjust how others colliders affect others and you", ResourceManager.GetSprite("remodce.cogwheel"));
             _othersColliderOptionButton = othersMenu.AddButton($"Colliders: {_settings.OthersColliderOption}", "Choose which colliders are applied", () =>
             {
                 var o = _settings.OthersColliderOption;

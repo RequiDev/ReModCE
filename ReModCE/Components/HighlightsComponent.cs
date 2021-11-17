@@ -69,14 +69,14 @@ namespace ReModCE.Components
                 () =>
                 {
                     PopupColorInput(_friendsColorButton, "Friends", FriendsColor);
-                }, ResourceManager.Instance.GetSprite("palette"));
+                }, ResourceManager.GetSprite("remodce.palette"));
 
             _othersColorButton = menu.AddButton($"<color=#{OthersColor.Value.ToHex()}>Others</color> Color",
                 $"Set <color=#{OthersColor.Value.ToHex()}>other</color> peoples highlight color",
                 () =>
                 {
                     PopupColorInput(_othersColorButton, "Others", OthersColor);
-                }, ResourceManager.Instance.GetSprite("palette"));
+                }, ResourceManager.GetSprite("remodce.palette"));
         }
 
         private void PopupColorInput(ReMenuButton button, string who, ConfigValue<Color> configValue)

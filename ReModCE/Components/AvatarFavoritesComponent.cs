@@ -173,7 +173,7 @@ namespace ReModCE.Components
                             MaxAvatarsPerPage.SetValue(maxAvatarsPerPage);
                             _maxAvatarsPerPageButton.Text = $"Max Avatars Per Page: {MaxAvatarsPerPage}";
                         }, null);
-                }, ResourceManager.Instance.GetSprite("max"));
+                }, ResourceManager.GetSprite("remodce.max"));
 
             if (_pinCode == 0)
             {
@@ -196,7 +196,7 @@ namespace ReModCE.Components
 
                             LoginToAPI(APIUser.CurrentUser, FetchAvatars);
                         }, null);
-                }, ResourceManager.Instance.GetSprite("padlock"));
+                }, ResourceManager.GetSprite("remodce.padlock"));
             }
         }
 

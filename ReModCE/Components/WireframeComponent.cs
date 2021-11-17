@@ -124,7 +124,7 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            var menu = uiManager.MainMenu.GetMenuPage("Visuals").AddMenuPage("Wireframe", "Access wireframe settings", ResourceManager.Instance.GetSprite("wireframe"));
+            var menu = uiManager.MainMenu.GetMenuPage("Visuals").AddMenuPage("Wireframe", "Access wireframe settings", ResourceManager.GetSprite("remodce.wireframe"));
             _wireframeToggle = menu.AddToggle("Enable", "Highlight objects using wireframe.", ToggleWireframe, _wireframeEnabled);
 
             _rangeButton = menu.AddButton($"Range: {WireframeRange}",
@@ -143,7 +143,7 @@ namespace ReModCE.Components
 
                             WireframeRange.SetValue(range);
                         }, null);
-                }, ResourceManager.Instance.GetSprite("binoculars"));
+                }, ResourceManager.GetSprite("remodce.binoculars"));
 
             menu.AddToggle("Hide Original", "Hide original meshes so only the wireframe shows",
                 ToggleHideOriginalObject, _wireframeHideOriginalObjects);
