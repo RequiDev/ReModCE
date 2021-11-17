@@ -4,6 +4,7 @@ using MelonLoader;
 using ReMod.Core;
 using ReMod.Core.Managers;
 using ReMod.Core.UI;
+using ReMod.Core.UI.QuickMenu;
 using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Managers;

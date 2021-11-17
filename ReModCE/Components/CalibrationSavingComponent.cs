@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using ReMod.Core;
 using ReMod.Core.Managers;
 using ReMod.Core.UI;
+using ReMod.Core.UI.QuickMenu;
 using ReModCE.Core;
 using ReModCE.Loader;
 using ReModCE.Managers;
