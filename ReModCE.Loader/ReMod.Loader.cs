@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Reflection;
 using System.Security.Cryptography;
+using UnityEngine;
 using VRC.UI.Core;
 using Object = UnityEngine.Object;
 
@@ -18,7 +19,7 @@ namespace ReModCE.Loader
         public const string Name = "ReModCE";
         public const string Author = "Requi, FenrixTheFox";
         public const string Company = null;
-        public const string Version = "1.0.0.1";
+        public const string Version = "1.0.0.2";
         public const string DownloadLink = "https://github.com/RequiDev/ReModCE/releases/latest/";
     }
 
@@ -186,7 +187,7 @@ namespace ReModCE.Loader
             OnUiManagerInitEarly();
 
             while (UIManager.field_Private_Static_UIManager_0 == null) yield return null;
-            while (Object.FindObjectOfType<VRC.UI.Elements.QuickMenu>() == null) yield return null;
+            while (GameObject.Find("UserInterface").GetComponentInChildren<VRC.UI.Elements.QuickMenu>(true) == null) yield return null;
 
             OnUiManagerInit();
         }
