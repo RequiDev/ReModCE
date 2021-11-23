@@ -42,6 +42,12 @@ namespace ReModCE.Components
                 return;
             }
 
+            if (MelonHandler.Mods.Any(i => i.Info.Name == "IKTweaks")) // Added by Jdbye
+            {
+                ReLogger.Msg(ConsoleColor.Yellow, "Found IKTweaks Mod. Not loading Calibration Saver.");
+                return;
+            }
+
             if (File.Exists("UserData/ReModCE/calibrations.json"))
             {
                 _savedCalibrations =
