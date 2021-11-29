@@ -294,7 +294,7 @@ namespace ReModCE.Components
                 {
                     searchResponse.Content.ReadAsStringAsync().ContinueWith(t =>
                     {
-                        var avatars = JsonConvert.DeserializeObject<List<ReAvatar>>(t.Result);
+                        var avatars = JsonConvert.DeserializeObject<List<ReAvatar>>(t.Result) ?? new List<ReAvatar>();
                         MelonCoroutines.Start(RefreshSearchedAvatars(avatars));
                     });
                 }
