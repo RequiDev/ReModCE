@@ -310,7 +310,7 @@ namespace ReModCE.Components
                 "Enables global dynamic bones for this person.",
                 _ =>
                 {
-                    var selectedUser = QuickMenuEx.Instance.field_Private_UIPage_1.Cast<SelectedUserMenuQM>().field_Private_IUser_0;
+                    var selectedUser = QuickMenuEx.SelectedUserLocal.field_Private_IUser_0;
                     if (selectedUser == null)
                         return;
 
@@ -319,7 +319,7 @@ namespace ReModCE.Components
 
             uiManager.TargetMenu.AddButton("Reload Avatar", "Reload this users avatar", () =>
             {
-                var selectedUser = QuickMenuEx.Instance.field_Private_UIPage_1.Cast<SelectedUserMenuQM>().field_Private_IUser_0;
+                var selectedUser = QuickMenuEx.SelectedUserLocal.field_Private_IUser_0;
                 if (selectedUser == null)
                     return;
 
