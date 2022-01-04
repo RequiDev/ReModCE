@@ -79,7 +79,7 @@ namespace ReModCE.Components
 
         public override void OnSetupUserInfo(APIUser apiUser)
         {
-            _copyAvatarIDButton.Active = APIUser.CurrentUser.id != apiUser.id && PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(apiUser.id) != null;
+            //_copyAvatarIDButton.Active = APIUser.CurrentUser.id != apiUser.id && PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(apiUser.id) != null;
         }
     }
 }
