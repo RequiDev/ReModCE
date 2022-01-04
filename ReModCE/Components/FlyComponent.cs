@@ -250,9 +250,10 @@ namespace ReModCE.Components
                 // better to combine scalars before vector or it'll keep creating new vectors several times
                 playerTransform.position += (viewpointBased ? _cameraTransform.forward : playerTransform.forward) * (Time.deltaTime * Input.GetAxis("Vertical") * FlySpeed);
                 playerTransform.position += (viewpointBased ? _cameraTransform.right : playerTransform.right) * (Time.deltaTime * Input.GetAxis("Horizontal") * FlySpeed);
-                playerTransform.position +=
-                    Vector3.up * (Time.deltaTime * Input.GetAxis("Oculus_CrossPlatform_SecondaryThumbstickVertical")
-                                                 * FlySpeed);
+                playerTransform.position += new Vector3(
+                    0f,
+                    Time.deltaTime * Input.GetAxis("Oculus_CrossPlatform_SecondaryThumbstickVertical") * FlySpeed,
+                    0f);
             }
             else
             {
@@ -262,12 +263,12 @@ namespace ReModCE.Components
 
                 if (!Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Q))
                 {
-                    playerTransform.position -= Vector3.up * (Time.deltaTime * speed);
+                    playerTransform.position -= new Vector3(0f, Time.deltaTime * speed, 0f);
                 }
 
                 if (!Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.E))
                 {
-                    playerTransform.position += Vector3.up * (Time.deltaTime * speed);
+                    playerTransform.position += new Vector3(0f, Time.deltaTime * speed, 0f);
                 }
             }
             
