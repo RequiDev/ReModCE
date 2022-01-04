@@ -43,6 +43,8 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInitEarly()
         {
+            /* Temporarily commented until solution is reached for many buttons
+             
             var userInfoTransform = VRCUiManagerEx.Instance.MenuContent().transform.Find("Screens/UserInfo");
 
             var pageUserInfo = userInfoTransform.GetComponent<PageUserInfo>();
@@ -72,6 +74,7 @@ namespace ReModCE.Components
 
                 GUIUtility.systemCopyBuffer = apiAvatar.id;
             }, buttonContainer);
+            */
         }
 
         public override void OnSetupUserInfo(APIUser apiUser)
