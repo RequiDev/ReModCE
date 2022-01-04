@@ -9,6 +9,7 @@ using HarmonyLib;
 using MelonLoader;
 using ReMod.Core;
 using ReMod.Core.Managers;
+using ReMod.Core.UI.Wings;
 using ReMod.Core.Unity;
 using ReModCE.Components;
 using ReModCE.Core;
@@ -17,6 +18,7 @@ using ReModCE.Managers;
 using UnhollowerRuntimeLib;
 using UnhollowerRuntimeLib.XrefScans;
 using VRC;
+using VRC.Core;
 using VRC.DataModel;
 using VRC.UI.Elements.Menus;
 
@@ -28,6 +30,7 @@ namespace ReModCE
         private static UiManager _uiManager;
         private static ConfigManager _configManager;
 
+        public static ReMirroredWingMenu WingMenu;
         public static bool IsEmmVRCLoaded { get; private set; }
         public static bool IsRubyLoaded { get; private set; }
         public static bool IsOculus { get; private set; }
@@ -129,6 +132,8 @@ namespace ReModCE
 
             _uiManager = new UiManager("ReMod <color=#00ff00>CE</color>", ResourceManager.GetSprite("remodce.remod"));
 
+            WingMenu = ReMirroredWingMenu.Create("ReModCE", "Open the RemodCE menu", ResourceManager.GetSprite("remodce.remod"));
+            
             _uiManager.MainMenu.AddMenuPage("Movement", "Access movement related settings", ResourceManager.GetSprite("remodce.running"));
             _uiManager.MainMenu.AddMenuPage("Visuals", "Access anything that will affect your game visually", ResourceManager.GetSprite("remodce.eye"));
             _uiManager.MainMenu.AddMenuPage("Dynamic Bones", "Access your global dynamic bone settings", ResourceManager.GetSprite("remodce.bone"));
