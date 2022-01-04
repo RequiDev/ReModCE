@@ -30,8 +30,16 @@ In case you want to update you can always grab the latest and even previous vers
 * ESP/Player Highlighting (Not usable in Game/Club worlds)
 * Wireframe ESP (Players, Pickups, World) (Not usable in Game/Club worlds)
 * Third Person (Not usable in Game/Club worlds)
-* Small UI adjustments like adding a "Paste" button to input popups.
+* Small UI adjustments like adding a "Paste" button to input popups
 * FBT Calibration Saver as already seen at [RequiDev/FBTSaver](https://github.com/RequiDev/FBTSaver)
+* Teleport to other players (Not usable in Game/Club worlds)
+* Media Controls which syncs with your Spotify
+* Quickly restart in either desktop or VR and automatically teleport to back where you were.
+* Copy your current instance join link or join others by using a join link
+* Keep track of your visited instances with Instance History
+* Not sure if you have already joined an instance? Instance Dejavu will put an icon on instances you have visited before
+* Automatically adjusts VRChat News to be collapsible or hide it completely
+* Small utilities like disabling chairs in any world, copying user/avatar id and having confirmations for portals
 
 ## Hotkeys
 * CTRL + F = Noclip
@@ -41,7 +49,6 @@ In case you want to update you can always grab the latest and even previous vers
 Head over to [here](https://requi.dev/remod/pin.php) to reset it.
 
 ## Credits
-[loukylor](https://github.com/loukylor) - For selected VRChat function reflections and his button mover code which I am using  
 [knah](https://github.com/knah) - For his usage of GitHub Action which I've looked at to figure out on how to do CI on GitHub
 
 ## Notable Mentions
