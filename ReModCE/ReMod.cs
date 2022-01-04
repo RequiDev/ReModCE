@@ -98,7 +98,8 @@ namespace ReModCE
         private static void InitializePatches()
         {
             Harmony.Patch(typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake)), GetLocalPatch(nameof(VRCPlayerAwakePatch)));
-
+            Harmony.Patch(typeof(RoomManager).GetMethod(nameof(RoomManager.Method_Public_Static_Boolean_ApiWorld_ApiWorldInstance_String_Int32_0)), postfix: GetLocalPatch(nameof(EnterWorldPatch)));
+            
             foreach (var method in typeof(SelectedUserMenuQM).GetMethods())
             {
                 if (!method.Name.StartsWith("Method_Private_Void_IUser_PDM_"))
@@ -333,6 +334,16 @@ namespace ReModCE
             ReLogger.Msg(ConsoleColor.Cyan, $"Created {Components.Count} mod components.");
         }
 
+        private static void EnterWorldPatch(ApiWorld __0, ApiWorldInstance __1)
+        {
+            if (__0 == null || __1 == null)
+                return;
+
+            foreach (var m in Components)
+            {
+                m.OnEnterWorld(__0, __1);
+            }
+        }
 
         private static void VRCPlayerAwakePatch(VRCPlayer __instance)
         {
