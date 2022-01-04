@@ -73,6 +73,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\3rdparty\ml\Managed\System.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -236,6 +239,7 @@
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\HighlightsComponent.cs" />
     <Compile Include="Components\InfoLogsComponent.cs" />
+    <Compile Include="Components\MediaControlComponent.cs" />
     <Compile Include="Components\PopupExComponent.cs" />
     <Compile Include="Components\AvatarHistoryComponent.cs" />
     <Compile Include="Components\TeleportComponent.cs" />
