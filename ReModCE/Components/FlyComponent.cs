@@ -170,7 +170,7 @@ namespace ReModCE.Components
             _flyToggle?.Toggle(value);
 
             if (_cameraTransform == null
-                || !_cameraTransform) _cameraTransform = Camera.main.transform;
+                || !_cameraTransform) _cameraTransform = VRCVrCamera.field_Private_Static_VRCVrCamera_0.field_Public_Camera_0.transform;
 
             if (_flyEnabled)
             {
