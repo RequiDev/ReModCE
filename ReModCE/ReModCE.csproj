@@ -242,6 +242,7 @@
     <Compile Include="Components\MediaControlComponent.cs" />
     <Compile Include="Components\PopupExComponent.cs" />
     <Compile Include="Components\AvatarHistoryComponent.cs" />
+    <Compile Include="Components\PortalConfirmationComponent.cs" />
     <Compile Include="Components\RestartButtonComponent.cs" />
     <Compile Include="Components\TeleportComponent.cs" />
     <Compile Include="Components\ThirdPersonComponent.cs" />
