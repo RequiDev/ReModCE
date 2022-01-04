@@ -240,6 +240,7 @@
     <Compile Include="Components\AvatarHistoryComponent.cs" />
     <Compile Include="Components\TeleportComponent.cs" />
     <Compile Include="Components\ThirdPersonComponent.cs" />
+    <Compile Include="Components\VRCNewsAdjustment.cs" />
     <Compile Include="Components\WireframeComponent.cs" />
     <Compile Include="Core\ApiError.cs" />
     <Compile Include="Core\BinaryGZipSerializer.cs" />
