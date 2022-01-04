@@ -15,7 +15,6 @@ using ReMod.Core.UI.QuickMenu;
 using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Loader;
-using ReModCE.Managers;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;

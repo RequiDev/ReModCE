@@ -6,17 +6,13 @@ using System.Linq;
 using Newtonsoft.Json;
 using ReMod.Core;
 using ReMod.Core.Managers;
-using ReMod.Core.UI;
 using ReMod.Core.UI.QuickMenu;
 using ReMod.Core.VRChat;
-using ReModCE.Core;
-using ReModCE.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC;
 using VRC.Core;
 using VRC.DataModel;
-using VRC.UI.Elements.Menus;
 
 namespace ReModCE.Components
 {

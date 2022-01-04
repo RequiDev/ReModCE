@@ -10,7 +10,6 @@ using ReMod.Core.UI.QuickMenu;
 using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Loader;
-using ReModCE.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.Core;

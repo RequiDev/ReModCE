@@ -10,7 +10,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using UnityEngine;
 using VRC.UI.Core;
-using Object = UnityEngine.Object;
 
 namespace ReModCE.Loader
 {
