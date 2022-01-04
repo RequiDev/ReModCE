@@ -2,10 +2,9 @@
 using System.Linq;
 using ReMod.Core;
 using ReMod.Core.Managers;
-using ReMod.Core.UI;
 using ReMod.Core.UI.QuickMenu;
+using ReMod.Core.UI.Wings;
 using ReMod.Core.VRChat;
-using ReModCE.Core;
 using ReModCE.Managers;
 using UnhollowerRuntimeLib;
 using UnityEngine;
@@ -13,7 +12,6 @@ using UnityEngine.UI;
 using UnityEngine.XR;
 using VRC.Animation;
 using VRC.SDK3.Components;
-using VRC.UI.Elements;
 using VRCSDK2;
 using VRC_AvatarPedestal = VRC.SDKBase.VRC_AvatarPedestal;
 using VRC_Pickup = VRC.SDKBase.VRC_Pickup;
@@ -35,6 +33,7 @@ namespace ReModCE.Components
         private ReMenuButton _flySpeedButton;
 
         private ReMenuToggle _flyToggle;
+        private ReMirroredWingToggle _noclipWingToggle;
         private ReMenuToggle _noclipToggle;
         private ReMenuToggle _hotkeyToggle;
 
@@ -56,6 +55,11 @@ namespace ReModCE.Components
                     _noclipToggle.Interactable = allowed;
                 }
 
+                if (_noclipWingToggle != null)
+                {
+                    _noclipWingToggle.Interactable = allowed;
+                }
+
                 if (!allowed)
                 {
                     ToggleNoclip(false);
@@ -70,6 +74,18 @@ namespace ReModCE.Components
 
             _flyToggle = movementMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
             _noclipToggle = movementMenu.AddToggle("Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
+            _noclipWingToggle = ReModCE.WingMenu.AddToggle("Noclip", "Enable/Disable Noclip", b =>
+            {
+                if (b)
+                {
+                    ToggleNoclip(true);
+                }
+                else
+                {
+                    ToggleFly(false);
+                }
+            }, _noclipEnabled);
+            
             _hotkeyToggle = hotkeyMenu.AddToggle("Fly Hotkey", "Enable/Disable fly hotkey",
                 EnableFlyHotkey.SetValue, EnableFlyHotkey);
 

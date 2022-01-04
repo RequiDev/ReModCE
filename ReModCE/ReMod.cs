@@ -12,15 +12,14 @@ using ReMod.Core.Managers;
 using ReMod.Core.UI.Wings;
 using ReMod.Core.Unity;
 using ReModCE.Components;
-using ReModCE.Core;
 using ReModCE.Loader;
-using ReModCE.Managers;
 using UnhollowerRuntimeLib;
 using UnhollowerRuntimeLib.XrefScans;
 using VRC;
 using VRC.Core;
 using VRC.DataModel;
 using VRC.UI.Elements.Menus;
+using ConfigManager = ReMod.Core.Managers.ConfigManager;
 
 namespace ReModCE
 {
@@ -132,11 +131,14 @@ namespace ReModCE
             ReLogger.Msg("Initializing UI...");
 
             _uiManager = new UiManager("ReMod <color=#00ff00>CE</color>", ResourceManager.GetSprite("remodce.remod"));
-
             WingMenu = ReMirroredWingMenu.Create("ReModCE", "Open the RemodCE menu", ResourceManager.GetSprite("remodce.remod"));
             
             _uiManager.MainMenu.AddMenuPage("Movement", "Access movement related settings", ResourceManager.GetSprite("remodce.running"));
-            _uiManager.MainMenu.AddMenuPage("Visuals", "Access anything that will affect your game visually", ResourceManager.GetSprite("remodce.eye"));
+            
+            var visualPage = _uiManager.MainMenu.AddCategoryPage("Visuals", "Access anything that will affect your game visually", ResourceManager.GetSprite("remodce.eye"));
+            visualPage.AddCategory("ESP/Highlights");
+            visualPage.AddCategory("Wireframe");
+            
             _uiManager.MainMenu.AddMenuPage("Dynamic Bones", "Access your global dynamic bone settings", ResourceManager.GetSprite("remodce.bone"));
             _uiManager.MainMenu.AddMenuPage("Avatars", "Access avatar related settings", ResourceManager.GetSprite("remodce.hanger"));
             

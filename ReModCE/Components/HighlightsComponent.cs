@@ -1,9 +1,9 @@
 ﻿using ReMod.Core;
 using ReMod.Core.Managers;
 using ReMod.Core.UI.QuickMenu;
+using ReMod.Core.UI.Wings;
 using ReMod.Core.Unity;
 using ReMod.Core.VRChat;
-using ReModCE.Core;
 using ReModCE.Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +20,8 @@ namespace ReModCE.Components
         private ConfigValue<Color> FriendsColor;
         private ConfigValue<Color> OthersColor;
         private ConfigValue<bool> ESPEnabled;
+        
+        private ReMirroredWingToggle _espMirroredToggle;
         private ReMenuToggle _espToggle;
         private ReMenuButton _friendsColorButton;
         private ReMenuButton _othersColorButton;
@@ -38,6 +40,11 @@ namespace ReModCE.Components
                 {
                     _espToggle.Interactable = allowed;
                 }
+                if(_espMirroredToggle != null)
+                {
+                    _espMirroredToggle.Interactable = allowed;
+                }
+                
                 if (!allowed)
                     ESPEnabled.SetValue(false);
             };
@@ -57,13 +64,15 @@ namespace ReModCE.Components
         {
             base.OnUiManagerInit(uiManager);
 
-            var menu = uiManager.MainMenu.GetMenuPage("Visuals");
+            var menu = uiManager.MainMenu.GetCategoryPage("Visuals").GetCategory("ESP/Highlights");
             _espToggle = menu.AddToggle("ESP/Highlights", "Enable ESP (Highlight players through walls)", b =>
             {
                 ESPEnabled.SetValue(b);
                 ToggleESP(b);
             }, ESPEnabled);
 
+            _espMirroredToggle = ReModCE.WingMenu.AddToggle("ESP", "Enable/Disable ESP", ESPEnabled.SetValue, ESPEnabled);
+            
             _friendsColorButton = menu.AddButton($"<color=#{FriendsColor.Value.ToHex()}>Friends</color> Color",
                 $"Set your <color=#{FriendsColor.Value.ToHex()}>friends</color> highlight color",
                 () =>
