@@ -239,6 +239,7 @@
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\HighlightsComponent.cs" />
     <Compile Include="Components\InfoLogsComponent.cs" />
+    <Compile Include="Components\InstanceDejavuComponent.cs" />
     <Compile Include="Components\InstanceHistoryComponent.cs" />
     <Compile Include="Components\InstanceLinkComponent.cs" />
     <Compile Include="Components\MediaControlComponent.cs" />
