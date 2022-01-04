@@ -29,13 +29,17 @@ namespace ReModCE.Components
         private ConfigValue<float> FlySpeed;
         private Vector3 _originalGravity;
         private ConfigValue<bool> EnableFlyHotkey;
-        
+        private ConfigValue<bool> FlyViewpointBased;
+
         private ReMenuButton _flySpeedButton;
 
         private ReMenuToggle _flyToggle;
         private ReMirroredWingToggle _noclipWingToggle;
         private ReMenuToggle _noclipToggle;
         private ReMenuToggle _hotkeyToggle;
+        private ReMenuToggle _viewpointFlyingToggle;
+
+        private Transform _cameraTransform;
 
         public FlyComponent()
         {
@@ -43,6 +47,13 @@ namespace ReModCE.Components
             FlySpeed.OnValueChanged += () => _flySpeedButton.Text = $"Fly Speed: {FlySpeed}";
             EnableFlyHotkey = new ConfigValue<bool>(nameof(EnableFlyHotkey), true);
             EnableFlyHotkey.OnValueChanged += () => _hotkeyToggle.Toggle(EnableFlyHotkey);
+
+            FlyViewpointBased = new ConfigValue<bool>(
+                nameof(FlyViewpointBased),
+                false,
+                "Fly Viewpoint Based",
+                "Whether to use Player/Viewpoint Transform as forward/right vectors.");
+            FlyViewpointBased.OnValueChanged += () => _viewpointFlyingToggle?.Toggle(FlyViewpointBased);
 
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
@@ -103,6 +114,11 @@ namespace ReModCE.Components
                         FlySpeed.SetValue(flySpeed);
                     }, null);
             }, ResourceManager.GetSprite("remodce.speed"));
+
+            _viewpointFlyingToggle = movementMenu.AddToggle(
+                "Fly Viewpoint Based",
+                "Flying based of Player or Viewpoint transform",
+                FlyViewpointBased);
         }
 
         private readonly List<Il2CppSystem.Type> _blacklistedComponents = new List<Il2CppSystem.Type>
@@ -150,6 +166,9 @@ namespace ReModCE.Components
         {
             _flyEnabled = value;
             _flyToggle?.Toggle(value);
+
+            if (_cameraTransform == null
+                || !_cameraTransform) _cameraTransform = VRCVrCamera.field_Private_Static_VRCVrCamera_0.field_Public_Camera_0.transform;
 
             if (_flyEnabled)
             {
@@ -220,20 +239,24 @@ namespace ReModCE.Components
             }
 
             if (!_flyEnabled) return;
-
+            
             var playerTransform = player.transform;
+            var flyingTransform = FlyViewpointBased ? _cameraTransform : playerTransform;
             if (XRDevice.isPresent)
             {
-                playerTransform.position += playerTransform.forward * Time.deltaTime * Input.GetAxis("Vertical") * FlySpeed;
-                playerTransform.position += playerTransform.right * Time.deltaTime * Input.GetAxis("Horizontal") * FlySpeed;
-                playerTransform.position += new Vector3(0f, Time.deltaTime * Input.GetAxis("Oculus_CrossPlatform_SecondaryThumbstickVertical") * FlySpeed);
+                // better to combine scalars before vector or it'll keep creating new vectors several times
+                playerTransform.position += flyingTransform.forward * (Time.deltaTime * Input.GetAxis("Vertical") * FlySpeed);
+                playerTransform.position += flyingTransform.right * (Time.deltaTime * Input.GetAxis("Horizontal") * FlySpeed);
+                playerTransform.position += new Vector3(
+                    0f,
+                    Time.deltaTime * Input.GetAxis("Oculus_CrossPlatform_SecondaryThumbstickVertical") * FlySpeed,
+                    0f);
             }
             else
             {
                 var speed = Input.GetKey(KeyCode.LeftShift) ? FlySpeed * 2 : FlySpeed;
-                var camera = Camera.main.transform;
-                playerTransform.position += camera.forward * Time.deltaTime * Input.GetAxis("Vertical") * speed;
-                playerTransform.position += camera.right * Time.deltaTime * Input.GetAxis("Horizontal") * speed;
+                playerTransform.position += flyingTransform.forward * (Time.deltaTime * Input.GetAxis("Vertical") * speed);
+                playerTransform.position += flyingTransform.right * (Time.deltaTime * Input.GetAxis("Horizontal") * speed);
 
                 if (!Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.Q))
                 {
