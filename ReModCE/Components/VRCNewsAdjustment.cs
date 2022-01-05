@@ -32,11 +32,12 @@ namespace ReModCE.Components
         public override void OnUiManagerInit(UiManager uiManager)
         {
             var dashboard = QuickMenuEx.Instance.field_Public_Transform_0.Find("Window/QMParent/Menu_Dashboard").GetComponentInChildren<ScrollRect>().content;
-            _newsHeader = new ReMenuHeaderCollapsible("VRChat News", dashboard);
-            _newsHeader.OnToggle += b => _carousel.gameObject.SetActive(b);
             
             _carousel = dashboard.Find("Carousel_Banners");
             if (_carousel==null) return; // some mod removed the carousel.
+            
+            _newsHeader = new ReMenuHeaderCollapsible("VRChat News", dashboard);
+            _newsHeader.OnToggle += b => _carousel.gameObject.SetActive(b);
             
             _newsHeader.RectTransform.SetSiblingIndex(_carousel.GetSiblingIndex());
             
