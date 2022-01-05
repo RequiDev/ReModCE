@@ -35,7 +35,7 @@ namespace ReModCE.Components
 
         private Button.ButtonClickedEvent _changeButtonEvent;
 
-        private bool _enableApi = false;
+        private const bool EnableApi = true;
         private const string ApiUrl = "https://requi.dev/remod";
         private string _userAgent = "";
         private HttpClient _httpClient;
@@ -91,7 +91,7 @@ namespace ReModCE.Components
 
         private void InitializeNetworkClient()
         {
-            if (!_enableApi)
+            if (!EnableApi)
                 return;
 
             _httpClientHandler = new HttpClientHandler
@@ -271,7 +271,7 @@ namespace ReModCE.Components
 
         private void SearchAvatars(string searchTerm)
         {
-            if (!_enableApi)
+            if (!EnableApi)
             {
                 VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0.ShowStandardPopupV2("ReModCE API", "ReModCE API is currently down for maintenance. This will take about 12-24 hours. During this time, your avatar favorites in ReModCE are unavailable and search will be disabled.\nThank you for your patience!", "OK!",
                     () =>
@@ -378,7 +378,7 @@ namespace ReModCE.Components
 
         private void LoginToAPI(APIUser user, Action onLogin)
         {
-            if (!_enableApi)
+            if (!EnableApi)
             {
                 return;
             }
@@ -525,7 +525,7 @@ namespace ReModCE.Components
 
         private void SendAvatarRequest(HttpMethod method, Action<HttpResponseMessage> onResponse, ReAvatar avater = null)
         {
-            if (!_enableApi)
+            if (!EnableApi)
                 return;
 
             var request = new HttpRequestMessage(method, $"{ApiUrl}/avatar.php");
