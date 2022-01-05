@@ -55,11 +55,11 @@ namespace ReModCE.Managers
             var riskyFunctionAllowed = !worldName.Contains("club") && !worldName.Contains("game") && !hasBlacklistedTag;
 
             var rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
-            if (rootGameObjects.Any(go => go.name == "eVRCRiskFuncDisable"))
+            if (rootGameObjects.Any(go => go.name is "eVRCRiskFuncDisable" or "UniversalRiskyFuncDisable"))
             {
                 riskyFunctionAllowed = false;
             }
-            else if (rootGameObjects.Any(go => go.name == "eVRCRiskFuncEnable"))
+            else if (rootGameObjects.Any(go => go.name is "eVRCRiskFuncEnable" or "UniversalRiskyFuncEnable"))
             {
                 riskyFunctionAllowed = true;
             }
