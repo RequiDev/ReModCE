@@ -35,7 +35,9 @@ namespace ReModCE.Components
 
         private Button.ButtonClickedEvent _changeButtonEvent;
 
+        private bool _enableApi = false;
         private const string ApiUrl = "https://requi.dev/remod";
+        private string _userAgent = "";
         private HttpClient _httpClient;
         private HttpClientHandler _httpClientHandler;
 
@@ -62,8 +64,6 @@ namespace ReModCE.Components
 
         public AvatarFavoritesComponent()
         {
-            InitializeNetworkClient();
-
             AvatarFavoritesEnabled = new ConfigValue<bool>(nameof(AvatarFavoritesEnabled), true);
             AvatarFavoritesEnabled.OnValueChanged += () =>
             {
@@ -91,6 +91,9 @@ namespace ReModCE.Components
 
         private void InitializeNetworkClient()
         {
+            if (!_enableApi)
+                return;
+
             _httpClientHandler = new HttpClientHandler
             {
                 UseCookies = true,
@@ -101,11 +104,15 @@ namespace ReModCE.Components
             var vrHeadset = XRDevice.isPresent ? XRDevice.model : "Desktop";
             vrHeadset = vrHeadset.Replace(' ', '_');
 
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"ReModCE/{vrHeadset}.{Application.version} (Windows NT 10.0; Win64; x64)");
+            _userAgent = $"ReModCE/{vrHeadset}.{Application.version} (Windows NT 10.0; Win64; x64)";
+
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
         }
 
         public override void OnUiManagerInitEarly()
         {
+            InitializeNetworkClient();
+
             _searchedAvatarList = new ReAvatarList("ReModCE Search", this);
 
             _favoriteAvatarList = new ReAvatarList("ReModCE Favorites", this, false);
@@ -264,8 +271,19 @@ namespace ReModCE.Components
 
         private void SearchAvatars(string searchTerm)
         {
+            if (!_enableApi)
+            {
+                VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0.ShowStandardPopupV2("ReModCE API", "ReModCE API is currently down for maintenance. This will take about 12-24 hours. During this time, your avatar favorites in ReModCE are unavailable and search will be disabled.\nThank you for your patience!", "OK!",
+                    () =>
+                    {
+                        VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0.HideCurrentPopup();
+                    });
+                return;
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiUrl}/search.php?searchTerm={searchTerm}");
 
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
             _httpClient.SendAsync(request).ContinueWith(rsp =>
             {
                 var searchResponse = rsp.Result;
@@ -360,6 +378,10 @@ namespace ReModCE.Components
 
         private void LoginToAPI(APIUser user, Action onLogin)
         {
+            if (!_enableApi)
+            {
+                return;
+            }
             if (_loginRetries >= 3)
             {
                 ReLogger.Error($"Could not login to ReModCE API: Exceeded retries. Please restart your game and make sure your pin is correct!");
@@ -376,6 +398,7 @@ namespace ReModCE.Components
             };
 
             ++_loginRetries;
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
             _httpClient.SendAsync(request).ContinueWith(t =>
             {
                 var loginResponse = t.Result;
@@ -502,12 +525,16 @@ namespace ReModCE.Components
 
         private void SendAvatarRequest(HttpMethod method, Action<HttpResponseMessage> onResponse, ReAvatar avater = null)
         {
+            if (!_enableApi)
+                return;
+
             var request = new HttpRequestMessage(method, $"{ApiUrl}/avatar.php");
             if (avater != null)
             {
                 request.Content = new StringContent(avater.ToJson(), Encoding.UTF8, "application/json");
             }
 
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
             _httpClient.SendAsync(request).ContinueWith(t => onResponse(t.Result));
         }
 
