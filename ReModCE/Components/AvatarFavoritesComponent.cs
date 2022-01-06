@@ -35,7 +35,7 @@ namespace ReModCE.Components
 
         private Button.ButtonClickedEvent _changeButtonEvent;
 
-        private const bool EnableApi = false;
+        private const bool EnableApi = true;
         private const string ApiUrl = "https://requi.dev/remod";
         private string _userAgent = "";
         private HttpClient _httpClient;
