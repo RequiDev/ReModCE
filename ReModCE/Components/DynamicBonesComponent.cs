@@ -616,62 +616,62 @@ namespace ReModCE.Components
             {
                 if (toggled)
                 {
-                    _settings.OwnCollisionFlag |= CollisionFlag.Self;
+                    _settings.OthersCollisionFlag |= CollisionFlag.Self;
                 }
                 else
                 {
-                    _settings.OwnCollisionFlag &= ~CollisionFlag.Self;
+                    _settings.OthersCollisionFlag &= ~CollisionFlag.Self;
                 }
                 if (_settings.AutoReloadAvatars)
                 {
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
-            }, (_settings.OwnCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self);
+            }, (_settings.OthersCollisionFlag & CollisionFlag.Self) == CollisionFlag.Self);
             othersMenu.AddToggle("To Whitelisted", "Add colliders to whitelisted users", toggled =>
             {
                 if (toggled)
                 {
-                    _settings.OwnCollisionFlag |= CollisionFlag.Whitelist;
+                    _settings.OthersCollisionFlag |= CollisionFlag.Whitelist;
                 }
                 else
                 {
-                    _settings.OwnCollisionFlag &= ~CollisionFlag.Whitelist;
+                    _settings.OthersCollisionFlag &= ~CollisionFlag.Whitelist;
                 }
                 if (_settings.AutoReloadAvatars)
                 {
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
-            }, (_settings.OwnCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist);
+            }, (_settings.OthersCollisionFlag & CollisionFlag.Whitelist) == CollisionFlag.Whitelist);
             othersMenu.AddToggle("To Friends", "Add colliders to friends", toggled =>
             {
                 if (toggled)
                 {
-                    _settings.OwnCollisionFlag |= CollisionFlag.Friends;
+                    _settings.OthersCollisionFlag |= CollisionFlag.Friends;
                 }
                 else
                 {
-                    _settings.OwnCollisionFlag &= ~CollisionFlag.Friends;
+                    _settings.OthersCollisionFlag &= ~CollisionFlag.Friends;
                 }
                 if (_settings.AutoReloadAvatars)
                 {
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
-            }, (_settings.OwnCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends);
+            }, (_settings.OthersCollisionFlag & CollisionFlag.Friends) == CollisionFlag.Friends);
             othersMenu.AddToggle("To Others", "Add colliders to others", toggled =>
             {
                 if (toggled)
                 {
-                    _settings.OwnCollisionFlag |= CollisionFlag.Others;
+                    _settings.OthersCollisionFlag |= CollisionFlag.Others;
                 }
                 else
                 {
-                    _settings.OwnCollisionFlag &= ~CollisionFlag.Others;
+                    _settings.OthersCollisionFlag &= ~CollisionFlag.Others;
                 }
                 if (_settings.AutoReloadAvatars)
                 {
                     VRCPlayer.field_Internal_Static_VRCPlayer_0.ReloadAllAvatars();
                 }
-            }, (_settings.OwnCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
+            }, (_settings.OthersCollisionFlag & CollisionFlag.Others) == CollisionFlag.Others);
         }
 
         private void PromptMaxRadiusInput()
