@@ -105,7 +105,7 @@ namespace ReModCE.Components
             vrHeadset = vrHeadset.Replace(' ', '_');
 
             _userAgent = $"ReModCE/{vrHeadset}.{Application.version} (Windows NT 10.0; Win64; x64)";
-
+            
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
         }
 
@@ -282,8 +282,7 @@ namespace ReModCE.Components
             }
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"{ApiUrl}/search.php?searchTerm={searchTerm}");
-
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
+            
             _httpClient.SendAsync(request).ContinueWith(rsp =>
             {
                 var searchResponse = rsp.Result;
@@ -398,7 +397,6 @@ namespace ReModCE.Components
             };
 
             ++_loginRetries;
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
             _httpClient.SendAsync(request).ContinueWith(t =>
             {
                 var loginResponse = t.Result;
@@ -533,8 +531,7 @@ namespace ReModCE.Components
             {
                 request.Content = new StringContent(avater.ToJson(), Encoding.UTF8, "application/json");
             }
-
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
+            
             _httpClient.SendAsync(request).ContinueWith(t => onResponse(t.Result));
         }
 
