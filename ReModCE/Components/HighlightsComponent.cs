@@ -143,7 +143,10 @@ namespace ReModCE.Components
 
         private HighlightsFXStandalone GetHighlightsFX(APIUser apiUser)
         {
-            return APIUser.IsFriendsWith(apiUser.id) ? _friendsHighlights : _othersHighlights;
+            if (APIUser.IsFriendsWith(apiUser.id))
+                return _friendsHighlights;
+
+            return _othersHighlights;
         }
     }
 }
