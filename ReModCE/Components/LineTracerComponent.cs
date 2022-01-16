@@ -30,6 +30,10 @@
         private static readonly int SrcBlend = Shader.PropertyToID("_SrcBlend");
 
         private static readonly int ZWrite = Shader.PropertyToID("_ZWrite");
+        
+        // Requi told me no, do this
+        private ConfigValue<Color> FriendsColor;
+        private ConfigValue<Color> OthersColor;
 
         private static Material lineMaterial;
 
@@ -53,7 +57,10 @@
                 nameof(lineTracerEnabled),
                 false,
                 "Enable Line Tracer (Right Trigger)");
-
+            
+            FriendsColor = new ConfigValue<Color>(nameof(FriendsColor), Color.yellow);
+            OthersColor = new ConfigValue<Color>(nameof(OthersColor), Color.magenta);
+            
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += b => riskyFunctionsAllowed = b;
         }
 
@@ -131,7 +138,7 @@
             {
                 if (!player) continue;
                 GL.Color(
-                    player.GetAPIUser().isFriend ? HighlightsComponent.FriendsColor : HighlightsComponent.OthersColor);
+                    player.GetAPIUser().isFriend ? FriendsColor.Value : OthersColor.Value);
                 GL.Vertex(originTransform.position);
                 GL.Vertex(player.transform.position);
             }

@@ -17,8 +17,8 @@ namespace ReModCE.Components
         private HighlightsFXStandalone _friendsHighlights;
         private HighlightsFXStandalone _othersHighlights;
 
-        internal static ConfigValue<Color> FriendsColor;
-        internal static ConfigValue<Color> OthersColor;
+        private ConfigValue<Color> FriendsColor;
+        private ConfigValue<Color> OthersColor;
         private ConfigValue<bool> ESPEnabled;
         
         private ReMirroredWingToggle _espMirroredToggle;
