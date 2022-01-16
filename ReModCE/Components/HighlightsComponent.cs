@@ -17,8 +17,8 @@ namespace ReModCE.Components
         private HighlightsFXStandalone _friendsHighlights;
         private HighlightsFXStandalone _othersHighlights;
 
-        private ConfigValue<Color> FriendsColor;
-        private ConfigValue<Color> OthersColor;
+        internal static ConfigValue<Color> FriendsColor;
+        internal static ConfigValue<Color> OthersColor;
         private ConfigValue<bool> ESPEnabled;
         
         private ReMirroredWingToggle _espMirroredToggle;
@@ -143,10 +143,7 @@ namespace ReModCE.Components
 
         private HighlightsFXStandalone GetHighlightsFX(APIUser apiUser)
         {
-            if (APIUser.IsFriendsWith(apiUser.id))
-                return _friendsHighlights;
-
-            return _othersHighlights;
+            return APIUser.IsFriendsWith(apiUser.id) ? _friendsHighlights : _othersHighlights;
         }
     }
 }
