@@ -16,8 +16,7 @@
 
     using VRC;
     using VRC.Core;
-
-    [ComponentPriority(8)]
+    
     public sealed class LineTracerComponent : ModComponent
     {
 
@@ -85,8 +84,8 @@
             ReMenuCategory espMenu = uiManager.MainMenu.GetCategoryPage("Visuals").GetCategory("ESP/Highlights");
 
             espMenu.AddToggle(
-                "[VR] Line Tracer (Right Trigger)",
-                "Draw lines from your hand to each player in world",
+                "[VR] Line Tracer",
+                "Hold Right Trigger to draw lines to each players from your hand",
                 lineTracerEnabled);
 
             // Late enough that the camera is on now
