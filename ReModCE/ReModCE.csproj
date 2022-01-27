@@ -236,13 +236,14 @@
     <Compile Include="Components\CopyUserInformationComponent.cs" />
     <Compile Include="Components\DisableChairComponent.cs" />
     <Compile Include="Components\DynamicBonesComponent.cs" />
+    <Compile Include="Components\EmojiBlocker.cs" />
     <Compile Include="Components\FlyComponent.cs" />
     <Compile Include="Components\HighlightsComponent.cs" />
     <Compile Include="Components\InfoLogsComponent.cs" />
     <Compile Include="Components\InstanceDejavuComponent.cs" />
     <Compile Include="Components\InstanceHistoryComponent.cs" />
     <Compile Include="Components\InstanceLinkComponent.cs" />
-    <Compile Include="Components\LineTracerComponent.cs"  />
+    <Compile Include="Components\LineTracerComponent.cs" />
     <Compile Include="Components\MediaControlComponent.cs" />
     <Compile Include="Components\PopupExComponent.cs" />
     <Compile Include="Components\AvatarHistoryComponent.cs" />
