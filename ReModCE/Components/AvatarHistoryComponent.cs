@@ -56,6 +56,7 @@ namespace ReModCE.Components
                     ReLogger.Error($"Your recent avatars file seems to be corrupted. I renamed it for you, so this error doesn't happen again.");
                     File.Delete("UserData/ReModCE/recent_avatars.bin.corrupted");
                     File.Move("UserData/ReModCE/recent_avatars.bin", "UserData/ReModCE/recent_avatars.bin.corrupted");
+                    _recentAvatars = new List<ReAvatar>();
                 }
             }
             else
