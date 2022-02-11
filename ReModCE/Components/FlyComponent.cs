@@ -229,6 +229,12 @@ namespace ReModCE.Components
         private VRCMotionState _motionState;
         private void HandleFly()
         {
+            if (!_flyEnabled)
+                return;
+
+            if (VRCUiManagerEx.IsOpen)
+                return;
+
             var player = VRCPlayer.field_Internal_Static_VRCPlayer_0;
             if (player == null)
                 return;
@@ -238,7 +244,9 @@ namespace ReModCE.Components
                 _motionState = player.GetComponent<VRCMotionState>();
             }
 
-            if (!_flyEnabled) return;
+            if (XRDevice.isPresent && ActionMenuDriver.field_Public_Static_ActionMenuDriver_0.IsOpen())
+                return;
+
             
             var playerTransform = player.transform;
             var flyingTransform = FlyViewpointBased ? _cameraTransform : playerTransform;
