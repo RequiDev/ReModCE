@@ -272,7 +272,7 @@ namespace ReModCE.Components
         private void SearchAvatars(string searchTerm)
         {
             var popupManager = VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0;
-            if (string.IsNullOrEmpty(searchTerm) && searchTerm.Length < 3)
+            if (string.IsNullOrEmpty(searchTerm) || searchTerm.Length < 3)
             {
                 popupManager.ShowStandardPopupV2("ReModCE Search", "That search term is too short. The search term has to be at least 3 characters.", "I'm sorry!",
                     () =>
