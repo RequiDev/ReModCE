@@ -271,12 +271,23 @@ namespace ReModCE.Components
 
         private void SearchAvatars(string searchTerm)
         {
-            if (!EnableApi)
+            var popupManager = VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0;
+            if (string.IsNullOrEmpty(searchTerm) && searchTerm.Length < 3)
             {
-                VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0.ShowStandardPopupV2("ReModCE API", "ReModCE API is currently down for maintenance. This will take about 12-24 hours. During this time, your avatar favorites in ReModCE are unavailable and search will be disabled.\nThank you for your patience!", "OK!",
+                popupManager.ShowStandardPopupV2("ReModCE Search", "That search term is too short. The search term has to be at least 3 characters.", "I'm sorry!",
                     () =>
                     {
-                        VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0.HideCurrentPopup();
+                        popupManager.HideCurrentPopup();
+                    });
+                return;
+            }
+
+            if (!EnableApi)
+            {
+                popupManager.ShowStandardPopupV2("ReModCE API", "ReModCE API is currently down for maintenance. This will take about 12-24 hours. During this time, your avatar favorites in ReModCE are unavailable and search will be disabled.\nThank you for your patience!", "OK!",
+                    () =>
+                    {
+                        popupManager.HideCurrentPopup();
                     });
                 return;
             }
