@@ -48,7 +48,7 @@ In case you want to update you can always grab the latest and even previous vers
 * CTRL + T = Thirdperson
 
 ## Forgot your PIN?
-Head over to [here](https://requi.dev/remod/pin.php) to reset it.
+Head over to [here](https://remod-ce.requi.dev/api/pin.php) to reset it.
 
 ## Credits
 [knah](https://github.com/knah) - For his usage of GitHub Action which I've looked at to figure out on how to do CI on GitHub
