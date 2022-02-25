@@ -13,7 +13,7 @@ This is essentially a public version of my invite-only VRChat mod. It's a cut-do
 If you want a feature or have a bug report, head over to the issues page and create an issue for it!
 
 ## Installation & Usage
-Disclaimer: ReModCE is not functional on the Oculus version of VRChat. You'll have to use the Steam version.
+Disclaimer: ReModCE is not functional on the Oculus version of VRChat. You'll have to use the Steam version.  
 **You need at least MelonLoader v0.5.3 since VRChat Build 1169!**
 
 Grab the latest loader from [here](https://api.vrcmg.com/v0/mods/246/ReModCE.Loader.dll) and put it in your Mods directory.  
