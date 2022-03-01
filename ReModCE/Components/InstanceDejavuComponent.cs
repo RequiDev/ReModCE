@@ -27,7 +27,7 @@ namespace ReModCE.Components
                 ReModCE.Harmony.Patch(m, postfix: GetLocalPatch(nameof(OnInstanceContentButtonGenerationPostfix)));
             }
 
-            var selectWorldInstance = typeof(PageWorldInfo).GetMethods().Single(m => XrefUtils.CheckMethod(m, "Make Home"));
+            var selectWorldInstance = typeof(PageWorldInfo).GetMethods().Single(m => XrefUtils.CheckMethod(m, "Make Home") && m.Name.StartsWith("Method_Private_Void_") && m.Name.Length < 22);
             ReModCE.Harmony.Patch(selectWorldInstance, postfix: GetLocalPatch(nameof(UpdateWorldMainPicker)));
         }
 
