@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using MelonLoader;
 using Newtonsoft.Json;
 using ReMod.Core;
@@ -67,11 +68,12 @@ namespace ReModCE.Components
             PatchSteamTracking();
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private void PatchSteamTracking()
         {
             try
             {
-                var methods = typeof(VRCTrackingSteam).GetMethods();
+                var methods = Assembly.GetAssembly(typeof(VRCTracking)).GetType(nameof(VRCTrackingSteam)).GetMethods();
                 foreach (var methodInfo in methods)
                 {
                     switch (methodInfo.GetParameters().Length)
