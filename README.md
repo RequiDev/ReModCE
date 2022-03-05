@@ -4,6 +4,7 @@
 [![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/total.svg?style=for-the-badge&logo=appveyor)](https://github.com/RequiDev/ReModCE/releases)
 [![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/latest/total.svg?style=for-the-badge&logo=appveyor)](https://github.com/RequiDev/ReModCE/releases/latest)
 
+![ReModCE Logo](https://github.com/RequiDev/ReModCE/raw/master/remod_ce_logo.png)
 
 ReMod Community Edition - A All-in-One VRChat mod to suit all your needs using [MelonLoader](https://github.com/LavaGang/MelonLoader)
 # **You need at least MelonLoader v0.5.3 since VRChat Build 1169!**
