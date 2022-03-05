@@ -14,8 +14,6 @@ This is essentially a public version of my invite-only VRChat mod. It's a cut-do
 If you want a feature or have a bug report, head over to the issues page and create an issue for it!
 
 ## Installation & Usage
-Disclaimer: ReModCE is not functional on the Oculus version of VRChat. You'll have to use the Steam version.  
-
 Grab the latest loader from [here](https://api.vrcmg.com/v0/mods/246/ReModCE.Loader.dll) and put it in your Mods directory.  
 
 By default the loader will attempt to load the mod from your VRChat directory using the filename 'ReModCE.dll'. If it doesn't exist, it will attempt to download the latest Version from GitHub.  
