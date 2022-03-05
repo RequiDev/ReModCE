@@ -18,7 +18,7 @@ namespace ReModCE.Loader
         public const string Name = "ReModCE";
         public const string Author = "Requi, FenrixTheFox, Xaiver, Potato, Psychloor";
         public const string Company = null;
-        public const string Version = "1.0.0.3";
+        public const string Version = "1.0.0.4";
         public const string DownloadLink = "https://github.com/RequiDev/ReModCE/releases/latest/";
     }
 
@@ -52,7 +52,7 @@ namespace ReModCE.Loader
             _paranoidMode = category.CreateEntry("ParanoidMode", false, "Paranoid Mode",
                 "If enabled ReModCE will not automatically download the latest version from GitHub. Manual update will be required.",
                 true);
-
+            
             DownloadFromGitHub("ReMod.Core", out _);
             DownloadFromGitHub("ReModCE", out var assembly);
 
@@ -230,7 +230,14 @@ namespace ReModCE.Loader
                 }
                 MelonLogger.Warning($"Couldn't find {fileName}.dll on disk. Saving latest version from GitHub.");
                 bytes = latestBytes;
-                File.WriteAllBytes($"{fileName}.dll", bytes);
+                try
+                {
+                    File.WriteAllBytes($"{fileName}.dll", bytes);
+                }
+                catch (IOException e)
+                {
+                    ReLogger.Warning($"Failed writing {fileName} to disk. You may encounter errors while using ReModCE.");
+                }
             }
 
 #if !DEBUG
@@ -249,13 +256,20 @@ namespace ReModCE.Loader
                     else
                     {
                         bytes = latestBytes;
-                        File.WriteAllBytes($"{fileName}.dll", bytes);
+                        try
+                        {
+                            File.WriteAllBytes($"{fileName}.dll", bytes);
+                        }
+                        catch (IOException e)
+                        {
+                            ReLogger.Warning($"Failed writing {fileName} to disk. You may encounter errors while using ReModCE.");
+                        }
                         MelonLogger.Msg(ConsoleColor.Green, $"Updated {fileName} to latest version.");
                     }
                 }
             }
 #endif
-            
+
             try
             {
                 loadedAssembly = Assembly.Load(bytes);
