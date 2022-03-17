@@ -15,17 +15,17 @@ namespace ReModCE.Loader
 {
     public static class BuildInfo
     {
-        public const string Name = "ReModCE";
-        public const string Author = "Requi, FenrixTheFox, Xaiver, Potato, Psychloor";
+        public const string Name = "ReModCE-Unlocked";
+        public const string Author = "Requi, FenrixTheFox, Xaiver, Potato, Psychloor, VRChat is Awesome";
         public const string Company = null;
         public const string Version = "1.0.0.4";
-        public const string DownloadLink = "https://github.com/RequiDev/ReModCE/releases/latest/";
+        public const string DownloadLink = "https://github.com/VRChat-is-Awesome/ReModCE-Unlocked/latest/";
     }
 
     internal static class GitHubInfo
     {
-        public const string Author = "RequiDev";
-        public const string Repository = "ReModCE";
+        public const string Author = "VRChat-is-Awesome";
+        public const string Repository = "ReModCE-Unlocked";
         public const string Version = "latest";
     }
 
