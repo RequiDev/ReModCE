@@ -23,6 +23,7 @@ using UnityEngine.XR;
 using VRC.Core;
 using VRC.SDKBase.Validation.Performance.Stats;
 using AvatarList = Il2CppSystem.Collections.Generic.List<VRC.Core.ApiAvatar>;
+using BuildInfo = ReModCE.Loader.BuildInfo;
 
 namespace ReModCE.Components
 {
@@ -104,7 +105,7 @@ namespace ReModCE.Components
             var vrHeadset = XRDevice.isPresent ? XRDevice.model : "Desktop";
             vrHeadset = vrHeadset.Replace(' ', '_');
 
-            _userAgent = $"ReModCE/{vrHeadset}.{Application.version} (Windows NT 10.0; Win64; x64)";
+            _userAgent = $"{BuildInfo.Name}/{vrHeadset}.{BuildInfo.Version} (Windows NT 10.0; Win64; x64)";
             
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
         }
