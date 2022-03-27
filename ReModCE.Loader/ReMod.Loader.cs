@@ -15,7 +15,7 @@ namespace ReModCE.Loader
 {
     public static class BuildInfo
     {
-        public const string Name = "ReModCE";
+        public const string Name = "ReModCEUnlocked";
         public const string Author = "Requi, FenrixTheFox, Xaiver, Potato, Psychloor, VRChat is Awesome";
         public const string Company = null;
         public const string Version = "1.0.0.4";
@@ -48,13 +48,13 @@ namespace ReModCE.Loader
         private MelonPreferences_Entry<bool> _paranoidMode;
         public override void OnApplicationStart()
         {
-            var category = MelonPreferences.CreateCategory("ReModCE");
+            var category = MelonPreferences.CreateCategory("ReModCEUnlocked");
             _paranoidMode = category.CreateEntry("ParanoidMode", false, "Paranoid Mode",
                 "If enabled ReModCE will not automatically download the latest version from GitHub. Manual update will be required.",
                 true);
             
             DownloadFromGitHub("ReMod.Core", out _);
-            DownloadFromGitHub("ReModCE", out var assembly);
+            DownloadFromGitHub("ReModCEUnlocked", out var assembly);
 
             if (assembly == null)
                 return;
