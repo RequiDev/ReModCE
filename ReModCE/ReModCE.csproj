@@ -235,6 +235,7 @@
     <Compile Include="Components\CalibrationSavingComponent.cs" />
     <Compile Include="Components\CopyUserInformationComponent.cs" />
     <Compile Include="Components\DisableChairComponent.cs" />
+    <Compile Include="Components\DiscordPopupComponent.cs" />
     <Compile Include="Components\DynamicBonesComponent.cs" />
     <Compile Include="Components\EmojiBlocker.cs" />
     <Compile Include="Components\FlyComponent.cs" />

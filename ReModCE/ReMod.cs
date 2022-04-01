@@ -149,6 +149,10 @@ namespace ReModCE
             _uiManager.MainMenu.AddMenuPage("Logging", "Access logging related settings", ResourceManager.GetSprite("remodce.log"));
             _uiManager.MainMenu.AddMenuPage("Hotkeys", "Access hotkey related settings", ResourceManager.GetSprite("remodce.keyboard"));
 
+            var remodMenu = _uiManager.MainMenu.AddMenuPage("ReMod CE", "Access ReMod CE related options", ResourceManager.GetSprite("remodce.remod"));
+            remodMenu.AddButton("Discord", "Join my Discord if you need help or if you just want to chat!",
+                () => { Process.Start("https://discord.gg/KdTSGU4jt3"); }, ResourceManager.GetSprite("remodce.discord"));
+
             foreach (var m in Components)
             {
                 try
