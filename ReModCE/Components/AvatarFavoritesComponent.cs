@@ -216,6 +216,14 @@ namespace ReModCE.Components
                 return;
             }
 
+            // Have we already found emmVRCs search action? We can just use our override to make sure shit's right.
+            if (_emmVRCsearchAvatarsAction != null)
+            {
+                _searchBox.field_Public_UnityAction_1_String_0 = _overrideSearchAvatarsAction;
+                _searchBox.field_Public_Button_0.interactable = true;
+                return;
+            }
+
             // Has emmVRC replaced the button functionality?
             if (!_searchBox.field_Public_Button_0.interactable)
             {
@@ -225,6 +233,7 @@ namespace ReModCE.Components
                     // We already have emmVRCs search function. Make sure we don't fuck it up here.
                     if (_emmVRCsearchAvatarsAction != null)
                         return;
+
                     // enable the fucker and set it to our search. We assume emmVRC is not loaded or search isn't enabled
                     _searchBox.field_Public_Button_0.interactable = true;
                     _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
