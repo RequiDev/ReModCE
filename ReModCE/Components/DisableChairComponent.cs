@@ -1,7 +1,9 @@
-﻿using ReMod.Core;
+﻿using System;
+using ReMod.Core;
 using ReMod.Core.Managers;
 using ReMod.Core.UI.QuickMenu;
 using ReMod.Core.VRChat;
+using ReModCE.Loader;
 using VRC;
 using VRC.Core;
 
@@ -15,6 +17,12 @@ namespace ReModCE.Components
 
         public DisableChairComponent()
         {
+            if (ReModCE.IsComponentToggleLoaded)
+            {
+                ReLogger.Msg(ConsoleColor.Yellow, "Found ComponentToggle Mod. Not loading DisableChairComponent.");
+                return;
+            }
+
             ReModCE.Harmony.Patch(typeof(VRC_StationInternal).GetMethod(nameof(VRC_StationInternal.Method_Public_Boolean_Player_Boolean_0)),
                 GetLocalPatch(nameof(PlayerCanUseStation)));
 

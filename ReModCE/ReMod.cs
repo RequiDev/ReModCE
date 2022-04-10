@@ -33,6 +33,7 @@ namespace ReModCE
         public static bool IsEmmVRCLoaded { get; private set; }
         public static bool IsRubyLoaded { get; private set; }
         public static bool IsOculus { get; private set; }
+        public static bool IsComponentToggleLoaded { get; private set; }
 
         public static HarmonyLib.Harmony Harmony { get; private set; }
 
@@ -44,6 +45,7 @@ namespace ReModCE
 
             IsEmmVRCLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "emmVRCLoader");
             IsRubyLoaded = File.Exists("hid.dll");
+            IsComponentToggleLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "ComponentToggle");
 
             var ourAssembly = Assembly.GetExecutingAssembly();
             var resources = ourAssembly.GetManifestResourceNames();
