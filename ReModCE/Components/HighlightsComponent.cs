@@ -77,33 +77,15 @@ namespace ReModCE.Components
                 $"Set your <color=#{FriendsColor.Value.ToHex()}>friends</color> highlight color",
                 () =>
                 {
-                    PopupColorInput(_friendsColorButton, "Friends", FriendsColor);
+                    VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowColorInputPopup(_friendsColorButton, "Friends", FriendsColor);
                 }, ResourceManager.GetSprite("remodce.palette"));
 
             _othersColorButton = menu.AddButton($"<color=#{OthersColor.Value.ToHex()}>Others</color> Color",
                 $"Set <color=#{OthersColor.Value.ToHex()}>other</color> peoples highlight color",
                 () =>
                 {
-                    PopupColorInput(_othersColorButton, "Others", OthersColor);
+                    VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowColorInputPopup(_othersColorButton, "Others", OthersColor);
                 }, ResourceManager.GetSprite("remodce.palette"));
-        }
-
-        private void PopupColorInput(ReMenuButton button, string who, ConfigValue<Color> configValue)
-        {
-            VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowInputPopupWithCancel("Input hex color code",
-                $"#{configValue.Value.ToHex()}", InputField.InputType.Standard, false, "Submit",
-                (s, k, t) =>
-                {
-                    if (string.IsNullOrEmpty(s))
-                        return;
-
-                    if (!ColorUtility.TryParseHtmlString(s, out var color))
-                        return;
-
-                    configValue.SetValue(color);
-
-                    button.Text = $"<color=#{configValue.Value.ToHex()}>{who}</color> Color";
-                }, null);
         }
 
         private void ToggleESP(bool enabled)
