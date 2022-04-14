@@ -42,6 +42,9 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
+            if (ReModCE.IsComponentToggleLoaded)
+                return;
+
             var othersMenu = uiManager.MainMenu.GetCategoryPage("Utility").GetCategory("Quality of Life");
             _disableChairToggle = othersMenu.AddToggle("Disable Chairs", "Toggle Chairs. Because fuck chairs.", ChairsDisabled);
         }
