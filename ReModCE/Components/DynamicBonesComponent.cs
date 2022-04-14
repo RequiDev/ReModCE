@@ -829,11 +829,16 @@ namespace ReModCE.Components
             if (!_settings.Enabled)
                 return;
 
-            var apiUser = vrcPlayer.GetPlayer().GetAPIUser();
+            var apiUser = vrcPlayer.GetPlayer()?.GetAPIUser();
             if (apiUser == null)
                 return;
             var avatarObject = vrcPlayer.GetAvatarObject();
+            if (avatarObject == null)
+                return;
+
             var animator = avatarObject.GetComponentInChildren<Animator>();
+            if (animator == null)
+                return;
 
             var isSelf = vrcPlayer.gameObject == VRCPlayer.field_Internal_Static_VRCPlayer_0.gameObject;
             var isWhitelisted = !isSelf && _settings.IsWhitelisted(apiUser.id);
