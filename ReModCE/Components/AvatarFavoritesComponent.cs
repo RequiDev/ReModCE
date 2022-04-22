@@ -50,6 +50,8 @@ namespace ReModCE.Components
         private ReMenuToggle _enabledToggle;
         private ConfigValue<int> MaxAvatarsPerPage;
         private ReMenuButton _maxAvatarsPerPageButton;
+        private ConfigValue<bool> AvatarSearchEnabled;
+        private ReMenuToggle _searchEnabledToggle;
 
         private List<ReAvatar> _savedAvatars;
         private readonly AvatarList _searchedAvatars;
@@ -77,7 +79,13 @@ namespace ReModCE.Components
             {
                 _favoriteAvatarList.SetMaxAvatarsPerPage(MaxAvatarsPerPage);
             };
-            
+            AvatarSearchEnabled = new ConfigValue<bool>(nameof(AvatarSearchEnabled), true);
+            AvatarSearchEnabled.OnValueChanged += () =>
+            {
+                _searchEnabledToggle.Toggle(AvatarSearchEnabled);
+                _searchedAvatarList.GameObject.SetActive(AvatarSearchEnabled);
+            };
+
             _savedAvatars = new List<ReAvatar>();
             _searchedAvatars = new AvatarList();
 
@@ -162,6 +170,7 @@ namespace ReModCE.Components
 
             var menu = uiManager.MainMenu.GetMenuPage("Avatars");
             _enabledToggle = menu.AddToggle("Avatar Favorites", "Enable/Disable avatar favorites (requires VRC+)", AvatarFavoritesEnabled);
+            _searchEnabledToggle = menu.AddToggle("Avatar Search", "Enable/Disable avatar search", AvatarSearchEnabled);
             _maxAvatarsPerPageButton = menu.AddButton($"Avatars Per Page: {MaxAvatarsPerPage}",
                 "Set the maximum amount of avatars shown per page",
                 () =>
@@ -208,6 +217,8 @@ namespace ReModCE.Components
 
         public override void OnUpdate()
         {
+            if (!AvatarSearchEnabled)
+                return;
             if (_searchBox == null)
                 return;
 
