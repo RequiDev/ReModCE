@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MelonLoader.Preferences;
 using ReMod.Core.UI.QuickMenu;
+using ReMod.Core.VRChat;
 using UnityEngine;
 using VRC.Core;
 using VRC.SDKBase;
@@ -35,9 +37,12 @@ namespace ReModCE.Components
 
         private SavedWorld _currentSavedWorld;
 
+        private ConfigValue<int> InstanceHistoryThreshold;
+        private ReMenuButton _instanceHistoryThreshholdButton;
+        
         public InstanceHistoryComponent()
         {
-
+            InstanceHistoryThreshold = new ConfigValue<int>(nameof(InstanceHistoryThreshold), 8);
             if (File.Exists("UserData/ReModCE/instance_history.json"))
             {
                 _instanceHistory = JsonConvert.DeserializeObject<List<SavedWorld>>(File.ReadAllText("UserData/ReModCE/instance_history.json"));
@@ -46,7 +51,7 @@ namespace ReModCE.Components
             _instanceHistory ??= new List<SavedWorld>();
 
             var history = _instanceHistory.ToList();
-            foreach (var instance in history.Where(instance => (DateTime.UtcNow - instance.JoinDate).TotalHours > 8))
+            foreach (var instance in history.Where(instance => (DateTime.UtcNow - instance.JoinDate).TotalHours > InstanceHistoryThreshold))
             {
                 _instanceHistory.Remove(instance);
             }
@@ -81,6 +86,11 @@ namespace ReModCE.Components
 
             _instanceSettingsDescendingToggle = _instanceSettingsMenu.AddToggle("Reverse Order",
                 "Reverse the order of the instances.", InstanceHistoryDescendingEnabled);
+            _instanceHistoryThreshholdButton = _instanceSettingsMenu.AddButton($"Keep Threshold: {InstanceHistoryThreshold}",
+                "For how many hours an instance is kept before getting deleted",
+                () => VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0.ShowInputPopup("Set the amount of hours",
+                    InstanceHistoryThreshold, _instanceHistoryThreshholdButton, "Keep Threshold", new ValueRange<int>(1, 180)
+                ));
         }
 
         //TODO: On restart (rejoining last world), queue the button move rather than execute immediately.
