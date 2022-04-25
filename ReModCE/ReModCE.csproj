@@ -1,267 +1,207 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4EA50331-5D4E-47D3-BDA5-260600CFF84C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ReModCE</RootNamespace>
     <AssemblyName>ReModCE</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+
   <ItemGroup>
+    <Reference Include="HarmonyLib">
+      <Private>false</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(VRCPath)\MelonLoader\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="DataModel">
-      <HintPath>..\3rdparty\ml\Managed\DataModel.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\DataModel.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2Cppmscorlib, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem">
-      <HintPath>..\3rdparty\ml\Managed\Il2CppSystem.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\Il2CppSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>..\3rdparty\ml\Managed\Il2CppSystem.Core.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\Il2CppSystem.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="MelonLoader, Version=0.4.3.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\MelonLoader.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <HintPath>..\3rdparty\ml\Managed\System.Windows.Forms.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\System.Windows.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="UnhollowerBaseLib, Version=0.4.15.4, Culture=neutral, PublicKeyToken=null">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnhollowerBaseLib.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnhollowerBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="UniTask.TextMeshPro">
-      <HintPath>..\3rdparty\ml\Managed\UniTask.TextMeshPro.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UniTask.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
-      <HintPath>..\3rdparty\ml\Managed\Unity.Postprocessing.Runtime.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\Unity.Postprocessing.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\3rdparty\ml\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ClothModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.ClothModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.ClothModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <Private>false</Private>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.InputModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.InputModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextCoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.TextCoreModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.TextCoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.UIElementsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.VRModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\UnityEngine.XRModule.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\UnityEngine.XRModule.dll</HintPath>
     </Reference>
     <Reference Include="VRC.UI.Core">
-      <HintPath>..\3rdparty\ml\Managed\VRC.UI.Core.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRC.UI.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="VRC.UI.Elements">
-      <HintPath>..\3rdparty\ml\Managed\VRC.UI.Elements.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRC.UI.Elements.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="VRC.UI.Shared">
-      <HintPath>..\3rdparty\ml\Managed\VRC.UI.Shared.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRC.UI.Shared.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="VRC.Utility">
-      <HintPath>..\3rdparty\ml\Managed\VRC.Utility.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRC.Utility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="VRCCore-Standalone, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\VRCCore-Standalone.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRCCore-Standalone.dll</HintPath>
     </Reference>
     <Reference Include="VRCSDK2, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\VRCSDK2.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRCSDK2.dll</HintPath>
     </Reference>
     <Reference Include="VRCSDK3, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\VRCSDK3.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRCSDK3.dll</HintPath>
     </Reference>
     <Reference Include="VRCSDK3A">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\VRCSDK3A.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRCSDK3A.dll</HintPath>
     </Reference>
     <Reference Include="VRCSDKBase, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>false</Private>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdparty\ml\Managed\VRCSDKBase.dll</HintPath>
+      <HintPath>$(VRCPath)\MelonLoader\Managed\VRCSDKBase.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Components\AvatarFavoritesComponent.cs" />
-    <Compile Include="Components\CalibrationSavingComponent.cs" />
-    <Compile Include="Components\CopyUserInformationComponent.cs" />
-    <Compile Include="Components\DisableChairComponent.cs" />
-    <Compile Include="Components\DiscordPopupComponent.cs" />
-    <Compile Include="Components\DynamicBonesComponent.cs" />
-    <Compile Include="Components\EmojiBlocker.cs" />
-    <Compile Include="Components\FlyComponent.cs" />
-    <Compile Include="Components\HighlightsComponent.cs" />
-    <Compile Include="Components\InfoLogsComponent.cs" />
-    <Compile Include="Components\InstanceDejavuComponent.cs" />
-    <Compile Include="Components\InstanceHistoryComponent.cs" />
-    <Compile Include="Components\InstanceLinkComponent.cs" />
-    <Compile Include="Components\LineTracerComponent.cs" />
-    <Compile Include="Components\MediaControlComponent.cs" />
-    <Compile Include="Components\PopupExComponent.cs" />
-    <Compile Include="Components\AvatarHistoryComponent.cs" />
-    <Compile Include="Components\PortalConfirmationComponent.cs" />
-    <Compile Include="Components\RestartButtonComponent.cs" />
-    <Compile Include="Components\TeleportComponent.cs" />
-    <Compile Include="Components\ThirdPersonComponent.cs" />
-    <Compile Include="Components\VRCNewsAdjustment.cs" />
-    <Compile Include="Components\WireframeComponent.cs" />
-    <Compile Include="Core\ApiError.cs" />
-    <Compile Include="Core\BinaryGZipSerializer.cs" />
-    <Compile Include="Core\DynamicContractResolver.cs" />
-    <Compile Include="Core\ReAvatar.cs" />
-    <Compile Include="Core\TaskExtensions.cs" />
-    <Compile Include="Managers\RiskyFunctionsManager.cs" />
-    <Compile Include="ReMod.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReModCE.Loader\ReModCE.Loader.csproj">
@@ -277,10 +217,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\*.png" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy /Y $(TargetFileName) S:\Games\steamapps\common\VRChat\$(TargetFileName)
-exit /b 0</PostBuildEvent>
-  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(CopyToVrc)'=='true'">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(VRCPath)" />
+    <Message Text="Copied $(TargetFileName) to $(VRCPath)" Importance="high" />
+  </Target>
 </Project>
