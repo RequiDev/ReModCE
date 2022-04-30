@@ -38,6 +38,8 @@ using ReModCE.Loader;
 [assembly: AssemblyFileVersion(ReModCE.Loader.BuildInfo.Version)]
 
 [assembly: MelonInfo(typeof(ReLoader), ReModCE.Loader.BuildInfo.Name, ReModCE.Loader.BuildInfo.Version, ReModCE.Loader.BuildInfo.Author, ReModCE.Loader.BuildInfo.DownloadLink)]
+[assembly: MelonGame("VRChat", "VRChat")]
+[assembly: MelonPriority(int.MinValue)]
 
 // Create and Setup a MelonModGame to mark a Mod as Universal or Compatible with specific Games.
 // If no MelonModGameAttribute is found or any of the Values for any MelonModGame on the Mod is null or empty it will be assumed the Mod is Universal.

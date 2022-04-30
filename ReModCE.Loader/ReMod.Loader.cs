@@ -18,7 +18,7 @@ namespace ReModCE.Loader
         public const string Name = "ReModCE";
         public const string Author = "Requi, FenrixTheFox, Xaiver, Potato, Psychloor";
         public const string Company = null;
-        public const string Version = "1.0.0.4";
+        public const string Version = "1.0.0.5";
         public const string DownloadLink = "https://github.com/RequiDev/ReModCE/releases/latest/";
     }
 
@@ -31,6 +31,8 @@ namespace ReModCE.Loader
 
     public class ReLoader : MelonMod
     {
+        private ReLogger _logger;
+        
         private Action _onApplicationStart;
         private Action _onUiManagerInit;
         private Action _onUiManagerInitEarly;
@@ -46,14 +48,22 @@ namespace ReModCE.Loader
         private Action<int, string> _onSceneWasInitialized;
 
         private MelonPreferences_Entry<bool> _paranoidMode;
-        public override void OnApplicationStart()
+
+        public ReLoader()
         {
+            _logger = new ReLogger(new MelonLogger.Instance("ReModCE"));
+
             var category = MelonPreferences.CreateCategory("ReModCE");
             _paranoidMode = category.CreateEntry("ParanoidMode", false, "Paranoid Mode",
                 "If enabled ReModCE will not automatically download the latest version from GitHub. Manual update will be required.",
                 true);
-            
+
+            ReLogger.Msg($"Loading ReMod.Core early so other mods don't break me...");
             DownloadFromGitHub("ReMod.Core", out _);
+        }
+
+        public override void OnApplicationStart()
+        {
             DownloadFromGitHub("ReModCE", out var assembly);
 
             if (assembly == null)
