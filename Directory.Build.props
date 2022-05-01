@@ -15,9 +15,13 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(VRCPath)'==''">
-		<VRCPath>..\3rdparty</VRCPath>
 		<VRCPath Condition="Exists('C:/Program Files (x86)/Steam/steamapps/common/VRChat')">C:/Program Files (x86)/Steam/steamapps/common/VRChat</VRCPath>
 		<VRCPath Condition="Exists('$(HOME)/.steam/steam/steamapps/common/VRChat')">$(HOME)/.steam/steam/steamapps/common/VRChat</VRCPath>
 		<VRCPath Condition="Exists('S:\Games\steamapps\common\VRChat')">S:\Games\steamapps\common\VRChat</VRCPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(MlPath)'==''">
+		<MlPath>..\3rdparty\ml</MlPath>
+		<MlPath Condition="Exists('$(VRCPath)/MelonLoader')">$(VRCPath)/MelonLoader</MlPath>
 	</PropertyGroup>
 </Project>
