@@ -7,7 +7,7 @@
 ![ReModCE Logo](https://github.com/RequiDev/ReModCE/raw/master/remod_ce_logo.png)
 
 ReMod Community Edition - A All-in-One VRChat mod to suit all your needs using [MelonLoader](https://github.com/LavaGang/MelonLoader)
-# **You need at least MelonLoader v0.5.3!**
+# **You need at least MelonLoader v0.5.4!**
 
 ## Description
 This is essentially a public version of my invite-only VRChat mod. It's a cut-down version with no connection to the ReMod server and with it's security measures removed.  
