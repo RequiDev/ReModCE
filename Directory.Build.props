@@ -1,8 +1,8 @@
 <Project>
 	<PropertyGroup>
 		<PlatformTarget>x64</PlatformTarget>
-		<OutputPath>..\.build\$(Configuration) ($(PlatformTarget))\Modules\$(ProjectName)\</OutputPath>
-		<BaseIntermediateOutputPath>..\.build</BaseIntermediateOutputPath>
+		<OutputPath>$(SolutionDir)\.build\$(Configuration) ($(PlatformTarget))\Modules\$(ProjectName)\</OutputPath>
+		<BaseIntermediateOutputPath>$(SolutionDir)\.build</BaseIntermediateOutputPath>
 		<IntermediateOutputPath>$(BaseIntermediateOutputPath)\tmp\$(Configuration) ($(PlatformTarget))\$(ProjectName)\</IntermediateOutputPath>
 
 		<FileAlignment>512</FileAlignment>
@@ -21,7 +21,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(MlPath)'==''">
-		<MlPath>..\3rdparty\ml</MlPath>
-		<MlPath Condition="Exists('$(VRCPath)/MelonLoader')">$(VRCPath)/MelonLoader</MlPath>
+		<MlPath>$(SolutionDir)\3rdparty\ml</MlPath>
+		<MlPath Condition="!Exists('$(MlPath)') And Exists('$(VRCPath)/MelonLoader')">$(VRCPath)/MelonLoader</MlPath>
 	</PropertyGroup>
 </Project>
