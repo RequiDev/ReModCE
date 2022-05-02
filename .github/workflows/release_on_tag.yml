@@ -40,5 +40,8 @@ jobs:
           .build/Release (x64)/Modules/ReModCE.dll
           .build/Release (x64)/Modules/ReMod.Core.dll
           .build/Release (x64)/Modules/ReModCE.Loader.dll
+          .build/Release (x64)/Modules/net472/ReModCE.dll
+          .build/Release (x64)/Modules/net472/ReMod.Core.dll
+          .build/Release (x64)/Modules/net472/ReModCE.Loader.dll
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
