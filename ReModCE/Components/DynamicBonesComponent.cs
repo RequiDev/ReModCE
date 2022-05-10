@@ -16,6 +16,7 @@ using VRC.DataModel;
 
 namespace ReModCE.Components
 {
+    [ComponentDisabled]
     internal class DynamicBonesComponent : ModComponent
     {
         [Flags]
