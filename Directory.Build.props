@@ -7,7 +7,7 @@
 
 		<FileAlignment>512</FileAlignment>
 		<Deterministic>true</Deterministic>
-		<TargetFramework>net472</TargetFramework>
+		<TargetFrameworks>net472;net6</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<CopyToVrc Condition="'$(CopyToVrc)'!='false'">true</CopyToVrc>
 		<DebugSymbols Condition="'$(Configuration)'=='Release'">false</DebugSymbols>

@@ -218,7 +218,7 @@
     <EmbeddedResource Include="Resources\*.png" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="('$(CopyToVrc)'=='true') And (Exists('$(VRCPath)'))">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' == 'net472' And ('$(CopyToVrc)'=='true') And (Exists('$(VRCPath)'))">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(VRCPath)" />
     <Message Text="Copied $(TargetFileName) to $(VRCPath)" Importance="high" />
   </Target>

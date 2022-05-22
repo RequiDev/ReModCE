@@ -61,7 +61,7 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="('$(CopyToVrc)'=='true') And (Exists('$(VRCPath)/Mods'))">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' == 'net472' And ('$(CopyToVrc)'=='true') And (Exists('$(VRCPath)/Mods'))">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(VRCPath)/Mods" />
     <Message Text="Copied $(TargetFileName) to $(VRCPath)/Mods" Importance="high" />
   </Target>

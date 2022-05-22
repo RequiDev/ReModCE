@@ -115,6 +115,14 @@ namespace ReModCE.Components
             GetHighlightsFX(player.field_Private_APIUser_0).Method_Public_Void_Renderer_Boolean_0(selectRegion.GetComponent<Renderer>(), highlighted);
         }
 
+        public override void OnUpdate()
+        {
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.E))
+            {
+                ESPEnabled.SetValue(!ESPEnabled);
+            }
+        }
+
         public override void OnPlayerJoined(Player player)
         {
             if (!ESPEnabled)
