@@ -8,7 +8,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using ReMod.Core.Notification;
 using ReMod.Core.UI.QuickMenu;
+using ReMod.Core.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -172,7 +174,8 @@ namespace ReModCE.Components
                 }
                 if (SongPreviewEnabled)
                 {
-                    VRCUiManagerEx.Instance.QueueHudMessage($"Now Playing on Spotify:\n{song}", Color.green);
+                    NotificationSystem.EnqueueNotification("ReModCE", $"<color=#{Color.green.ToHex()}>Now Playing on Spotify:\n{song}</color>", icon: ResourceManager.GetSprite("remodce.remod"));
+                    // VRCUiManagerEx.Instance.QueueHudMessage($"Now Playing on Spotify:\n{song}", Color.green);
                 }
             }
             _currentSong = isPlayingSong ? song : string.Empty;
