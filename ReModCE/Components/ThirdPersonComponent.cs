@@ -25,10 +25,15 @@ namespace ReModCE.Components
         private ConfigValue<bool> EnableThirdpersonHotkey;
         private ReMenuToggle _hotkeyToggle;
 
+        private ConfigValue<KeyCode> ThirdpersonHotkey;
+
         public ThirdPersonComponent()
         {
             EnableThirdpersonHotkey = new ConfigValue<bool>(nameof(EnableThirdpersonHotkey), true);
             EnableThirdpersonHotkey.OnValueChanged += () => _hotkeyToggle.Toggle(EnableThirdpersonHotkey);
+
+            ThirdpersonHotkey = new ConfigValue<KeyCode>(nameof(ThirdpersonHotkey), KeyCode.T);
+
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
                 if (!allowed)
@@ -84,7 +89,7 @@ namespace ReModCE.Components
         {
             if (!EnableThirdpersonHotkey) return;
 
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.T))
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(ThirdpersonHotkey))
             {
                 var mode = _cameraSetup;
                 if (++mode > ThirdPersonMode.Front)

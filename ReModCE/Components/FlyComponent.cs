@@ -30,6 +30,7 @@ namespace ReModCE.Components
         private Vector3 _originalGravity;
         private ConfigValue<bool> EnableFlyHotkey;
         private ConfigValue<bool> FlyViewpointBased;
+        private ConfigValue<KeyCode> FlyHotkey;
 
         private ReMenuButton _flySpeedButton;
 
@@ -54,6 +55,12 @@ namespace ReModCE.Components
                 "Fly Viewpoint Based",
                 "Whether to use Player/Viewpoint Transform as forward/right vectors.");
             FlyViewpointBased.OnValueChanged += () => _viewpointFlyingToggle?.Toggle(FlyViewpointBased);
+
+            FlyHotkey = new ConfigValue<KeyCode>(
+                nameof(FlyHotkey),
+                KeyCode.F,
+                "Fly Hotkey",
+                "Hotkey to toggle fly mode.");
 
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
             {
@@ -204,7 +211,7 @@ namespace ReModCE.Components
         {
             if (!EnableFlyHotkey) return;
 
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(FlyHotkey))
             {
                 if (!_flyEnabled)
                 {
