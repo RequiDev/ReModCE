@@ -38,7 +38,6 @@ In case you want to update you can always grab the latest and even previous vers
 * Wireframe ESP (Players, Pickups, World) (Not usable in Game/Club worlds)
 * Third Person (Not usable in Game/Club worlds)
 * Small UI adjustments like adding a "Paste" button to input popups
-* FBT Calibration Saver as already seen at [RequiDev/FBTSaver](https://github.com/RequiDev/FBTSaver)
 * Teleport to other players (Not usable in Game/Club worlds)
 * Media Controls which syncs with your Spotify
 * Quickly restart in either desktop or VR and automatically teleport to back where you were.
