@@ -125,7 +125,7 @@ namespace ReModCE.Components
             _searchedAvatarList = new ReAvatarList("ReModCE Search", this);
 
             _favoriteAvatarList = new ReAvatarList("ReModCE Favorites", this, false);
-            _favoriteAvatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
+            _favoriteAvatarList.AvatarPedestal.field_Internal_Action_4_String_GameObject_AvatarPerformanceStats_ObjectPublicBoBoBoBoBoBoBoBoBoBoUnique_0 = new Action<string, GameObject, AvatarPerformanceStats, ObjectPublicBoBoBoBoBoBoBoBoBoBoUnique>(OnAvatarInstantiated);
             _favoriteAvatarList.OnEnable += () =>
             {
                 // make sure it stays off if it should be off.
@@ -507,7 +507,7 @@ namespace ReModCE.Components
             VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", message);
         }
 
-        private void OnAvatarInstantiated(string url, GameObject avatar, AvatarPerformanceStats avatarPerformanceStats)
+        private void OnAvatarInstantiated(string url, GameObject avatar, AvatarPerformanceStats avatarPerformanceStats, ObjectPublicBoBoBoBoBoBoBoBoBoBoUnique unk)
         {
             _favoriteButton.Text = HasAvatarFavorited(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0.id) ? "Unfavorite" : "Favorite";
         }
