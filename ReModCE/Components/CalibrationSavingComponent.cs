@@ -15,6 +15,7 @@ using UnityEngine;
 
 namespace ReModCE.Components
 {
+    [ComponentDisabled]
     internal class CalibrationSavingComponent : ModComponent
     {
         private class FbtCalibration
