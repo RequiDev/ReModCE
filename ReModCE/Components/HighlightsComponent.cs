@@ -65,8 +65,6 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
-            base.OnUiManagerInit(uiManager);
-
             var menu = uiManager.MainMenu.GetCategoryPage("Visuals").GetCategory("ESP/Highlights");
             _espToggle = menu.AddToggle("ESP/Highlights", "Enable ESP (Highlight players through walls)", b =>
             {
