@@ -19,6 +19,7 @@ namespace ReModCE.Components
         private Camera _cameraBack;
         private Camera _cameraFront;
         private Camera _referenceCamera;
+        private Camera _photoCamera;
 
         private ThirdPersonMode _cameraSetup;
 
@@ -49,6 +50,7 @@ namespace ReModCE.Components
             _hotkeyToggle = hotkeyMenu.AddToggle("Thirdperson Hotkey", "Enable/Disable thirdperson hotkey", EnableThirdpersonHotkey.SetValue, EnableThirdpersonHotkey);
 
             var cameraObject = GameObject.Find("Camera (eye)");
+            _photoCamera = GameObject.Find("UserCamera")?.transform.Find("PhotoCamera")?.GetComponent<Camera>();
 
             if (cameraObject == null)
             {
@@ -59,7 +61,7 @@ namespace ReModCE.Components
                     return;
                 }
             }
-
+            
             _referenceCamera = cameraObject.GetComponent<Camera>();
             if (_referenceCamera == null)
                 return;
@@ -81,6 +83,9 @@ namespace ReModCE.Components
             camera.enabled = false;
             camera.fieldOfView = fieldOfView;
             camera.nearClipPlane /= 4f;
+
+            if(_photoCamera != null)
+                camera.cullingMask = _photoCamera.cullingMask;
 
             return camera;
         }
