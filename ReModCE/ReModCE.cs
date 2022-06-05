@@ -9,12 +9,15 @@ using HarmonyLib;
 using MelonLoader;
 using ReMod.Core;
 using ReMod.Core.Managers;
+using ReMod.Core.UI;
 using ReMod.Core.UI.Wings;
 using ReMod.Core.Unity;
+using ReMod.Core.VRChat;
 using ReModCE.Components;
 using ReModCE.Loader;
 using UnhollowerRuntimeLib;
 using UnhollowerRuntimeLib.XrefScans;
+using UnityEngine;
 using VRC;
 using VRC.Core;
 using VRC.DataModel;
@@ -35,6 +38,9 @@ namespace ReModCE
         public static bool IsOculus { get; private set; }
         public static bool IsComponentToggleLoaded { get; private set; }
 
+        public static List<ReUiButton> SocialMenuButtons = new List<ReUiButton>();
+        private static readonly Dictionary<string, bool> SocialMenuButtonStates = new Dictionary<string, bool>();
+
         public static HarmonyLib.Harmony Harmony { get; private set; }
 
         public static void OnApplicationStart()
@@ -42,27 +48,32 @@ namespace ReModCE
             Harmony = MelonHandler.Mods.First(m => m.Info.Name == "ReModCE").HarmonyInstance;
             Directory.CreateDirectory("UserData/ReModCE");
             ReLogger.Msg("Initializing...");
-
-            IsEmmVRCLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "emmVRCLoader");
-            IsRubyLoaded = File.Exists("hid.dll");
-            IsComponentToggleLoaded = MelonHandler.Mods.Any(m => m.Info.Name == "ComponentToggle");
-
-            var ourAssembly = Assembly.GetExecutingAssembly();
-            var resources = ourAssembly.GetManifestResourceNames();
-            foreach (var resource in resources)
+            
+            foreach (var m in MelonHandler.Mods)
             {
-                if (!resource.EndsWith(".png"))
-                    continue;
-
-                var stream = ourAssembly.GetManifestResourceStream(resource);
-
-                using var ms = new MemoryStream();
-                stream.CopyTo(ms);
-                var resourceName = Regex.Match(resource, @"([a-zA-Z\d\-_]+)\.png").Groups[1].ToString();
-                ResourceManager.LoadSprite("remodce", resourceName, ms.ToArray());
+                switch (m.Info.Name)
+                {
+                    case "emmVRCLoader":
+                        IsEmmVRCLoaded = true;
+                        break;
+                    case "ComponentToggle":
+                        IsComponentToggleLoaded = true;
+                        break;
+                }
             }
             
-            _configManager = new ConfigManager(nameof(ReModCE));
+            IsRubyLoaded = File.Exists("hid.dll");
+
+            ResourceManager.LoadImageResources("remodce");
+
+            try
+            {
+                _configManager = new ConfigManager(nameof(ReModCE));
+            }
+            catch (Exception e)
+            {
+                ReLogger.Msg(ConsoleColor.Red, "Failed to load config manager: " + e.Message);
+            }
 
             EnableDisableListener.RegisterSafe();
             ClassInjector.RegisterTypeInIl2Cpp<WireframeEnabler>();
@@ -110,6 +121,17 @@ namespace ReModCE
                     continue;
 
                 Harmony.Patch(method, postfix: GetLocalPatch(nameof(SetUserPatch)));
+            }
+
+            foreach (var method in typeof(MenuController).GetMethods())
+            {
+                if (!method.Name.StartsWith("Method_Public_Void_APIUser_"))
+                    continue;
+
+                if (method.Name.Contains("_PDM_"))
+                    continue;
+
+                Harmony.Patch(method, postfix: GetLocalPatch(nameof(SetupUserInfoPatch)));
             }
         }
 
@@ -173,6 +195,24 @@ namespace ReModCE
 
             InitializeNetworkManager();
 
+            var _ = new ReUiButton("ReMod <color=#00ff00>CE</color>", Vector2.zero, new Vector2(0.68f, 1.2f), () =>
+            {
+                foreach (var button in SocialMenuButtons)
+                {
+                    if (button.GameObject.activeSelf)
+                    {
+                        button.GameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        if (SocialMenuButtonStates[button.GameObject.name])
+                        {
+                            button.GameObject.SetActive(true);
+                        }
+                    }
+                }
+            }, VRCUiManagerEx.Instance.MenuContent().transform.Find("Screens/UserInfo/Buttons/RightSideButtons/RightUpperButtonColumn/"));
+
             foreach (var m in Components)
             {
                 try
@@ -183,6 +223,11 @@ namespace ReModCE
                 {
                     ReLogger.Error($"{m.GetType().Name} had an error during early UI initialization:\n{e}");
                 }
+            }
+
+            foreach (var button in SocialMenuButtons)
+            {
+                button.GameObject.SetActive(false);
             }
         }
 
@@ -373,6 +418,28 @@ namespace ReModCE
             foreach (var m in Components)
             {
                 m.OnSelectUser(__0, __instance.field_Public_Boolean_0);
+            }
+        }
+        private static void SetupUserInfoPatch(APIUser __0)
+        {
+            if (__0 == null)
+                return;
+
+            foreach (var button in SocialMenuButtons)
+            {
+                button.GameObject.SetActive(true);
+            }
+
+            foreach (var m in Components)
+            {
+                m.OnSetupUserInfo(__0);
+            }
+
+            foreach (var button in SocialMenuButtons)
+            {
+                SocialMenuButtonStates[button.GameObject.name] = button.GameObject.activeSelf;
+
+                button.GameObject.SetActive(false);
             }
         }
     }

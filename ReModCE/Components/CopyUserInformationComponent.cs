@@ -43,21 +43,19 @@ namespace ReModCE.Components
 
         public override void OnUiManagerInitEarly()
         {
-            /* Temporarily commented until solution is reached for many buttons
-             
             var userInfoTransform = VRCUiManagerEx.Instance.MenuContent().transform.Find("Screens/UserInfo");
 
             var pageUserInfo = userInfoTransform.GetComponent<PageUserInfo>();
             var buttonContainer = userInfoTransform.Find("Buttons/RightSideButtons/RightUpperButtonColumn/");
 
-            var _ = new ReUiButton("Copy User ID", Vector2.zero, new Vector2(0.68f, 1.2f), () =>
+            ReModCE.SocialMenuButtons.Add(new ReUiButton("Copy User ID", Vector2.zero, new Vector2(0.68f, 1.2f), () =>
             {
                 var user = pageUserInfo.field_Private_IUser_0;
                 if (user == null)
                     return;
 
                 GUIUtility.systemCopyBuffer = user.GetUserID();
-            }, buttonContainer);
+            }, buttonContainer));
 
             _copyAvatarIDButton = new ReUiButton("Copy Avatar ID", Vector2.zero, new Vector2(0.68f, 1.2f), () =>
             {
@@ -74,12 +72,13 @@ namespace ReModCE.Components
 
                 GUIUtility.systemCopyBuffer = apiAvatar.id;
             }, buttonContainer);
-            */
+            
+            ReModCE.SocialMenuButtons.Add(_copyAvatarIDButton);
         }
 
         public override void OnSetupUserInfo(APIUser apiUser)
         {
-            //_copyAvatarIDButton.Active = APIUser.CurrentUser.id != apiUser.id && PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(apiUser.id) != null;
+            _copyAvatarIDButton.Active = APIUser.CurrentUser.id != apiUser.id && PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(apiUser.id) != null;
         }
     }
 }

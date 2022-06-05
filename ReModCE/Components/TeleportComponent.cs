@@ -29,6 +29,8 @@ namespace ReModCE.Components
             var buttonContainer = userInfoTransform.Find("Buttons/RightSideButtons/RightUpperButtonColumn/");
             
             _teleportMenuButton = new ReUiButton("Teleport", Vector2.zero, new Vector2(0.68f, 1.2f), TeleportMenuButtonOnClick, buttonContainer);
+            ReModCE.SocialMenuButtons.Add(_teleportMenuButton);
+            
             _teleportTargetButton = targetMenu.AddButton("Teleport", "Teleports to target.", TeleportTargetButtonOnClick, ResourceManager.GetSprite("remodce.teleport"));
 
             RiskyFunctionsManager.Instance.OnRiskyFunctionsChanged += allowed =>
@@ -71,11 +73,10 @@ namespace ReModCE.Components
             VRCUiManagerEx.Instance.CloseUi();
         }
 
+
         public override void OnSetupUserInfo(APIUser apiUser)
         {
-            bool check = APIUser.CurrentUser.id != apiUser.id && PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(apiUser.id) != null;
-            _teleportMenuButton.Active = check;
-            _teleportTargetButton.Active = check;
+            _teleportMenuButton.Active = RiskyFunctionsManager.Instance.RiskyFunctionAllowed && APIUser.CurrentUser.id != apiUser.id && PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(apiUser.id) != null;
         }
     }
 }
