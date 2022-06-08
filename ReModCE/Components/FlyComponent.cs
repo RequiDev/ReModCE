@@ -34,6 +34,7 @@ namespace ReModCE.Components
 
         private ReMenuButton _flySpeedButton;
 
+        private ReMirroredWingToggle _flyWingToggle;
         private ReMenuToggle _flyToggle;
         private ReMirroredWingToggle _noclipWingToggle;
         private ReMenuToggle _noclipToggle;
@@ -73,6 +74,10 @@ namespace ReModCE.Components
                     _noclipToggle.Interactable = allowed;
                 }
 
+                if (_flyWingToggle != null)
+                {
+                    _flyWingToggle.Interactable = allowed;
+                }
                 if (_noclipWingToggle != null)
                 {
                     _noclipWingToggle.Interactable = allowed;
@@ -91,6 +96,8 @@ namespace ReModCE.Components
             var hotkeyMenu = uiManager.MainMenu.GetMenuPage("Hotkeys");
 
             _flyToggle = movementMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
+            _flyWingToggle = ReModCE.WingMenu.AddToggle("Fly", "Enable/Disable Fly", ToggleFly, _flyEnabled);
+
             _noclipToggle = movementMenu.AddToggle("Noclip", "Enable/Disable Noclip", ToggleNoclip, _noclipEnabled);
             _noclipWingToggle = ReModCE.WingMenu.AddToggle("Noclip", "Enable/Disable Noclip", b =>
             {
