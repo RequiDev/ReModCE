@@ -1,17 +1,20 @@
 ﻿using ReMod.Core;
 using ReMod.Core.Managers;
 using ReMod.Core.UI;
+using ReMod.Core.UI.QuickMenu;
 using ReMod.Core.VRChat;
 using UnityEngine;
 using VRC;
 using VRC.Core;
+using VRC.DataModel;
 using VRC.UI;
 
 namespace ReModCE.Components
 {
     internal sealed class CopyUserInformationComponent : ModComponent
     {
-        private static ReUiButton _copyAvatarIDButton;
+        private ReUiButton _copyAvatarIDButton;
+        private ReMenuButton _copyTargetAvatarIDButton;
 
         public override void OnUiManagerInit(UiManager uiManager)
         {
@@ -24,7 +27,7 @@ namespace ReModCE.Components
                 GUIUtility.systemCopyBuffer = user.GetUserID();
             }, ResourceManager.GetSprite("remodce.copy"));
 
-            uiManager.TargetMenu.AddButton("Copy Avatar ID", "Copies the selected users Avatar ID", () =>
+            _copyTargetAvatarIDButton = uiManager.TargetMenu.AddButton("Copy Avatar ID", "Copies the selected users Avatar ID", () =>
             {
                 var user = QuickMenuEx.SelectedUserLocal.field_Private_IUser_0;
                 if (user == null)
@@ -79,6 +82,19 @@ namespace ReModCE.Components
         public override void OnSetupUserInfo(APIUser apiUser)
         {
             _copyAvatarIDButton.Active = APIUser.CurrentUser.id != apiUser.id && PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(apiUser.id) != null;
+        }
+
+        public override void OnSelectUser(IUser user, bool isRemote)
+        {
+            if (isRemote)
+            {
+                _copyTargetAvatarIDButton.Interactable = false;
+            }
+            else
+            {
+                var player = PlayerManager.field_Private_Static_PlayerManager_0.GetPlayer(user.prop_String_0);
+                _copyTargetAvatarIDButton.Interactable = player != null && player.GetAPIUser().allowAvatarCopying;
+            }
         }
     }
 }
