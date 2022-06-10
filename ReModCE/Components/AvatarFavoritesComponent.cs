@@ -55,6 +55,7 @@ namespace ReModCE.Components
 
         private List<ReAvatar> _savedAvatars;
         private readonly AvatarList _searchedAvatars;
+        private ReUiButton _searchButton;
 
         private GameObject _avatarScreen;
         private UiInputField _searchBox;
@@ -84,6 +85,7 @@ namespace ReModCE.Components
             {
                 _searchEnabledToggle.Toggle(AvatarSearchEnabled);
                 _searchedAvatarList.GameObject.SetActive(AvatarSearchEnabled);
+                _searchButton.Active = AvatarSearchEnabled;
             };
 
             _savedAvatars = new List<ReAvatar>();
@@ -137,6 +139,23 @@ namespace ReModCE.Components
                 () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
                 parent);
             _favoriteButton.GameObject.SetActive(AvatarFavoritesEnabled);
+            
+            var userInfoTransform = VRCUiManagerEx.Instance.MenuContent().transform.Find("Screens/UserInfo");
+            var pageUserInfo = userInfoTransform.GetComponent<PageUserInfo>();
+            var buttonContainer = userInfoTransform.Find("Buttons/RightSideButtons/RightUpperButtonColumn/");
+            _searchButton = new ReUiButton("Search Avatars", Vector2.zero, new Vector2(0.68f, 1.2f), () =>
+            {
+                var user = pageUserInfo.field_Private_IUser_0;
+                if (user == null)
+                    return;
+
+                SearchAvatars(user.prop_String_0);
+            }, buttonContainer)
+            {
+                Active = AvatarSearchEnabled
+            };
+
+            ReModCE.SocialMenuButtons.Add(_searchButton);            
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
             if (changeButton != null)
@@ -189,6 +208,15 @@ namespace ReModCE.Components
                             _maxAvatarsPerPageButton.Text = $"Max Avatars Per Page: {MaxAvatarsPerPage}";
                         }, null);
                 }, ResourceManager.GetSprite("remodce.max"));
+
+            uiManager.TargetMenu.AddButton("Search Avatars", "Search avatars uploaded by this person", () =>
+            {
+                var user = QuickMenuEx.SelectedUserLocal.field_Private_IUser_0;
+                if (user == null)
+                    return;
+                
+                SearchAvatars(user.prop_String_0);
+            }, ResourceManager.GetSprite("remodce.search"));
 
             if (_pinCode == 0)
             {
