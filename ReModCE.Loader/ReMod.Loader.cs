@@ -18,7 +18,7 @@ namespace ReModCE.Loader
         public const string Name = "ReModCE";
         public const string Author = "Requi, FenrixTheFox, Xaiver, Potato, Psychloor";
         public const string Company = null;
-        public const string Version = "1.0.0.5";
+        public const string Version = "1.0.0.6";
         public const string DownloadLink = "https://github.com/RequiDev/ReModCE/releases/latest/";
     }
 
@@ -47,7 +47,7 @@ namespace ReModCE.Loader
         private Action<int, string> _onSceneWasLoaded;
         private Action<int, string> _onSceneWasInitialized;
 
-        private MelonPreferences_Entry<bool> _paranoidMode;
+        private readonly MelonPreferences_Entry<bool> _paranoidMode;
 
         public ReLoader()
         {
@@ -58,6 +58,10 @@ namespace ReModCE.Loader
                 "If enabled ReModCE will not automatically download the latest version from GitHub. Manual update will be required.",
                 true);
 
+            // check for ReMod.Core.Updater plugin before attempting to load ReMod.Core
+            if (MelonHandler.Plugins.Any(p => p.Info.Name == "ReMod.Core.Updater"))
+                return;
+            
             ReLogger.Msg($"Loading ReMod.Core early so other mods don't break me...");
             DownloadFromGitHub("ReMod.Core", out _);
         }
@@ -205,10 +209,17 @@ namespace ReModCE.Loader
         {
             using var sha256 = SHA256.Create();
 
-            byte[] bytes = null;
+            // delete files saved in old path
             if (File.Exists($"{fileName}.dll"))
             {
-                bytes = File.ReadAllBytes($"{fileName}.dll");
+                File.Delete($"{fileName}.dll");
+            }
+
+            byte[] bytes = null;
+            var path = Path.Combine("UserLibs", $"{fileName}.dll");
+            if (File.Exists(path))
+            {
+                bytes = File.ReadAllBytes(path);
             }
 
             using var wc = new WebClient
@@ -242,7 +253,7 @@ namespace ReModCE.Loader
                 bytes = latestBytes;
                 try
                 {
-                    File.WriteAllBytes($"{fileName}.dll", bytes);
+                    File.WriteAllBytes(path, bytes);
                 }
                 catch (IOException e)
                 {
@@ -268,7 +279,7 @@ namespace ReModCE.Loader
                         bytes = latestBytes;
                         try
                         {
-                            File.WriteAllBytes($"{fileName}.dll", bytes);
+                            File.WriteAllBytes(path, bytes);
                         }
                         catch (IOException e)
                         {

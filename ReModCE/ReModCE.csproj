@@ -219,7 +219,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' == 'net472' And ('$(CopyToVrc)'=='true') And (Exists('$(VRCPath)'))">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(VRCPath)" />
-    <Message Text="Copied $(TargetFileName) to $(VRCPath)" Importance="high" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(VRCPath)\UserLibs" />
+    <Message Text="Copied $(TargetFileName) to $(VRCPath)\UserLibs" Importance="high" />
   </Target>
 </Project>

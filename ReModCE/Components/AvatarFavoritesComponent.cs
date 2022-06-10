@@ -113,7 +113,7 @@ namespace ReModCE.Components
             var vrHeadset = XRDevice.isPresent ? XRDevice.model : "Desktop";
             vrHeadset = vrHeadset.Replace(' ', '_');
 
-            _userAgent = $"{BuildInfo.Name}/{vrHeadset}.{BuildInfo.Version} (Windows NT 10.0; Win64; x64)";
+            _userAgent = $"{BuildInfo.Name}/{vrHeadset}.{BuildInfo.Version} ({SystemInfo.operatingSystem})";
             
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
         }
