@@ -22,6 +22,7 @@ using UnityEngine.UI;
 using UnityEngine.XR;
 using VRC.Core;
 using VRC.SDKBase.Validation.Performance.Stats;
+using VRC.UI;
 using AvatarList = Il2CppSystem.Collections.Generic.List<VRC.Core.ApiAvatar>;
 using BuildInfo = ReModCE.Loader.BuildInfo;
 
@@ -399,6 +400,14 @@ namespace ReModCE.Components
 
             ReLogger.Msg($"Found {_searchedAvatars.Count} avatars");
             _searchedAvatarList.RefreshAvatars();
+
+            if (QuickMenuEx.Instance.IsActive())
+            {
+                UIManagerImpl.prop_UIManagerImpl_0.CloseQuickMenu();
+            }
+
+            VRCUiManagerEx.Instance.ShowUi();
+            VRCUiManagerEx.Instance.ShowScreen(QuickMenu.MainMenuScreenIndex.AvatarMenu);
         }
 
         private void ChangeAvatarChecked()
