@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using HarmonyLib;
 using MelonLoader;
@@ -35,7 +36,6 @@ namespace ReModCE
         public static ReMirroredWingMenu WingMenu;
         public static bool IsEmmVRCLoaded { get; private set; }
         public static bool IsRubyLoaded { get; private set; }
-        public static bool IsOculus { get; private set; }
         public static bool IsComponentToggleLoaded { get; private set; }
 
         public static List<ReUiButton> SocialMenuButtons = new List<ReUiButton>();
@@ -77,29 +77,10 @@ namespace ReModCE
 
             EnableDisableListener.RegisterSafe();
             ClassInjector.RegisterTypeInIl2Cpp<WireframeEnabler>();
-
-            SetIsOculus();
-
-            ReLogger.Msg($"Running on {(IsOculus ? "Not Steam" : "Steam")}");
-
+            
             InitializePatches();
             InitializeModComponents();
             ReLogger.Msg("Done!");
-        }
-
-        private static void SetIsOculus()
-        {
-            try
-            {
-                var steamTracking = typeof(VRCTrackingSteam);
-            }
-            catch (TypeLoadException)
-            {
-                IsOculus = true;
-                return;
-            }
-
-            IsOculus = false;
         }
 
         private static HarmonyMethod GetLocalPatch(string name)
