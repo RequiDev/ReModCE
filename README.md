@@ -20,7 +20,7 @@ If you want a feature or have a bug report, head over to the issues page and cre
 Click [here](https://discord.gg/KdTSGU4jt3) to join the Discord!
 
 ## Installation & Usage
-Grab the latest loader from [here](https://api.vrcmg.com/v0/mods/246/ReModCE.Loader.dll) and put it in your Mods directory.  
+Grab the latest loader from [here](https://api.vrcmg.com/v1/mods/download/246) and put it in your Mods directory.  
 
 By default the loader will attempt to load the mod from your VRChat directory using the filename 'ReModCE.dll'. If it doesn't exist, it will attempt to download the latest Version from GitHub.  
 If there is a newer version available on GitHub it will automatically update to that version.  
