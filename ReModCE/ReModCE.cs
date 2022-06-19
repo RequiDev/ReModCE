@@ -297,6 +297,9 @@ namespace ReModCE
 
         private static void OnPlayerLeft(Player player)
         {
+            if (player == null)
+                return;
+
             foreach (var m in Components)
             {
                 m.OnPlayerLeft(player);

@@ -37,7 +37,7 @@ namespace ReModCE.Components
         public override void OnPlayerLeft(Player player)
         {
             if (!JoinLeaveLogsEnabled) return;
-            ReLogger.Msg(ConsoleColor.White, $"{player.field_Private_APIUser_0.displayName} left the instance.");
+            ReLogger.Msg(ConsoleColor.White, $"{player.field_Private_APIUser_0?.displayName ?? string.Empty} left the instance.");
         }
     }
 }
