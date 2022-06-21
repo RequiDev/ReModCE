@@ -174,7 +174,6 @@ namespace ReModCE.Components
                 (Action<string>)PromptChooseSearch);
 
             _avatarScreen = VRCUiManagerEx.Instance.GetScreen(QuickMenu.MainMenuScreenIndex.AvatarMenu).gameObject;
-
             _avatarScreen.AddComponent<EnableDisableListener>().OnEnableEvent += () =>
             {
                 if (AvatarSearchEnabled)
@@ -353,6 +352,8 @@ namespace ReModCE.Components
             
             _httpClient.SendAsync(request).ContinueWith(rsp =>
             {
+                MelonCoroutines.Start(EnableSearchDelayed());
+                
                 var searchResponse = rsp.Result;
                 if (!searchResponse.IsSuccessStatusCode)
                 {
