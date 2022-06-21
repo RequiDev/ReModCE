@@ -12,6 +12,7 @@ using ReMod.Core;
 using ReMod.Core.Managers;
 using ReMod.Core.UI;
 using ReMod.Core.UI.QuickMenu;
+using ReMod.Core.Unity;
 using ReMod.Core.VRChat;
 using ReModCE.Core;
 using ReModCE.Loader;
@@ -63,7 +64,6 @@ namespace ReModCE.Components
         private UnityAction<string> _searchAvatarsAction;
         private UnityAction<string> _overrideSearchAvatarsAction;
         private UnityAction<string> _emmVRCsearchAvatarsAction;
-        private int _updatesWithoutSearch;
 
         private int _loginRetries;
 
@@ -173,7 +173,17 @@ namespace ReModCE.Components
             _overrideSearchAvatarsAction = DelegateSupport.ConvertDelegate<UnityAction<string>>(
                 (Action<string>)PromptChooseSearch);
 
-            _avatarScreen = GameObject.Find("UserInterface/MenuContent/Screens/Avatar");
+            _avatarScreen = VRCUiManagerEx.Instance.GetScreen(QuickMenu.MainMenuScreenIndex.AvatarMenu).gameObject;
+
+            _avatarScreen.AddComponent<EnableDisableListener>().OnEnableEvent += () =>
+            {
+                if (AvatarSearchEnabled)
+                {
+                    _searchedAvatarList.RefreshAvatars();
+                    MelonCoroutines.Start(EnableSearchDelayed());
+                }
+            };
+
             _searchBox = GameObject.Find("UserInterface/MenuContent/Backdrop/Header/Tabs/ViewPort/Content/Search/InputField").GetComponent<UiInputField>();
 
             MelonCoroutines.Start(LoginToAPICoroutine());
@@ -244,55 +254,42 @@ namespace ReModCE.Components
             }
         }
 
-        public override void OnUpdate()
+        public IEnumerator EnableSearchDelayed()
         {
-            if (!AvatarSearchEnabled)
-                return;
-            if (_searchBox == null)
-                return;
-
-            if (!_avatarScreen.active)
-            {
-                return;
-            }
+            yield return new WaitForSeconds(0.2f); // wait 0.1f longer than emmVRC to make sure their shit was set.
 
             // Have we already found emmVRCs search action? We can just use our override to make sure shit's right.
             if (_emmVRCsearchAvatarsAction != null)
             {
                 _searchBox.field_Public_UnityAction_1_String_0 = _overrideSearchAvatarsAction;
                 _searchBox.field_Public_Button_0.interactable = true;
-                return;
+                yield break;
             }
 
             // Has emmVRC replaced the button functionality?
             if (!_searchBox.field_Public_Button_0.interactable)
             {
                 // Is emmVRC even loaded or has nothing replaced the button functionality?
-                if (!ReModCE.IsEmmVRCLoaded || _updatesWithoutSearch >= 10)
+                if (!ReModCE.IsEmmVRCLoaded)
                 {
-                    // We already have emmVRCs search function. Make sure we don't fuck it up here.
-                    if (_emmVRCsearchAvatarsAction != null)
-                        return;
-
                     // enable the fucker and set it to our search. We assume emmVRC is not loaded or search isn't enabled
                     _searchBox.field_Public_Button_0.interactable = true;
                     _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
                 }
-                // Is emmVRC loaded?
-                else if (ReModCE.IsEmmVRCLoaded)
-                {
-                    ++_updatesWithoutSearch;
-                }
-                // emmVRC will set it to be interactable. We want to grab their search function
             }
+            // emmVRC will set it to be interactable. We want to grab their search function
             else
             {
                 // Soo the button was enabled and emmVRC has changed the button before we reached threshold
-                if (ReModCE.IsEmmVRCLoaded && _updatesWithoutSearch < 10)
+                if (ReModCE.IsEmmVRCLoaded)
                 {
                     // is the action null? we can't do shit with it yet
                     if (_searchBox.field_Public_UnityAction_1_String_0 == null)
-                        return;
+                    {
+                        _searchBox.field_Public_Button_0.interactable = true;
+                        _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
+                        yield break;
+                    }
                     
                     // is this our override method? if not grab it because it's probably the emmvrc method we want!
                     if (_searchBox.field_Public_UnityAction_1_String_0.method != _overrideSearchAvatarsAction.method)
