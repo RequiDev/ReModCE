@@ -268,30 +268,25 @@ namespace ReModCE.Components
             // Has emmVRC replaced the button functionality?
             if (!_searchBox.field_Public_Button_0.interactable)
             {
-                // Is emmVRC even loaded or has nothing replaced the button functionality?
-                if (!ReModCE.IsEmmVRCLoaded)
-                {
-                    // enable the fucker and set it to our search. We assume emmVRC is not loaded or search isn't enabled
-                    _searchBox.field_Public_Button_0.interactable = true;
-                    _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
-                }
+                // enable the fucker and set it to our search. We assume emmVRC is not loaded or search isn't enabled
+                _searchBox.field_Public_Button_0.interactable = true;
+                _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
             }
             // emmVRC will set it to be interactable. We want to grab their search function
             else
             {
-                // Soo the button was enabled and emmVRC has changed the button before we reached threshold
+                // Soo the button was enabled and emmVRC has changed the button functionality.
                 if (ReModCE.IsEmmVRCLoaded)
                 {
-                    // is the action null? we can't do shit with it yet
                     if (_searchBox.field_Public_UnityAction_1_String_0 == null)
                     {
                         _searchBox.field_Public_Button_0.interactable = true;
                         _searchBox.field_Public_UnityAction_1_String_0 = _searchAvatarsAction;
                         yield break;
                     }
-                    
+
                     // is this our override method? if not grab it because it's probably the emmvrc method we want!
-                    if (_searchBox.field_Public_UnityAction_1_String_0.method != _overrideSearchAvatarsAction.method)
+                    if (_searchBox.field_Public_UnityAction_1_String_0.method != _overrideSearchAvatarsAction.method && _searchBox.field_Public_UnityAction_1_String_0.method != _searchAvatarsAction.method)
                     {
                         // make sure we don't override the one we already had
                         if (_emmVRCsearchAvatarsAction == null)
