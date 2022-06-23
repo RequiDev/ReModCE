@@ -54,7 +54,7 @@ namespace ReModCE.Components
                 {
                     var apiWorld = RoomManager.field_Internal_Static_ApiWorld_0;
                     var apiWorldInstance = RoomManager.field_Internal_Static_ApiWorldInstance_0;
-                    GUIUtility.systemCopyBuffer = $"https://vrchat.com/home/launch?worldId={apiWorld.id}&instanceId={apiWorldInstance.instanceId}";
+                    GUIUtility.systemCopyBuffer = $"{apiWorld.id}:{apiWorldInstance.instanceId}";
                 }, userProfileSection);
             copyInstanceButton.RectTransform.sizeDelta = new Vector2(sizeDeltaX, copyInstanceButton.RectTransform.sizeDelta.y);
 
