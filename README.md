@@ -58,3 +58,7 @@ Head over to [here](https://remod-ce.requi.dev/api/pin.php) to reset it.
 
 ## Notable Mentions
 [emmVRC](https://github.com/emmVRC) - They inspired me to create this project in the first place. This would not exist without them  
+
+## JetBrains
+
+[![JetBrains Logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://jb.gg/OpenSourceSupport)
