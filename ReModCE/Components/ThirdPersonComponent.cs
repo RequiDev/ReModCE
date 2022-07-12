@@ -4,6 +4,7 @@ using ReMod.Core.Managers;
 using ReMod.Core.UI.QuickMenu;
 using ReModCE.Managers;
 using UnityEngine;
+using CameraTakePhotoEnumerator = VRC.UserCamera.CameraUtil._TakeScreenShot_d__5;
 
 namespace ReModCE.Components
 {
@@ -16,12 +17,12 @@ namespace ReModCE.Components
 
     internal class ThirdPersonComponent : ModComponent
     {
-        private Camera _cameraBack;
-        private Camera _cameraFront;
+        private static Camera _cameraBack;
+        private static Camera _cameraFront;
         private Camera _referenceCamera;
         private Camera _photoCamera;
 
-        private ThirdPersonMode _cameraSetup;
+        private static ThirdPersonMode _cameraSetup;
 
         private ConfigValue<bool> EnableThirdpersonHotkey;
         private ReMenuToggle _hotkeyToggle;
@@ -42,6 +43,9 @@ namespace ReModCE.Components
                     SetThirdPersonMode(ThirdPersonMode.Off);
                 }
             };
+            
+            ReModCE.Harmony.Patch(typeof (CameraTakePhotoEnumerator).GetMethod("MoveNext"), 
+                GetLocalPatch(nameof(CameraEnumeratorMoveNextPatch)));
         }
 
         public override void OnUiManagerInit(UiManager uiManager)
@@ -157,6 +161,14 @@ namespace ReModCE.Components
 
             HandleHotkeys();
             HandleThirdperson();
+        }
+
+        private static void CameraEnumeratorMoveNextPatch(ref CameraTakePhotoEnumerator __instance)
+        {
+            if(_cameraSetup == ThirdPersonMode.Off)
+                return;
+
+            __instance.field_Public_Camera_0 = _cameraSetup == ThirdPersonMode.Back ? _cameraBack : _cameraFront;
         }
     }
 }
