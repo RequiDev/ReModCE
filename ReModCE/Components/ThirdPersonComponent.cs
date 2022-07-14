@@ -17,17 +17,21 @@ namespace ReModCE.Components
 
     internal class ThirdPersonComponent : ModComponent
     {
-        private static Camera _cameraBack;
-        private static Camera _cameraFront;
-        private Camera _referenceCamera;
-        private Camera _photoCamera;
-
-        private static ThirdPersonMode _cameraSetup;
 
         private ConfigValue<bool> EnableThirdpersonHotkey;
         private ReMenuToggle _hotkeyToggle;
-
         private ConfigValue<KeyCode> ThirdpersonHotkey;
+
+        private static ThirdPersonMode _cameraSetup;
+        
+        private static Camera _thirdPersonCamera;
+        private Camera _referenceCamera;
+        private Transform _cameraParentTransform;
+        
+        private const int DefaultCullingMask = 7858963;
+        private readonly int UiMenuLayer;
+        
+        private ConfigValue<bool> ThirdPersonNameplates = new("ThirdPersonNameplates", false, "Third Person Nameplates");
 
         public ThirdPersonComponent()
         {
@@ -43,7 +47,9 @@ namespace ReModCE.Components
                     SetThirdPersonMode(ThirdPersonMode.Off);
                 }
             };
-            
+
+            UiMenuLayer = LayerMask.NameToLayer("UiMenu");
+
             ReModCE.Harmony.Patch(typeof (CameraTakePhotoEnumerator).GetMethod("MoveNext"), 
                 GetLocalPatch(nameof(CameraEnumeratorMoveNextPatch)));
         }
@@ -54,7 +60,6 @@ namespace ReModCE.Components
             _hotkeyToggle = hotkeyMenu.AddToggle("Thirdperson Hotkey", "Enable/Disable thirdperson hotkey", EnableThirdpersonHotkey.SetValue, EnableThirdpersonHotkey);
 
             var cameraObject = GameObject.Find("Camera (eye)");
-            _photoCamera = GameObject.Find("UserCamera")?.transform.Find("PhotoCamera")?.GetComponent<Camera>();
 
             if (cameraObject == null)
             {
@@ -65,22 +70,25 @@ namespace ReModCE.Components
                     return;
                 }
             }
+
+            _cameraParentTransform = cameraObject.transform;
             
             _referenceCamera = cameraObject.GetComponent<Camera>();
             if (_referenceCamera == null)
                 return;
+            
+            _thirdPersonCamera = CreateCamera(Vector3.zero, 75f);
 
-            _cameraBack = CreateCamera(ThirdPersonMode.Back, Vector3.zero, 75f);
-            _cameraFront = CreateCamera(ThirdPersonMode.Front, new Vector3(0f, 180f, 0f), 75f);
+            ThirdPersonNameplates.OnValueChanged += () =>
+                AddOrRemoveLayerFromCameraCullingMask(ThirdPersonNameplates.Value, _thirdPersonCamera, UiMenuLayer);
         }
 
-        private Camera CreateCamera(ThirdPersonMode cameraType, Vector3 rotation, float fieldOfView)
+        private Camera CreateCamera(Vector3 rotation, float fieldOfView)
         {
-            var cameraObject = new GameObject($"{cameraType}Camera");
+            var cameraObject = new GameObject("ThirdPersonCamera");
             cameraObject.transform.localScale = _referenceCamera.transform.localScale;
             cameraObject.transform.parent = _referenceCamera.transform;
-            cameraObject.transform.rotation = _referenceCamera.transform.rotation;
-            cameraObject.transform.Rotate(rotation);
+            cameraObject.transform.localEulerAngles = _referenceCamera.transform.localEulerAngles + new Vector3(0, 180, 0);
             cameraObject.transform.position = _referenceCamera.transform.position + (-cameraObject.transform.forward * 2f);
 
             var camera = cameraObject.AddComponent<Camera>();
@@ -88,8 +96,7 @@ namespace ReModCE.Components
             camera.fieldOfView = fieldOfView;
             camera.nearClipPlane /= 4f;
 
-            if(_photoCamera != null)
-                camera.cullingMask = _photoCamera.cullingMask;
+            camera.cullingMask = DefaultCullingMask;
 
             return camera;
         }
@@ -116,16 +123,12 @@ namespace ReModCE.Components
             switch (mode)
             {
                 case ThirdPersonMode.Off:
-                    _cameraBack.enabled = false;
-                    _cameraFront.enabled = false;
+                    _thirdPersonCamera.enabled = false;
                     break;
                 case ThirdPersonMode.Back:
-                    _cameraBack.enabled = true;
-                    _cameraFront.enabled = false;
-                    break;
                 case ThirdPersonMode.Front:
-                    _cameraBack.enabled = false;
-                    _cameraFront.enabled = true;
+                    _thirdPersonCamera.enabled = true;
+                    _thirdPersonCamera.transform.RotateAround(_cameraParentTransform.position, _cameraParentTransform.up, 180);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -139,13 +142,11 @@ namespace ReModCE.Components
             var scrollwheel = Input.GetAxis("Mouse ScrollWheel");
             if (scrollwheel > 0f)
             {
-                _cameraBack.transform.position += _cameraBack.transform.forward * 0.1f;
-                _cameraFront.transform.position -= _cameraBack.transform.forward * 0.1f;
+                _thirdPersonCamera.transform.position += _thirdPersonCamera.transform.forward * 0.1f;
             }
             else if (scrollwheel < 0f)
             {
-                _cameraBack.transform.position -= _cameraBack.transform.forward * 0.1f;
-                _cameraFront.transform.position += _cameraBack.transform.forward * 0.1f;
+                _thirdPersonCamera.transform.position -= _thirdPersonCamera.transform.forward * 0.1f;
             }
         }
 
@@ -154,10 +155,8 @@ namespace ReModCE.Components
             if (!RiskyFunctionsManager.Instance.RiskyFunctionAllowed)
                 return;
 
-            if (_cameraBack == null || _cameraFront == null)
-            {
+            if (_thirdPersonCamera == null)
                 return;
-            }
 
             HandleHotkeys();
             HandleThirdperson();
@@ -168,7 +167,12 @@ namespace ReModCE.Components
             if(_cameraSetup == ThirdPersonMode.Off)
                 return;
 
-            __instance.field_Public_Camera_0 = _cameraSetup == ThirdPersonMode.Back ? _cameraBack : _cameraFront;
+            __instance.field_Public_Camera_0 = _thirdPersonCamera;
+        }
+
+        private void AddOrRemoveLayerFromCameraCullingMask(bool add, Camera camera, int layer)
+        {
+            camera.cullingMask = add ? camera.cullingMask |= (1 << layer) : camera.cullingMask &= ~(1 << layer);
         }
     }
 }
