@@ -81,6 +81,8 @@ namespace ReModCE.Components
 
             ThirdPersonNameplates.OnValueChanged += () =>
                 AddOrRemoveLayerFromCameraCullingMask(ThirdPersonNameplates.Value, _thirdPersonCamera, UiMenuLayer);
+                
+            AddOrRemoveLayerFromCameraCullingMask(ThirdPersonNameplates.Value, _thirdPersonCamera, UiMenuLayer);
         }
 
         private Camera CreateCamera(Vector3 rotation, float fieldOfView)
