@@ -136,7 +136,7 @@ namespace ReModCE.Components
             };
 
             var parent = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Favorite Button").transform.parent;
-            _favoriteButton = new ReUiButton("Favorite", new Vector2(-600f, 375f), new Vector2(0.5f, 1f),
+            _favoriteButton = new ReUiButton("Favorite", new Vector2(600f, 375f), new Vector2(0.5f, 1f),
                 () => FavoriteAvatar(_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0),
                 parent);
             _favoriteButton.GameObject.SetActive(AvatarFavoritesEnabled);
