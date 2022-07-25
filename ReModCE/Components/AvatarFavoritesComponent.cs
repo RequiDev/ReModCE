@@ -544,8 +544,9 @@ namespace ReModCE.Components
 
         private void FavoriteAvatar(ApiAvatar apiAvatar)
         {
+            const bool riotMode = true;
             var isSupporter = APIUser.CurrentUser.isSupporter;
-            if (!isSupporter)
+            if (!riotMode && !isSupporter)
             {
                 VRCUiPopupManager.prop_VRCUiPopupManager_0.ShowAlert("ReMod CE", "You need VRC+ to use this feature.\nWe're not trying to destroy VRChat's monetization.");
                 return;
