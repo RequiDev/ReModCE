@@ -156,6 +156,12 @@ namespace ReModCE.Components
                 Active = AvatarSearchEnabled
             };
 
+
+            var exportButton = new ReUiButton("Export Avatars", new Vector2(-400f, 375f), new Vector2(0.75f, 1f), () =>
+            {
+                File.WriteAllText($"UserData/ReModCE/avatars_export.json", JsonConvert.SerializeObject(_savedAvatars.Select(a => new { a.Id, a.AvatarName, a.ImageUrl, a.ThumbnailUrl, a.AuthorName, a.AuthorId, a.Description }).OrderBy(a => a.AvatarName).ToArray(), Formatting.Indented));
+            }, parent);
+
             ReModCE.SocialMenuButtons.Add(_searchButton);            
 
             var changeButton = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Change Button");
