@@ -12,7 +12,7 @@ This free service to search for avatars won't be available for the time being. I
 If you are subscribed to VRC+ and think this change shouldn't happen, cancel your subscription. That's probably the only way they will listen.
 
 In the meantime, feel free to check out the private server project which aims at hosting your own VRChat by emulating its services:
-[https://discord.gg/bzb6TCfXsr](https://discord.gg/bzb6TCfXsr)
+[![Discord](https://img.shields.io/discord/876431015478951936?color=DD00FF&logo=Discord&logoColor=FFFFFF&style=plastic)](https://discord.gg/bzb6TCfXsr)
 
 To VRChat:
 Come on. You can do better.
