@@ -14,7 +14,7 @@ If you are subscribed to VRC+ and think this change shouldn't happen, cancel you
 In the meantime, feel free to check out the private server project which aims at hosting your own VRChat by emulating its services:
 [![Discord](https://img.shields.io/discord/876431015478951936?color=DD00FF&logo=Discord&logoColor=FFFFFF&style=plastic)](https://discord.gg/bzb6TCfXsr)
 
-To VRChat:
+To VRChat:  
 Come on. You can do better.
 
 # ReMod CE
