@@ -11,8 +11,8 @@ This free service to search for avatars won't be available for the time being. I
 
 If you are subscribed to VRC+ and think this change shouldn't happen, cancel your subscription. That's probably the only way they will listen.
 
-In the meantime, feel free to check out the private server project which aims at hosting your own VRChat by emulating its services:
-[![Discord](https://img.shields.io/discord/876431015478951936?color=DD00FF&logo=Discord&logoColor=FFFFFF&style=plastic)](https://discord.gg/bzb6TCfXsr)
+In the meantime, feel free to check out ChilloutVR. Another social VR platform: 
+[https://discord.gg/abi](https://discord.gg/abi)
 
 To VRChat:  
 Come on. You can do better.
