@@ -7,8 +7,6 @@ All of that, only to prevent a minority of malicious and toxic people in the gam
 
 With this change people using crashers will be more powerful than before. People using (Photon-)Bots will be more powerful than before. Because **YOU** won't have any protection due to Easy Anti-Cheat.
 
-This free service to search for avatars won't be available for the time being. If VRChat decides to stick with EAC I will be shutting it down entirely and maybe release the database to the public.
-
 If you are subscribed to VRC+ and think this change shouldn't happen, cancel your subscription. That's probably the only way they will listen.
 
 In the meantime, feel free to check out ChilloutVR. Another social VR platform: 
