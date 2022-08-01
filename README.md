@@ -35,9 +35,6 @@ If you want a feature or have a bug report, head over to the issues page and cre
 
 **Powered by [ReMod.Core](https://github.com/RequiDev/ReMod.Core/)**
 
-## Discord
-Click [here](https://discord.gg/KdTSGU4jt3) to join the Discord!
-
 ## Installation & Usage
 Grab the latest loader from [here](https://api.vrcmg.com/v1/mods/download/246) and put it in your Mods directory.  
 
