@@ -1,25 +1,10 @@
 # Disclaimer
-As of 26/07/2022 VRChat released an update which includes a kernel anti-cheat known as [**Easy Anti-Cheat**](https://easy.ac).
-This is a horrible change and will harm VRChat more than it will help it. VRChat has always had a honestly terrible stance on (even wholesome) modding, but we co-existed without any big problems.
-
-Now they want to block all Quality of Life mods, all protection mods like [AdvancedSafety](https://github.com/knah/VRCMods#advancedsafety) and [NetworkSanity](https://github.com/RequiDev/NetworkSanity) that prevented you from crashing from common crashing methods.
-All of that, only to prevent a minority of malicious and toxic people in the game that also happen to use mods to be a nuisance around other people.
-
-With this change people using crashers will be more powerful than before. People using (Photon-)Bots will be more powerful than before. Because **YOU** won't have any protection due to Easy Anti-Cheat.
-
-If you are subscribed to VRC+ and think this change shouldn't happen, cancel your subscription. That's probably the only way they will listen.
-
-In the meantime, feel free to check out ChilloutVR. Another social VR platform: 
-[https://discord.gg/abi](https://discord.gg/abi)
-
-To VRChat:  
-Come on. You can do better.
+Since VRChat has added EAC this mod doesn't work anymore.
 
 # ReMod CE
 
-[![main](https://img.shields.io/github/workflow/status/RequiDev/ReModCE/main?style=for-the-badge)](https://github.com/RequiDev/ReModCE/actions/workflows/main.yml)
 [![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/total.svg?style=for-the-badge&logo=appveyor)](https://github.com/RequiDev/ReModCE/releases)
-[![All Releases](https://img.shields.io/github/downloads/RequiDev/ReModCE/latest/total.svg?style=for-the-badge&logo=appveyor)](https://github.com/RequiDev/ReModCE/releases/latest)
+[![Latest Release](https://img.shields.io/github/downloads/RequiDev/ReModCE/latest/total.svg?style=for-the-badge&logo=appveyor)](https://github.com/RequiDev/ReModCE/releases/latest)
 
 ![ReModCE Logo](https://github.com/RequiDev/ReModCE/raw/master/remod_ce_logo.png)
 
